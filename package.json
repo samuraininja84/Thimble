@@ -1,0 +1,11 @@
+{
+  "name": "com.samuraininja.thimble",
+  "version": "1.0.0",
+  "displayName": "Thimble",
+  "description": "A Custom Logging & Debugging System for YarnSpinner.",
+  "unity": "2022.3",
+  "author": {
+    "name": "Samuraininja84",
+    "url": "https://github.com/samuaraininja"
+  }
+}

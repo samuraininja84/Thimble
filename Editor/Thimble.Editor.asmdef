@@ -1,0 +1,19 @@
+{
+    "name": "Thimble.Editor",
+    "rootNamespace": "Thimble",
+    "references": [
+        "GUID:97f5e635f85dc47488b5d01de78245c3",
+        "GUID:34aa492b82754644eac2f903cd496268"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
