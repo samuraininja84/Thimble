@@ -42,7 +42,7 @@
 	- CommandHandler.ActivateCommand(runner, commandData, command);
 	```
 
-# Tips:
+# Creation / Activation Tips:
 - The <> brackets denote the type of parameter(s) that the command takes in when it is executed.
 - The parameters are passed in the order that they are listed in the brackets.
 - If you have a method that takes in no parameters like this: ActivatePlayer();
@@ -55,13 +55,11 @@
 		```csharp
 		- Tier0Command commandT0 = new Tier0Command(name, "activatePlayer", ActivatePlayer, "Activates the player", "<<activatePlayer>>");
 		- Command command = CommandHandler.CreateCommand(commandT0);
-     		```
 - If you have a method that takes in multiple parameters like this: SetDetails(string name, int age);
 	- You would use the CreateCommand method like this:
 		```csharp
 		- Command command = CommandHandler.CreateCommand<string, int>(name, "setDetails", SetDetails, "Sets the player's name and age", "<<setDetails {name} {age}>>");
 		- CommandHandler.ActivateCommand(runner, commandData, command);
-     		```
 	- Or a Tier{int}Command method like this:
 		```csharp
 		- Tier2Command<string, int> commandT2 = new Tier2Command<string, int>(name, "setDetails", SetDetails, "Sets the player's name and age", "<<setDetails {name} {age}>>");
@@ -86,7 +84,7 @@
 	- CommandHandler.RemoveCommand(runner, commandData, command);
 	```
 
-# Tips: 
+# Deactivation / Removal Tips: 
 - It is recommended to use the DeactivateCommand method to turn off commands that you may want to turn back on later during Play Mode or when you want to turn off a command temporarily.
 - Use the RemoveCommand method when you are done with the command and do not need to see it in the tool's logging system, such as when Play Mode has ended. 
 - If you want to remove all commands when Play Mode has ended, put the RemoveCommand method on OnDisable or OnApplicationExit.
