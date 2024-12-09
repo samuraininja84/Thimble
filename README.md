@@ -1,6 +1,4 @@
-# Thimble
-
-Thimble - A Custom Logging & Debugging System for YarnSpinner
+# Thimble - A Custom Logging & Debugging System for YarnSpinner
 
 -----------------------------------
 
