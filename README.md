@@ -109,5 +109,3 @@ I also plan to look into adding more features to the system to make it more robu
 	- Adding the ability to set a method on a command from the inspector by picking them from a dropdown menu like with the UnityEvent system.
 	- Adding commands to use in a Custom Dev Cheats Console for testing purposes.
 But for now, I hope you enjoy using the current system and find it useful for your Yarn Projects.
-
---------------------------------
