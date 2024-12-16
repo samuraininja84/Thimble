@@ -1,7 +1,7 @@
 # Thimble - A Custom Logging & Debugging System for YarnSpinner
 
 - Purpose:
-	- What it adds is the ability to create custom commands and functions that can easily be added to the Yarn Spinner Dialogue Runner.
+	- What it adds is the ability to create custom commands and functions that can easily be added to the Yarn Spinner Dialogue Runner as well as update existing yarn variables at runtime.
 	- But the main purpose of this system is to add logging for the commands and functions that are added to the Dialogue Runner via the AddCommandHandle and Add Function method with the Command Center Window and the Function Finder Window.
 
 - Dependencies:
@@ -105,11 +105,8 @@
 --------------------------------
 
 Thats it! You should now have a custom command system that can be easily added to the Yarn Spinner Dialogue Runner and logged in the Command Editor Window.
-You can also freely modify the system to fit your needs. Feel free to reach out to me if you have any questions, need help with the system, or are trying to add a new command.
-Eventually, I will add more commands to the system and update the documentation to reflect those changes. 
+You can also freely modify the system to fit your needs. 
+Feel free to reach out to me if you have any questions, need help with the system, or are trying to add a new command.
 I also plan to look into adding more features to the system to make it more robust and easier to use, such as: 
-	- Adding the ability to track the number of times a command or function is called.
-	- Adding the ability to get variables from the In-Memory Variable Storage and set them via an Editor Window.
 	- Adding the ability to set a method on a command from the inspector by picking them from a dropdown menu like with the UnityEvent system.
-	- Adding commands to use in a Custom Dev Cheats Console for testing purposes.
 But for now, I hope you enjoy using the current system and find it useful for your Yarn Projects.
