@@ -1,8 +1,8 @@
 # Thimble - A Custom Logging & Debugging System for YarnSpinner
 
 - Purpose:
-	- What it adds is the ability to create custom commands and functions that can easily be added to the Yarn Spinner Dialogue Runner as well as update existing yarn variables at runtime.
-	- But the main purpose of this system is to add logging for the commands and functions that are added to the Dialogue Runner via the AddCommandHandle and Add Function method with the Command Center Window and the Function Finder Window.
+	- It adds the ability to create custom commands and functions that can easily be added to the Yarn Spinner Dialogue Runner and update existing yarn variables at runtime.
+	- But the primary purpose of this system is to add logging for the commands and functions added to the Dialogue Runner via the AddCommandHandle and Add Function method with the Command Center Window and the Function Finder Window and the variables added to the variable storage.
 
 - Dependencies:
 	- YarnSpinner for Unity must also be installed in your project
@@ -10,11 +10,11 @@
 # Minimum Command Set-Up Requirements:
 - Add a [SerializeField] Private / Public DialogueRunner Variable to your Script.
 - Add a [SerializeField] Private / Public CommandData Variable to your Script.
-	- If your need a new CommandData ScriptableObject, you can create one by right-clicking in the Project window and selecting Create -> Thimble -> Commands -> New Command Data.
+	- If you need a new CommandData ScriptableObject, you can create one by right-clicking in the Project window and selecting Create -> Thimble -> Commands -> New Command Data.
 - Add a Private / Public Command Variable to your Script.
 	- Pass in the CommandOrigin, CommandName, the CommandMethod, the CommandDescription, and the CommandSyntax.
 		- The CommandMethod must use parameters supported by YarnSpinner (No Variables, Float, Int, Bool, String, GameObject, Component).
-			- Supports up to 10 parameters per method as YarnSpinner does.
+			- It supports up to 10 parameters per method, as YarnSpinner does.
 		- The CommandSyntax should be in the format of "<<CommandName>> or <<CommandName {Variable}>>" because that is the format that YarnSpinner uses.
 - Add the Command using the CommandHandler.CreateCommand Method in Start or OnEnable.
 - Add the Command to the Dialogue Runner using the CommandHandler.ActivateCommand Method in Start or OnEnable.
