@@ -8,8 +8,8 @@
 	- YarnSpinner for Unity must also be installed in your project
 
 # Minimum Command Set-Up Requirements:
-- Add a [SerializeField] Private / Public DialogueRunner Variable to your Script.
-- Add a [SerializeField] Private / Public CommandData Variable to your Script.
+- Add a [SerializeField] Private / Public DialogueRunner to your Script.
+- Add a [SerializeField] Private / Public CommandData to your Script.
 	- If you need a new CommandData ScriptableObject, you can create one by right-clicking in the Project window and selecting Create -> Thimble -> Commands -> New Command Data.
 - Add a Private / Public Command Variable to your Script.
 	- Pass in the CommandOrigin, CommandName, the CommandMethod, the CommandDescription, and the CommandSyntax.
@@ -22,11 +22,10 @@
 - Drag in the Dialogue Runner Prefab with the Dialogue Runner Referencer Component into your Scene.
 - Press Play and Run your Dialogue until the Command is called.
 
-# Recommended Set-Up For Full Use Of The System:
+# Recommended Command Set-Up For Full Use Of The System:
 - Create a new Script and add the ICommandHandle interface to the Class Definition. 
 - This will require you to implement the ActivateCommands & DeactivateCommands methods. 
 - These methods are to be called when you want to Add / Remove a command to/from a Dialogue Runner. 
-
 
 - Inside the ActivateCommands method, you can put any commands you would like to Create & Turn On using the CreateCommand and ActivateCommand Methods.
 - You must pass the runner, the command data, and the method to be called when executing the command.
@@ -42,7 +41,7 @@
 	- CommandHandler.ActivateCommand(runner, commandData, command);
 	```
 
-# Creation / Activation Tips:
+# Command Creation / Activation Tips:
 - The <> brackets denote the type of parameter(s) the command takes in when executed.
 - The parameters are passed in the order listed in the brackets.
 - If you have a method that takes in no parameters like this: ActivatePlayer();
@@ -65,7 +64,7 @@
 		- Tier2Command<string, int> commandT2 = new Tier2Command<string, int>(name, "setDetails", SetDetails, "Sets the player's name and age", "<<setDetails {name} {age}>>");
 		- Command command = CommandHandler.CreateCommand(commandT2);
  		```
-# Notes: 
+# Command Notes: 
 - Regardless of your chosen method, they lead to the same result: A Command takes in a method with a String parameter and sets a name using the input string when the Command is executed within your Yarn Script.
 	- The Tier1Command method is just a more specific way of creating a command to be added to the Dialogue Runner than the CreateCommand method.
 	- Behind the scenes, its primary purpose is to supplement the creation of commands from the CommandHandler.CreateCommand method.
@@ -84,12 +83,12 @@
 	- CommandHandler.RemoveCommand(runner, commandData, command);
 	```
 
-# Deactivation / Removal Tips: 
+# Command Deactivation / Removal Tips: 
 - It is recommended to use the DeactivateCommand method to turn off commands that you may want to turn back on later during Play Mode or when you want to turn off a command temporarily.
 - Use the RemoveCommand method when you are done with the command and do not need to see it in the tool's logging system, such as when Play Mode has ended. 
 - If you want to remove all commands when Play Mode has ended, put the RemoveCommand method on OnDisable or OnApplicationExit.
 
-# Logging:
+# Command Logging:
 - You can use the Command Center Window to see the Commands added to the Dialogue Runner.
 This window will show you all the Commands added to the Dialogue Runner and the methods used to execute them.
 - To open the Command Editor Window, go to the Tools menu and select the Custom Data Editor.
@@ -101,9 +100,9 @@ This window will show you all the Commands added to the Dialogue Runner and the 
 		- If you are missing a CommandData ScriptableObject, you can create one by right-clicking in the Project window and selecting Create -> Commands -> New Command Data.
 - By default, there should be a Command Data ScriptableObject in the Resources/Data folder and a Dialogue Runner prefab with a Dialogue Runner Referencer component to use those as a reference.
 
-# Function Set-Up Requirements:
-- Add a [SerializeField] Private / Public DialogueRunner Variable to your Script.
-- Add a [SerializeField] Private / Public FunctionData Variable to your Script.
+# Minimum Function Set-Up Requirements:
+- Add a [SerializeField] Private / Public DialogueRunner to your Script.
+- Add a [SerializeField] Private / Public FunctionData to your Script.
 	- If you need a new FunctionData ScriptableObject, you can create one by right-clicking in the Project window and selecting Create -> Thimble -> Functions -> New Function Data.
 - Add a Private / Public Function Variable to your Script.
 	- Pass in the FunctionOrigin, FunctionName, the FunctionMethod, the FunctionDescription, and the FunctionSyntax.
@@ -116,11 +115,10 @@ This window will show you all the Commands added to the Dialogue Runner and the 
 - Drag in the Dialogue Runner Prefab with the Dialogue Runner Referencer Component into your Scene.
 - Press Play and Run your Dialogue until the Function is called.
 
-# Recommended Set-Up For Full Use Of The System:
+# Recommended Function Set-Up For Full Use Of The System:
 - Create a new Script and add the IFunctionHandle interface to the Class Definition. 
 - This will require you to implement the ActivateFunctions & DeactivateFunctions methods. 
 - These methods are to be called when you want to Add / Remove a Function to/from a Dialogue Runner. 
-
 
 - Inside the ActivateFunctions method, you can put any Functions you want to Create & Turn On using the CreateFunction and ActivateFunction Methods.
 - You must pass the runner, the Function data, and the method to be called when the Function is executed.
@@ -136,7 +134,7 @@ This window will show you all the Commands added to the Dialogue Runner and the 
 	- FunctionHandler.ActivateFunction(runner, FunctionData, Function);
 	```
 
-# Creation / Activation Tips:
+# Function Creation / Activation Tips:
 - The <> brackets denote the type of parameter(s) the Function takes in when executed.
 - The parameters are passed in the order listed in the brackets.
 - If you have a method that takes in no parameters like this: ActivatePlayer();
@@ -159,7 +157,7 @@ This window will show you all the Commands added to the Dialogue Runner and the 
 		- Tier2Function<string, int> FunctionT2 = new Tier2Function<string, int>(name, "setDetails", SetDetails, "Sets the player's name and age", "<<setDetails {name} {age}>>");
 		- Function Function = FunctionHandler.CreateFunction(FunctionT2);
  		```
-# Notes: 
+# Function Notes: 
 - Regardless of which method you choose, they lead to the same result: A Function takes in a method with a String parameter and sets a name using the input string when the Function is executed within your Yarn Script.
 	- The Tier1Function method is just a more specific way of creating a Function to be added to the Dialogue Runner than the CreateFunction method.
 	- Behind the scenes, its primary purpose is to supplement the creation of Functions from the FunctionHandler.CreateFunction method.
@@ -178,12 +176,12 @@ This window will show you all the Commands added to the Dialogue Runner and the 
 	- FunctionHandler.RemoveFunction(runner, FunctionData, Function);
 	```
 
-# Deactivation / Removal Tips: 
+# Function Deactivation / Removal Tips: 
 - It is recommended to use the DeactivateFunction method to turn off Functions that you may want to turn back on later during Play Mode or when you want to turn off a Function temporarily.
 - Use the RemoveFunction method when you are done with the Function and do not need to see it in the tool's logging system, such as when Play Mode has ended. 
 - If you want to remove all Functions when Play Mode has ended, put the RemoveFunction method on OnDisable or OnApplicationExit.
 
-# Logging:
+# Function Logging:
 - You can use the Function Finder Window to see the Functions added to the Dialogue Runner.
 This window will show you all the functions added to the Dialogue Runner and the methods used to execute them.
 - To open the Function Editor Window, go to the Tools menu and select the Custom Data Editor.
@@ -194,6 +192,11 @@ This window will show you all the functions added to the Dialogue Runner and the
 	- A FunctionData ScriptableObject.
 		- If you are missing a FunctionData ScriptableObject, you can create one by right-clicking in the Project window and selecting Create -> Functions -> New Function Data.
 - By default, there should be a Function Data ScriptableObject in the Resources/Data folder and a Dialogue Runner prefab with a Dialogue Runner Referencer component to use those as a reference.
+
+# Variable Set-Up Requirements:
+- Add a [SerializeField] Private / Public In-Memory Variable Storage to your Script.
+- Add a [SerializeField] Private / Public VariableData to your Script.
+	- If you need a new VariableData ScriptableObject, you can create one by right-clicking in the Project window and selecting Create -> Thimble -> Variables -> New Variable Data.
 
 --------------------------------
 
