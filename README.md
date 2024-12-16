@@ -13,7 +13,7 @@
 	- If you need a new CommandData ScriptableObject, you can create one by right-clicking in the Project window and selecting Create -> Thimble -> Commands -> New Command Data.
 - Add a Private / Public Command Variable to your Script.
 	- Pass in the CommandOrigin, CommandName, the CommandMethod, the CommandDescription, and the CommandSyntax.
-		- The CommandMethod must use parameters supported by YarnSpinner (No Variables, Float, Int, Bool, String, Game Object, or Component).
+		The CommandMethod must use parameters supported by YarnSpinner (No Variables, Floats, Ints, Bools, Strings, Game Objects, or Components).
 			- It supports up to 10 parameters per method, as YarnSpinner does.
 		- The CommandSyntax should be in the format of "<<CommandName>> or <<CommandName {Variable}>>" because that is the format that YarnSpinner uses.
 - Add the Command using the CommandHandler.CreateCommand Method in Start or OnEnable.
@@ -23,7 +23,7 @@
 - Press Play and Run your Dialogue until the Command is called.
 
 # Recommended Set-Up For Full Use Of The System:
-- Create a new Script and add the ICommandHandler interface to the Class Definition. 
+- Create a new Script and add the ICommandHandle interface to the Class Definition. 
 - This will require you to implement the ActivateCommands & DeactivateCommands methods. 
 - These methods are to be called when you want to Add / Remove a command to/from a Dialogue Runner. 
 
@@ -117,7 +117,7 @@ This window will show you all the Commands added to the Dialogue Runner and the 
 - Press Play and Run your Dialogue until the Function is called.
 
 # Recommended Set-Up For Full Use Of The System:
-- Create a new Script and add the IFunctionHandler interface to the Class Definition. 
+- Create a new Script and add the IFunctionHandle interface to the Class Definition. 
 - This will require you to implement the ActivateFunctions & DeactivateFunctions methods. 
 - These methods are to be called when you want to Add / Remove a Function to/from a Dialogue Runner. 
 
