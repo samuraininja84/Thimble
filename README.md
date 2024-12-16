@@ -90,7 +90,7 @@
 - If you want to remove all commands when Play Mode has ended, put the RemoveCommand method on OnDisable or OnApplicationExit.
 
 # Logging:
-- You can use the Command Editor Window to see the Commands added to the Dialogue Runner.
+- You can use the Command Center Window to see the Commands added to the Dialogue Runner.
 This window will show you all the Commands added to the Dialogue Runner and the methods used to execute them.
 - To open the Command Editor Window, go to the Tools menu and select the Custom Data Editor.
 - Enter Play Mode and open the Command Editor Window. You will see a list of all the Commands added to the Dialogue Runner.
@@ -184,7 +184,7 @@ This window will show you all the Commands added to the Dialogue Runner and the 
 - If you want to remove all Functions when Play Mode has ended, put the RemoveFunction method on OnDisable or OnApplicationExit.
 
 # Logging:
-- You can use the Function Editor Window to see the Functions added to the Dialogue Runner.
+- You can use the Function Finder Window to see the Functions added to the Dialogue Runner.
 This window will show you all the functions added to the Dialogue Runner and the methods used to execute them.
 - To open the Function Editor Window, go to the Tools menu and select the Custom Data Editor.
 - Enter Play Mode and open the Function Editor Window. You will see a list of all the Functions added to the Dialogue Runner.
