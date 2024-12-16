@@ -13,8 +13,6 @@ namespace Thimble.Editor
         public float floatInput = 0f;
         public bool boolInput = false;
 
-        public string variableDataPath = "Assets/Scripts/Tooling/Thimble/Resources/Data/Variables";
-
         private bool showVariableValues = false;
         private Vector2 scrollPosition = Vector2.zero;
 
@@ -27,7 +25,7 @@ namespace Thimble.Editor
         private void OnGUI()
         {
             // Get all variable data from the folder path if the variable data is null or if the variable dats is not equal to the variable data from the folder path
-            if (!HasAllVariableData()) variableData = GetVariableDataFromPath(variableDataPath);
+            if (!HasAllVariableData()) variableData = GetVariableData();
 
             // Get the height of the window
             float windowHeight = position.height;
@@ -263,10 +261,10 @@ namespace Thimble.Editor
             variableDataObject.ApplyModifiedProperties();
         }
 
-        private VariableData[] GetVariableDataFromPath(string filePath)
+        private VariableData[] GetVariableData()
         {
             // Get all variable data from the folder path
-            return AssetDatabase.FindAssets("t:VariableData", new[] { filePath })
+            return AssetDatabase.FindAssets("t:VariableData", null)
                 .Select(AssetDatabase.GUIDToAssetPath)
                 .Select(AssetDatabase.LoadAssetAtPath<VariableData>)
                 .ToArray();
@@ -281,7 +279,7 @@ namespace Thimble.Editor
         private bool HasAllVariableData()
         {
             // Check if the variable data is not null and is equal to the variable data from the folder path
-            return variableData != null && variableData == GetVariableDataFromPath(variableDataPath);
+            return variableData != null && variableData == GetVariableData();
         }
 
         private bool HasStringVariables(VariableData variableData)

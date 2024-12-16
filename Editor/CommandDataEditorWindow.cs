@@ -8,7 +8,6 @@ namespace Thimble.Editor
     public class CommandDataEditorWindow : EditorWindow
     {
         public CommandData[] commandDatas;
-        public string commandDataPath = "Assets/Scripts/Tooling/Thimble/Resources/Data/Commands";
 
         private Vector2 scrollPosition = Vector2.zero;
 
@@ -21,7 +20,7 @@ namespace Thimble.Editor
         private void OnGUI()
         {
             // Get all command data from the folder path if the command data is null or if the command dats is not equal to the command data from the folder path
-            if (!HasAllCommandData()) commandDatas = GetCommandDataFromPath(commandDataPath);
+            if (!HasAllCommandData()) commandDatas = GetCommandData();
 
             // Get the height of the window
             float windowHeight = position.height;
@@ -201,10 +200,10 @@ namespace Thimble.Editor
             }
         }
 
-        private CommandData[] GetCommandDataFromPath(string filePath)
+        private CommandData[] GetCommandData()
         {
             // Get all command data from the folder path
-            return AssetDatabase.FindAssets("t:CommandData", new[] { filePath })
+            return AssetDatabase.FindAssets("t:CommandData", null)
                 .Select(AssetDatabase.GUIDToAssetPath)
                 .Select(AssetDatabase.LoadAssetAtPath<CommandData>)
                 .ToArray();
@@ -219,7 +218,7 @@ namespace Thimble.Editor
         private bool HasAllCommandData()
         {
             // Check if the command data is not null and is equal to the command data from the folder path
-            return commandDatas != null && commandDatas == GetCommandDataFromPath(commandDataPath);
+            return commandDatas != null && commandDatas == GetCommandData();
         }
 
         private bool HasActiveCommands(CommandData commandData)

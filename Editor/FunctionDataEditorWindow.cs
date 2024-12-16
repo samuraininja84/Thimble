@@ -8,7 +8,6 @@ namespace Thimble.Editor
     public class FunctionDataEditorWindow : EditorWindow
     {
         public FunctionData[] functionDatas;
-        public string functionDataPath = "Assets/Scripts/Tooling/Thimble/Resources/Data/Functions";
 
         private Vector2 scrollPosition = Vector2.zero;
 
@@ -21,7 +20,7 @@ namespace Thimble.Editor
         private void OnGUI()
         {
             // Get all function data from the folder path if the function data is null or if the function dats is not equal to the function data from the folder path
-            if (!HasAllFunctionData()) functionDatas = GetFunctionDataFromPath(functionDataPath);
+            if (!HasAllFunctionData()) functionDatas = GetFunctionData();
 
             // Get the height of the window
             float windowHeight = position.height;
@@ -201,10 +200,10 @@ namespace Thimble.Editor
             }
         }
 
-        private FunctionData[] GetFunctionDataFromPath(string filePath)
+        private FunctionData[] GetFunctionData()
         {
             // Get all function data from the folder path
-            return AssetDatabase.FindAssets("t:FunctionData", new[] { filePath })
+            return AssetDatabase.FindAssets("t:FunctionData", null)
                 .Select(AssetDatabase.GUIDToAssetPath)
                 .Select(AssetDatabase.LoadAssetAtPath<FunctionData>)
                 .ToArray();
@@ -219,7 +218,7 @@ namespace Thimble.Editor
         private bool HasAllFunctionData()
         {
             // Check if the function data is not null and is equal to the function data from the folder path
-            return functionDatas != null && functionDatas == GetFunctionDataFromPath(functionDataPath);
+            return functionDatas != null && functionDatas == GetFunctionData();
         }
 
         private bool HasActiveFunctions(FunctionData functionData)
