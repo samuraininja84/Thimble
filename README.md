@@ -197,6 +197,15 @@ This window will show you all the functions added to the Dialogue Runner and the
 - Add a [SerializeField] Private / Public In-Memory Variable Storage to your Script.
 - Add a [SerializeField] Private / Public VariableData to your Script.
 	- If you need a new VariableData ScriptableObject, you can create one by right-clicking in the Project window and selecting Create -> Thimble -> Variables -> New Variable Data.
+- From here, you can use Variable Handler to set and get variables like this:
+	- Set Methods:
+ 		```csharp
+ 		- VariableHandler.SetVariable(InMemoryVariableStorage, VariableData, VariableName, Value) //value = string/float/int
+   		- SetAllVariables(InMemoryVariableStorage storage, VariableData variableData, Dictionary<string, float> floatVariables, Dictionary<string, string> stringVariables, Dictionary<string, bool> boolVariables)
+   		```
+   	- Get Methods:
+ 		- 
+ 
 
 --------------------------------
 
