@@ -1,71 +1,33 @@
 using System.Collections.Generic;
-using UnityEngine;
 using Yarn.Unity;
 
 namespace Thimble
 {
     public static class VariableSetter
     {
-        public static void SetFloatVariable(InMemoryVariableStorage variables, string variableName, float value)
+        public static void SetVariable(InMemoryVariableStorage storage, VariableData variableData, string variableName, string value)
         {
-            // If the variable does not exist in the variable storage, log an error and return
-            if (!variables.Contains(variableName))
-            {
-                Debug.LogError("Variable " + variableName + " does not exist in the variable storage.");
-                return;
-            }
-
-            // Set the value of the variable
-            variables.SetValue(variableName, value);
+            variableData.SetValue(storage, variableName, value);
         }
 
-        public static void SetIntVariable(InMemoryVariableStorage variables, string variableName, int value)
+        public static void SetVariable(InMemoryVariableStorage storage, VariableData variableData, string variableName, float value)
         {
-            // If the variable does not exist in the variable storage, log an error and return
-            if (!variables.Contains(variableName))
-            {
-                Debug.LogError("Variable " + variableName + " does not exist in the variable storage.");
-                return;
-            }
-
-            // Set the value of the variable
-            variables.SetValue(variableName, value);
+            variableData.SetValue(storage, variableName, value);
         }
 
-        public static void SetBoolVariable(InMemoryVariableStorage variables, string variableName, bool value)
+        public static void SetVariable(InMemoryVariableStorage storage, VariableData variableData, string variableName, bool value)
         {
-            // If the variable does not exist in the variable storage, log an error and return
-            if (!variables.Contains(variableName))
-            {
-                Debug.LogError("Variable " + variableName + " does not exist in the variable storage.");
-                return;
-            }
-
-            // Set the value of the variable
-            variables.SetValue(variableName, value);
+            variableData.SetValue(storage, variableName, value);
         }
 
-        public static void SetStringVariable(InMemoryVariableStorage variables, string variableName, string value)
+        public static void SetAllVariables(InMemoryVariableStorage storage, VariableData variableData, Dictionary<string, float> floatVariables, Dictionary<string, string> stringVariables, Dictionary<string, bool> boolVariables)
         {
-            // If the variable does not exist in the variable storage, log an error and return
-            if (!variables.Contains(variableName))
-            {
-                Debug.LogError("Variable " + variableName + " does not exist in the variable storage.");
-                return;
-            }
-
-            // Set the value of the variable
-            variables.SetValue(variableName, value);
+            variableData.SetAllVariables(storage, floatVariables, stringVariables, boolVariables);
         }
 
-        public static void SetAllVariables(InMemoryVariableStorage variables, Dictionary<string, float> floatVariables, Dictionary<string, string> stringVariables, Dictionary<string, bool> boolVariables)
+        public static void Clear(InMemoryVariableStorage storage)
         {
-            variables.SetAllVariables(floatVariables, stringVariables, boolVariables);
-        }
-
-        public static void Clear(InMemoryVariableStorage variables)
-        {
-            variables.Clear();
+            storage.Clear();
         }
     }
 }

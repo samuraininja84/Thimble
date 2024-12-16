@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using Yarn.Unity;
 
@@ -9,8 +10,8 @@ namespace Thimble
         [Header("Yarn Spinner")]
         public InMemoryVariableStorage variableStorage;
 
-        [Header("Variable Storage")]
-        public VariableData variableData;
+        [Header("Variables")]
+        public List<VariableData> variables;
 
         private void Awake()
         {
@@ -20,17 +21,46 @@ namespace Thimble
         private void OnEnable()
         {
             SetVariableStorage(GetVariableStorage());
+            GetVariables();
         }
 
         private void OnDisable()
         {
             SetVariableStorage();
+            ClearVariables();
         }
 
         private void SetVariableStorage(InMemoryVariableStorage storage = null)
         {
-            variableStorage = storage;
-            variableData.variableStorage = storage;
+            if (variables != null || variables.Count > 0)
+            {
+                foreach (VariableData data in variables)
+                {
+                    data.variableStorage = storage;
+                }
+            }
+        }
+
+        private void GetVariables()
+        {
+            if (variables != null || variables.Count > 0)
+            {
+                foreach (VariableData data in variables)
+                {
+                    data.GetVariables(variableStorage);
+                }
+            }
+        }
+
+        private void ClearVariables()
+        {
+            if (variables != null || variables.Count > 0)
+            {
+                foreach (VariableData data in variables)
+                {
+                    data.Clear();
+                }
+            }
         }
 
         private InMemoryVariableStorage GetVariableStorage()
@@ -40,6 +70,7 @@ namespace Thimble
             {
                 variableStorage = GetComponent<InMemoryVariableStorage>();
             }
+
             return variableStorage;
         }
     }

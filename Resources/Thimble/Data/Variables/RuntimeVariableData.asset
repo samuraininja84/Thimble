@@ -13,3 +13,6 @@ MonoBehaviour:
   m_Name: RuntimeVariableData
   m_EditorClassIdentifier: 
   variableStorage: {fileID: 0}
+  stringVariables: []
+  floatVariables: []
+  boolVariables: []
