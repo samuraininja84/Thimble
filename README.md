@@ -90,15 +90,15 @@
 
 # Command Logging:
 - You can use the Command Center Window to see the Commands added to the Dialogue Runner.
-This window will show you all the Commands added to the Dialogue Runner and the methods used to execute them.
-- To open the Command Editor Window, go to the Tools menu and select the Custom Data Editor.
-- Enter Play Mode and open the Command Editor Window. You will see a list of all the Commands added to the Dialogue Runner.
+- This window will show you all the Commands added to the Dialogue Runner and the methods used to execute them.
+- Open the Command Center Window by selecting Tools -> Thimble -> Command Center.
+- Enter Play Mode and open the Command Center Window. You will see a list of all the Commands added to the Dialogue Runner.
 - If it's empty, that may be because you are missing (at least) one of two things: 
 	- A Dialogue Runner Referencer on your GameObject that has your Dialogue Runner.
 		- If you are missing a Dialogue Runner Referencer, add one by dragging it onto the GameObject with the Dialogue Runner component.
 	- A CommandData ScriptableObject.
 		- If you are missing a CommandData ScriptableObject, you can create one by right-clicking in the Project window and selecting Create -> Commands -> New Command Data.
-- By default, there should be a Command Data ScriptableObject in the Resources/Data folder and a Dialogue Runner prefab with a Dialogue Runner Referencer component to use those as a reference.
+- By default, there should be a Command Data ScriptableObject in the Runtime/Data folder and a Dialogue Runner Prefab with a Dialogue Runner Referencer component to use as a reference.
 
 # Minimum Function Set-Up Requirements:
 - Add a [SerializeField] Private / Public DialogueRunner to your Script.
@@ -183,30 +183,47 @@ This window will show you all the Commands added to the Dialogue Runner and the 
 
 # Function Logging:
 - You can use the Function Finder Window to see the Functions added to the Dialogue Runner.
-This window will show you all the functions added to the Dialogue Runner and the methods used to execute them.
-- To open the Function Editor Window, go to the Tools menu and select the Custom Data Editor.
-- Enter Play Mode and open the Function Editor Window. You will see a list of all the Functions added to the Dialogue Runner.
+- This window will show you all the functions added to the Dialogue Runner and the methods used to execute them.
+- Open the Function Finder Window by selecting Tools -> Thimble -> Function Finder.
+- Enter Play Mode and open the Function Finder Window. You will see a list of all the Functions added to the Dialogue Runner.
 - If it's empty, that may be because you are missing (at least) one of two things: 
 	- A Dialogue Runner Referencer on your GameObject that has your Dialogue Runner.
 		- If you are missing a Dialogue Runner Referencer, add one by dragging it onto the GameObject with the Dialogue Runner component.
 	- A FunctionData ScriptableObject.
 		- If you are missing a FunctionData ScriptableObject, you can create one by right-clicking in the Project window and selecting Create -> Functions -> New Function Data.
-- By default, there should be a Function Data ScriptableObject in the Resources/Data folder and a Dialogue Runner prefab with a Dialogue Runner Referencer component to use those as a reference.
+- By default, there should be a Function Data ScriptableObject in the Runtime/Data folder and a Dialogue Runner Prefab with a Dialogue Runner Referencer component to use as a reference.
 
 # Variable Set-Up Requirements:
-- Add a [SerializeField] Private / Public In-Memory Variable Storage to your Script.
+- Add a [SerializeField] Private / Public InMemoryVariableStorage to your Script.
 - Add a [SerializeField] Private / Public VariableData to your Script.
 	- If you need a new VariableData ScriptableObject, you can create one by right-clicking in the Project window and selecting Create -> Thimble -> Variables -> New Variable Data.
 - From here, you can use Variable Handler to set and get variables like this:
 	- Set Methods:
  		```csharp
  		- VariableHandler.SetVariable(InMemoryVariableStorage, VariableData, VariableName, Value) //value = string/float/int
-   		- SetAllVariables(InMemoryVariableStorage storage, VariableData variableData, Dictionary<string, float> floatVariables, Dictionary<string, string> stringVariables, Dictionary<string, bool> boolVariables)
+   		- VariableHandler.SetAllVariables(InMemoryVariableStorage storage, VariableData variableData, Dictionary<string, float> floatVariables, Dictionary<string, string> stringVariables, Dictionary<string, bool> boolVariables)
+   		- VariableHandler.Clear(InMemoryVariableStorage storage)
    		```
    	- Get Methods:
- 		- 
- 
-
+   	  	```csharp
+ 		- VariableHandler.GetVariable(InMemoryVariableStorage, VariableData, VariableName, out Value) //value = string/float/int
+   		- VariableHandler.GetStringVariables(InMemoryVariableStorage storage) // Dictionary<string, string>
+   	 	- VariableHandler.GetFloatVariables(InMemoryVariableStorage storage) // Dictionary<string, float>
+   	  	- VariableHandler.GetBoolVariables(InMemoryVariableStorage storage) // Dictionary<string, bool>
+   	  	- VariableHandler. GetAllVariables(InMemoryVariableStorage storage) // (Dictionary<string, float>, Dictionary<string, string>, Dictionary<string, bool>)
+   	   	```
+# Variable Logging:
+- You can use the Variable Verifier Window to see the Variables added to the In-Memory Variable Storage.
+- This window will show all the variables added to the In-Memory Variable Storage.
+- Open the Variable Verifier Window by selecting Tools -> Thimble -> Variable Verifier.
+- Enter Play Mode and open the Variable Verifier Window. You will see a list of all the Functions added to the In-Memory Variable Storage.
+- If it's empty, that may be because you are missing (at least) one of two things: 
+	- A Variable Storage Referencer on your GameObject that has your Dialogue Runner.
+		- If you are missing a Variable Storage Referencer, add one by dragging it onto the GameObject with the Variable Storage component.
+	- A VariableData ScriptableObject.
+		- If you are missing a VariableData ScriptableObject, you can create one by right-clicking in the Project window and selecting Create -> Variables -> New Variable Data.
+- By default, there should be a Variable Data ScriptableObject in the Runtime/Data folder and a Dialogue Runner Prefab with a Variable Storage Referencer component to use as a reference.
+  
 --------------------------------
 
 - That's it! You should now have a custom command system that can be easily added to the Yarn Spinner Dialogue Runner and logged in the Command Editor Window.
