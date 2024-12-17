@@ -229,6 +229,7 @@
 - That's it! You should now have a custom command system that can be easily added to the Yarn Spinner Dialogue Runner and logged in the Command Editor Window.
 - You can also freely modify the system to fit your needs. 
 - Feel free to contact me if you have any questions, need help with the system, or are trying to add a new command.
-- I also plan to look into adding more features to the system to make it more robust and easier to use, such as: 
+- I also plan to look into adding more features to the system to make it more robust and easier to use, such as:
+	- Creating Commands and Functions in Inspector by creating a custom UnityEvent type to choose a valid method for the command tier
 	- Adding the ability to set a method on a command from the inspector by picking them from a dropdown menu like with the UnityEvent system.
 - But for now, I hope you enjoy using the current system and find it helpful for your Yarn Projects.
