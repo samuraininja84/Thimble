@@ -1,4 +1,6 @@
 using System;
+using UnityEngine;
+using UnityEngine.Events;
 using Yarn.Unity;
 
 namespace Thimble
@@ -7,7 +9,7 @@ namespace Thimble
     public class Command : IRegisterCommands
     {
         public CommandState commandState = CommandState.Inactive;
-        public CommandTier commandTier = CommandTier.Tier0;
+        [HideInInspector] public CommandTier commandTier = CommandTier.Tier0;
         public string commandOrigin;
         public string commandName;
         public string commandDescription;
@@ -73,6 +75,7 @@ namespace Thimble
     public class Tier0Command : Command
     {
         public Action commandMethod;
+        public UnityEvent commandEvent;
 
         public Tier0Command(string commandOrigin, string commandName, Action commandMethod, string commandDescription, string commandSyntax)
         {
@@ -86,12 +89,14 @@ namespace Thimble
 
         public override void AddCommand(DialogueRunner dialogueRunner)
         {
+            commandMethod += commandEvent.Invoke;
             dialogueRunner.AddCommandHandler(commandName, commandMethod);
             commandState = CommandState.Active;
         }
 
         public override void RemoveCommand(DialogueRunner dialogueRunner)
         {
+            commandMethod -= commandEvent.Invoke;
             commandState = CommandState.Inactive;
             dialogueRunner.RemoveCommandHandler(commandName);
         }
@@ -101,6 +106,7 @@ namespace Thimble
     public class Tier1Command<T1> : Command
     {
         public Action<T1> commandMethod;
+        public UnityEvent<T1> commandEvent;
 
         public Tier1Command(string commandOrigin, string commandName, Action<T1> commandMethod, string commandDescription, string commandSyntax)
         {
@@ -114,12 +120,14 @@ namespace Thimble
 
         public override void AddCommand(DialogueRunner dialogueRunner)
         {
+            commandMethod += commandEvent.Invoke;
             dialogueRunner.AddCommandHandler(commandName, commandMethod);
             commandState = CommandState.Active;
         }
 
         public override void RemoveCommand(DialogueRunner dialogueRunner)
         {
+            commandMethod -= commandEvent.Invoke;
             commandState = CommandState.Inactive;
             dialogueRunner.RemoveCommandHandler(commandName);
         }
@@ -129,6 +137,7 @@ namespace Thimble
     public class Tier2Command<T1, T2> : Command
     {
         public Action<T1, T2> commandMethod;
+        public UnityEvent<T1, T2> commandEvent;
 
         public Tier2Command(string commandOrigin, string commandName, Action<T1, T2> commandMethod, string commandDescription, string commandSyntax)
         {
@@ -142,12 +151,14 @@ namespace Thimble
 
         public override void AddCommand(DialogueRunner dialogueRunner)
         {
+            commandMethod += commandEvent.Invoke;
             dialogueRunner.AddCommandHandler(commandName, commandMethod);
             commandState = CommandState.Active;
         }
 
         public override void RemoveCommand(DialogueRunner dialogueRunner)
         {
+            commandMethod -= commandEvent.Invoke;
             commandState = CommandState.Inactive;
             dialogueRunner.RemoveCommandHandler(commandName);
         }
@@ -157,6 +168,7 @@ namespace Thimble
     public class Tier3Command<T1, T2, T3> : Command
     {
         public Action<T1, T2, T3> commandMethod;
+        public UnityEvent<T1, T2, T3> commandEvent;
 
         public Tier3Command(string commandOrigin, string commandName, Action<T1, T2, T3> commandMethod, string commandDescription, string commandSyntax)
         {
@@ -170,12 +182,14 @@ namespace Thimble
 
         public override void AddCommand(DialogueRunner dialogueRunner)
         {
+            commandMethod += commandEvent.Invoke;
             dialogueRunner.AddCommandHandler(commandName, commandMethod);
             commandState = CommandState.Active;
         }
 
         public override void RemoveCommand(DialogueRunner dialogueRunner)
         {
+            commandMethod -= commandEvent.Invoke;
             commandState = CommandState.Inactive;
             dialogueRunner.RemoveCommandHandler(commandName);
         }
@@ -185,6 +199,7 @@ namespace Thimble
     public class Tier4Command<T1, T2, T3, T4> : Command
     {
         public Action<T1, T2, T3, T4> commandMethod;
+        public UnityEvent<T1, T2, T3, T4> commandEvent;
 
         public Tier4Command(string commandOrigin, string commandName, Action<T1, T2, T3, T4> commandMethod, string commandDescription, string commandSyntax)
         {
@@ -198,12 +213,14 @@ namespace Thimble
 
         public override void AddCommand(DialogueRunner dialogueRunner)
         {
+            commandMethod += commandEvent.Invoke;
             dialogueRunner.AddCommandHandler(commandName, commandMethod);
             commandState = CommandState.Active;
         }
 
         public override void RemoveCommand(DialogueRunner dialogueRunner)
         {
+            commandMethod -= commandEvent.Invoke;
             commandState = CommandState.Inactive;
             dialogueRunner.RemoveCommandHandler(commandName);
         }
