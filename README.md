@@ -11,28 +11,17 @@
 - Add a [SerializeField] Private / Public DialogueRunner to your Script.
 - Add a [SerializeField] Private / Public CommandData to your Script.
 	- If you need a new CommandData ScriptableObject, you can create one by right-clicking in the Project window and selecting Create -> Thimble -> Commands -> New Command Data.
-- Method 1:
-	- Add a Private / Public Command to your Script.
-		- Pass in the CommandOrigin, CommandName, the CommandMethod, the CommandDescription, and the CommandSyntax.
-			The CommandMethod must use parameters supported by YarnSpinner (No Variables, Floats, Ints, Bools, Strings, Game Objects, or Components).
-				- It supports up to 10 parameters per method, as YarnSpinner does.
-			- The CommandSyntax should be in the format of "<<CommandName>> or <<CommandName {Variable}>>" because that is the format that YarnSpinner uses.
-	- Add the Command using the CommandHandler.CreateCommand Method in Start or OnEnable.
-		- You need to pass in the DialogueRunner, the CommandData, and the Method that will be called when the Command is executed.
-	- Add the Command to the Dialogue Runner using the CommandHandler.ActivateCommand Method in Start or OnEnable.
-		- You need to pass in the DialogueRunner, the CommandData, and the Command itself.
-	- Drag in the Dialogue Runner Prefab with the Dialogue Runner Referencer Component into your Scene.
-	- Press Play and Run your Dialogue until the Command is called.
-- Method 2:
-	- Add a [SerializeField] Private / Public Tier<int(0-4)>Command Variable
-	- For example:
-	```csharp
-	- [SerializeField] Private Tier1Command<int> AddHealth;
-	```
-	- In Inspector, pass in the CommandOrigin, CommandName, the CommandMethod, the CommandDescription, and the CommandSyntax.
-  	- Then, set the Command Event Invoke method to a method with parameter(s) that match those you set in the editor.
-  	- Finally, add the Command to the Dialogue Runner in the editor using the CommandHandler.ActivateCommand Method in Start or OnEnable.
-  		- You must pass in the DialogueRunner, the CommandData, and the Command itself.
+- Add a Private / Public Command to your Script.
+	- Pass in the CommandOrigin, CommandName, the CommandMethod, the CommandDescription, and the CommandSyntax.
+		The CommandMethod must use parameters supported by YarnSpinner (No Variables, Floats, Ints, Bools, Strings, Game Objects, or Components).
+			- It supports up to 10 parameters per method, as YarnSpinner does.
+		- The CommandSyntax should be in the format of "<<CommandName>> or <<CommandName {Variable}>>" because that is the format that YarnSpinner uses.
+- Add the Command using the CommandHandler.CreateCommand Method in Start or OnEnable.
+	- You need to pass in the DialogueRunner, the CommandData, and the Method that will be called when the Command is executed.
+- Add the Command to the Dialogue Runner using the CommandHandler.ActivateCommand Method in Start or OnEnable.
+	- You must pass in the DialogueRunner, the CommandData, and the Command itself.
+- Drag in the Dialogue Runner Prefab with the Dialogue Runner Referencer Component into your Scene.
+- Press Play and Run your Dialogue until the Command is called.
 
 # Recommended Command Set-Up For Full Use Of The System:
 - Create a new Script and add the ICommandHandle interface to the Class Definition. 
