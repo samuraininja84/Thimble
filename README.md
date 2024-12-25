@@ -81,10 +81,10 @@
 
 - Inside the DeactivateCommands Method, you can put any commands you would like to Turn Off using the Deactivate Command or RemoveCommand Methods.
 	- You can do so like this:
-	```csharp
-	- CommandHandler.DeactivateCommand(runner, commandData, command);
-	- CommandHandler.RemoveCommand(runner, commandData, command);
-	```
+		```csharp
+		CommandHandler.DeactivateCommand(runner, commandData, command);
+		CommandHandler.RemoveCommand(runner, commandData, command);
+		```
 
 # Command Deactivation / Removal Tips: 
 - It is recommended to use the DeactivateCommand method to turn off commands that you may want to turn back on later during Play Mode or when you want to turn off a command temporarily.
