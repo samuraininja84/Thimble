@@ -31,16 +31,16 @@
 - Inside the ActivateCommands method, you can put any commands you would like to Create & Turn On using the CreateCommand and ActivateCommand Methods.
 - You must pass the runner, the command data, and the method to be called when executing the command.
 	- You can do so like this:
-	```csharp
-	- Command command = CommandHandler.CreateCommand<string>(name, "setName", SetName, "Sets the player's name", "<<setName {name}>>");
-	- CommandHandler.ActivateCommand(runner, commandData, command);
-	```
+		```csharp
+		Command command = CommandHandler.CreateCommand<string>(name, "setName", SetName, "Sets the player's name", "<<setName {name}>>");
+		CommandHandler.ActivateCommand(runner, commandData, command);
+		```
 	- Or like this:
-	```csharp
-	- Tier1Command<string> commandT1 = new Tier1Command<string>(name, "setName", SetName, "Sets the player's name", "<<setName {name}>>");
-	- Command command = CommandHandler.CreateCommand(commandT1);
-	- CommandHandler.ActivateCommand(runner, commandData, command);
-	```
+		```csharp
+		Tier1Command<string> commandT1 = new Tier1Command<string>(name, "setName", SetName, "Sets the player's name", "<<setName {name}>>");
+		Command command = CommandHandler.CreateCommand(commandT1);
+		CommandHandler.ActivateCommand(runner, commandData, command);
+		```
 
 # Command Creation / Activation Tips:
 - The <> brackets denote the type of parameter(s) the command takes in when executed.
@@ -48,22 +48,24 @@
 - If you have a method that takes in no parameters like this: ActivatePlayer();
 	- You would use the CreateCommand method like this:
  		```csharp
-		- Command command = CommandHandler.CreateCommand(name, "activatePlayer", ActivatePlayer, "Activates the player", "<<activatePlayer>>");
-		- CommandHandler.ActivateCommand(runner, commandData, command);
+		Command command = CommandHandler.CreateCommand(name, "activatePlayer", ActivatePlayer, "Activates the player", "<<activatePlayer>>");
+		CommandHandler.ActivateCommand(runner, commandData, command);
    		```
 	- Or the Tier0Command method like this:
 		```csharp
-		- Tier0Command commandT0 = new Tier0Command(name, "activatePlayer", ActivatePlayer, "Activates the player", "<<activatePlayer>>");
-		- Command command = CommandHandler.CreateCommand(commandT0);
+		Tier0Command commandT0 = new Tier0Command(name, "activatePlayer", ActivatePlayer, "Activates the player", "<<activatePlayer>>");
+		Command command = CommandHandler.CreateCommand(commandT0);
+  		```
 - If you have a method that takes in multiple parameters like this: SetDetails(string name, int age);
 	- You would use the CreateCommand method like this:
 		```csharp
-		- Command command = CommandHandler.CreateCommand<string, int>(name, "setDetails", SetDetails, "Sets the player's name and age", "<<setDetails {name} {age}>>");
-		- CommandHandler.ActivateCommand(runner, commandData, command);
+		Command command = CommandHandler.CreateCommand<string, int>(name, "setDetails", SetDetails, "Sets the player's name and age", "<<setDetails {name} {age}>>");
+		CommandHandler.ActivateCommand(runner, commandData, command);
+  		```
 	- Or a Tier{int}Command method like this:
 		```csharp
-		- Tier2Command<string, int> commandT2 = new Tier2Command<string, int>(name, "setDetails", SetDetails, "Sets the player's name and age", "<<setDetails {name} {age}>>");
-		- Command command = CommandHandler.CreateCommand(commandT2);
+		Tier2Command<string, int> commandT2 = new Tier2Command<string, int>(name, "setDetails", SetDetails, "Sets the player's name and age", "<<setDetails {name} {age}>>");
+		Command command = CommandHandler.CreateCommand(commandT2);
  		```
 # Command Notes: 
 - Regardless of your chosen method, they lead to the same result: A Command takes in a method with a String parameter and sets a name using the input string when the Command is executed within your Yarn Script.
@@ -125,16 +127,16 @@
 - Inside the ActivateFunctions method, you can put any Functions you want to Create & Turn On using the CreateFunction and ActivateFunction Methods.
 - You must pass the runner, the Function data, and the method to be called when the Function is executed.
 	- You can do so like this:
-	```csharp
-	- Function Function = FunctionHandler.CreateFunction<string>(name, "setName", SetName, "Sets the player's name", "<<setName {name}>>");
-	- FunctionHandler.ActivateFunction(runner, FunctionData, Function);
-	```
+		```csharp
+		Function Function = FunctionHandler.CreateFunction<string>(name, "setName", SetName, "Sets the player's name", "<<setName {name}>>");
+		FunctionHandler.ActivateFunction(runner, FunctionData, Function);
+		```
 	- Or like this:
-	```csharp
-	- Tier1Function<string> FunctionT1 = new Tier1Function<string>(name, "setName", SetName, "Sets the player's name", "<<setName {name}>>");
-	- Function Function = FunctionHandler.CreateFunction(FunctionT1);
-	- FunctionHandler.ActivateFunction(runner, FunctionData, Function);
-	```
+		```csharp
+		Tier1Function<string> FunctionT1 = new Tier1Function<string>(name, "setName", SetName, "Sets the player's name", "<<setName {name}>>");
+		Function Function = FunctionHandler.CreateFunction(FunctionT1);
+		FunctionHandler.ActivateFunction(runner, FunctionData, Function);
+		```
 
 # Function Creation / Activation Tips:
 - The <> brackets denote the type of parameter(s) the Function takes in when executed.
@@ -142,22 +144,24 @@
 - If you have a method that takes in no parameters like this: ActivatePlayer();
 	- You would use the CreateFunction method like this:
  		```csharp
-		- Function Function = FunctionHandler.CreateFunction(name, "activatePlayer", ActivatePlayer, "Activates the player", "<<activatePlayer>>");
-		- FunctionHandler.ActivateFunction(runner, FunctionData, Function);
+		Function Function = FunctionHandler.CreateFunction(name, "activatePlayer", ActivatePlayer, "Activates the player", "<<activatePlayer>>");
+		FunctionHandler.ActivateFunction(runner, FunctionData, Function);
    		```
 	- Or the Tier0Function method like this:
 		```csharp
-		- Tier0Function FunctionT0 = new Tier0Function(name, "activatePlayer", ActivatePlayer, "Activates the player", "<<activatePlayer>>");
-		- Function Function = FunctionHandler.CreateFunction(FunctionT0);
+		Tier0Function FunctionT0 = new Tier0Function(name, "activatePlayer", ActivatePlayer, "Activates the player", "<<activatePlayer>>");
+		Function Function = FunctionHandler.CreateFunction(FunctionT0);
+  		```
 - If you have a method that takes in multiple parameters like this: SetDetails(string name, int age);
 	- You would use the CreateFunction method like this:
 		```csharp
-		- Function Function = FunctionHandler.CreateFunction<string, int>(name, "setDetails", SetDetails, "Sets the player's name and age", "<<setDetails {name} {age}>>");
-		- FunctionHandler.ActivateFunction(runner, FunctionData, Function);
+		Function Function = FunctionHandler.CreateFunction<string, int>(name, "setDetails", SetDetails, "Sets the player's name and age", "<<setDetails {name} {age}>>");
+		FunctionHandler.ActivateFunction(runner, FunctionData, Function);
+  		```
 	- Or a Tier{int}Function method like this:
 		```csharp
-		- Tier2Function<string, int> FunctionT2 = new Tier2Function<string, int>(name, "setDetails", SetDetails, "Sets the player's name and age", "<<setDetails {name} {age}>>");
-		- Function Function = FunctionHandler.CreateFunction(FunctionT2);
+		Tier2Function<string, int> FunctionT2 = new Tier2Function<string, int>(name, "setDetails", SetDetails, "Sets the player's name and age", "<<setDetails {name} {age}>>");
+		Function Function = FunctionHandler.CreateFunction(FunctionT2);
  		```
 # Function Notes: 
 - Regardless of which method you choose, they lead to the same result: A Function takes in a method with a String parameter and sets a name using the input string when the Function is executed within your Yarn Script.
@@ -173,10 +177,10 @@
 
 - Inside the DeactivateFunctions Method, you can put any Functions you would like to Turn Off using the Deactivate Function or RemoveFunction Methods.
 	- You can do so like this:
-	```csharp
-	- FunctionHandler.DeactivateFunction(runner, FunctionData, Function);
-	- FunctionHandler.RemoveFunction(runner, FunctionData, Function);
-	```
+		```csharp
+		FunctionHandler.DeactivateFunction(runner, FunctionData, Function);
+		FunctionHandler.RemoveFunction(runner, FunctionData, Function);
+		```
 
 # Function Deactivation / Removal Tips: 
 - It is recommended to use the DeactivateFunction method to turn off Functions that you may want to turn back on later during Play Mode or when you want to turn off a Function temporarily.
@@ -202,17 +206,17 @@
 - From here, you can use Variable Handler to set and get variables like this:
 	- Set Methods:
  		```csharp
- 		- VariableHandler.SetVariable(InMemoryVariableStorage, VariableData, VariableName, Value) //value = string/float/int
-   		- VariableHandler.SetAllVariables(InMemoryVariableStorage storage, VariableData variableData, Dictionary<string, float> floatVariables, Dictionary<string, string> stringVariables, Dictionary<string, bool> boolVariables)
-   		- VariableHandler.Clear(InMemoryVariableStorage storage)
+ 		VariableHandler.SetVariable(InMemoryVariableStorage, VariableData, VariableName, Value) //value = string/float/int
+   		VariableHandler.SetAllVariables(InMemoryVariableStorage storage, VariableData variableData, Dictionary<string, float> floatVariables, Dictionary<string, string> stringVariables, Dictionary<string, bool> boolVariables)
+   		VariableHandler.Clear(InMemoryVariableStorage storage)
    		```
    	- Get Methods:
    	  	```csharp
- 		- VariableHandler.GetVariable(InMemoryVariableStorage, VariableData, VariableName, out Value) //value = string/float/int
-   		- VariableHandler.GetStringVariables(InMemoryVariableStorage storage) // Dictionary<string, string>
-   	 	- VariableHandler.GetFloatVariables(InMemoryVariableStorage storage) // Dictionary<string, float>
-   	  	- VariableHandler.GetBoolVariables(InMemoryVariableStorage storage) // Dictionary<string, bool>
-   	  	- VariableHandler. GetAllVariables(InMemoryVariableStorage storage) // (Dictionary<string, float>, Dictionary<string, string>, Dictionary<string, bool>)
+ 		VariableHandler.GetVariable(InMemoryVariableStorage, VariableData, VariableName, out Value) //value = string/float/int
+   		VariableHandler.GetStringVariables(InMemoryVariableStorage storage) // Dictionary<string, string>
+   	 	VariableHandler.GetFloatVariables(InMemoryVariableStorage storage) // Dictionary<string, float>
+   	  	VariableHandler.GetBoolVariables(InMemoryVariableStorage storage) // Dictionary<string, bool>
+   	  	VariableHandler.GetAllVariables(InMemoryVariableStorage storage) // (Dictionary<string, float>, Dictionary<string, string>, Dictionary<string, bool>)
    	   	```
 # Variable Logging:
 - You can use the Variable Verifier Window to see the Variables added to the In-Memory Variable Storage.
