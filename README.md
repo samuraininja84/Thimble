@@ -1,5 +1,4 @@
-# Thimble
-A Custom Logging & Debugging System for YarnSpinner
+# Thimble - A Custom Logging & Debugging System for YarnSpinner
 
 - Purpose:
 	- It adds the ability to create custom commands and functions that can easily be added to the Yarn Spinner Dialogue Runner and update existing yarn variables at runtime.
