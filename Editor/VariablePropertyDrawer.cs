@@ -62,7 +62,7 @@ namespace Thimble.Editor
             float gap = 3f;
 
             // Draw name property and show value property side by side
-            Rect prefixSymbolRect = new Rect(position.x, position.y, (position.width + prefixWidth) - position.width , position.height);
+            Rect prefixSymbolRect = new Rect(position.x, position.y, (position.width + prefixWidth) - position.width, position.height);
             Rect nameRect = new Rect(position.x + offset / 2f, position.y, width - offset / 2, position.height);
             Rect valueRect = new Rect(position.x + width + gap, position.y, width, position.height);
 
