@@ -48,12 +48,13 @@ namespace Thimble.Editor
             Rect labelPosition = position;
             position = EditorGUI.PrefixLabel(labelPosition, GUIUtility.GetControlID(FocusType.Passive), label);
 
+            // Store the current indent level and set it to 0
             int indent = EditorGUI.indentLevel;
             EditorGUI.indentLevel = 0;
 
             // Calculate the divider based on the use value properties
             float divider = 2f;
-            if (useBoolProperty.boolValue == true) divider = 1.045f;
+            if (useBoolProperty.boolValue == true) divider = 1.065f;
 
             // Calculate the width and offset for the name and value properties
             float width = position.width / divider;
