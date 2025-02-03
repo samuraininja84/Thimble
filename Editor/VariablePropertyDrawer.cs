@@ -53,7 +53,7 @@ namespace Thimble.Editor
 
             // Calculate the divider based on the use value properties
             float divider = 2f;
-            if (useBoolProperty.boolValue == true) divider = 1.065f;
+            if (useBoolProperty.boolValue == true) divider = 1.05f;
 
             // Calculate the width and offset for the name and value properties
             float width = position.width / divider;
