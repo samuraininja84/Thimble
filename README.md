@@ -270,6 +270,12 @@
  	```
  - There is also a scriptable object called Node Reference that features this behavior and renames itself to match the name of the active node name
  - You can find it under Create -> Thimble -> New Node Reference
+ - This references similarly to Node Pointer with these get methods for the pointer's value
+	```csharp
+  	public string GetActiveNodeName()
+        public List<string> GetTitles()
+        public List<string> GetContent()
+ 	```
 --------------------------------
 
 - That's it! You should now have a custom command system that can be easily added to the Yarn Spinner Dialogue Runner and logged in the Command Editor Window.
