@@ -1,4 +1,6 @@
 using UnityEngine;
+using System.Collections.Generic;
+
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -26,13 +28,31 @@ namespace Thimble
             nodePointer.ParseForTitles();
         }
 
+        public string GetActiveNodeName()
+        {
+            // Get the active node name from the node pointer.
+            return nodePointer.activeNodeName;
+        }
+
+        public List<string> GetTitles()
+        {
+            // Get the titles from the node pointer.
+            return nodePointer.nodeNames;
+        }
+
+        public List<string> GetContent()
+        {
+            // Get the content from the node pointer.
+            return nodePointer.ParseForContent();
+        }
+
         #if UNITY_EDITOR
 
         [ContextMenu("Refresh")]
         public void Refresh()
         {
             // Set object name to the name of the node
-            name = nodePointer.linkName;
+            name = nodePointer.activeNodeName;
 
             // Set file name to the name of the node
             string path = AssetDatabase.GetAssetPath(this);

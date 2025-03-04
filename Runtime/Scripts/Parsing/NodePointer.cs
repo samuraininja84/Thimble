@@ -7,9 +7,9 @@ namespace Thimble
     public struct NodePointer
     {
         public TextAsset storyFile;
-        public string linkName;
-        public int linkIndex;
-        public List<string> linkNames;
+        public string activeNodeName;
+        public int activeNodeID;
+        public List<string> nodeNames;
 
         public void SetStoryFile(TextAsset file)
         {
@@ -18,44 +18,74 @@ namespace Thimble
             storyFile = file;
         }
 
-        public void SetLinkName(string name)
+        public void SetNodeByName(string name)
         {
             // Check if the name is valid, if not return.
             if (string.IsNullOrEmpty(name)) return;
-            if (linkNames == null || linkNames.Count == 0) return;
-            if (!linkNames.Contains(name)) return;
+            if (nodeNames == null || nodeNames.Count == 0) return;
+            if (!nodeNames.Contains(name)) return;
 
             // This method is used to set the link name to the name of the node.
-            for (int i = 0; i < linkNames.Count; i++)
+            for (int i = 0; i < nodeNames.Count; i++)
             {
-                if (linkNames[i] == name)
+                if (nodeNames[i] == name)
                 {
-                    linkName = name;
-                    linkIndex = i;
+                    activeNodeName = name;
+                    activeNodeID = i;
                     break;
                 }
             }
         }
 
-        public void SetLinkIndex(int index)
+        public void SetNodeByID(int index)
         {
             // Check if the index is valid, if not return.
-            if (index < 0 || index >= linkNames.Count) return;
-            if (linkNames == null || linkNames.Count == 0) return;
-            if (linkNames[index] == null) return;
-            if (linkNames[index] == string.Empty) return;
+            if (index < 0 || index >= nodeNames.Count) return;
+            if (nodeNames == null || nodeNames.Count == 0) return;
+            if (nodeNames[index] == null) return;
+            if (nodeNames[index] == string.Empty) return;
 
             // This method is used to set the link index to the index of the node.
-            if (index >= 0 && index < linkNames.Count)
+            if (index >= 0 && index < nodeNames.Count)
             {
-                linkIndex = index;
-                linkName = linkNames[index];
+                activeNodeID = index;
+                activeNodeName = nodeNames[index];
             }
+        }
+
+        public void SetNodeNames(TextAsset file)
+        {
+            // Set the story file to the file passed in.
+            SetStoryFile(file);
+
+            // This method is used to parse the story file for the title of the nodes.
+            nodeNames = new List<string>();
+
+            // Intialize the lines with the text from the story file and split it into lines.
+            string[] lines = storyFile.text.Split('\n');
+
+            // Loop through the lines and look for the line with "title: {name}".
+            for (int i = 0; i < lines.Length; i++)
+            {
+                // If the line contains "title: {name}", set the nodeName to the name in the line.
+                if (lines[i].Contains("title:"))
+                {
+                    string name = lines[i].Split(':')[1].Trim();
+                    nodeNames.Add(name);
+                }
+            }
+        }
+
+        public void SetNodeNames(List<string> names)
+        {
+            // Check if the names are valid, if not return.
+            if (names == null || names.Count == 0) return;
+            nodeNames = names;
         }
 
         public List<string> ParseForTitles()
         {
-            // This method is used to parse the story file for the title of the node.
+            // This method is used to parse the story file for the title of the nodes.
             List<string> titles = new List<string>();
 
             // Intialize the lines with the text from the story file and split it into lines.
@@ -69,7 +99,6 @@ namespace Thimble
                 {
                     string name = lines[i].Split(':')[1].Trim();
                     titles.Add(name);
-                    linkNames.Add(name);
                 }
             }
 

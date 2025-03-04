@@ -15,10 +15,10 @@ namespace Thimble.Editor
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             // Get value properties
-            var linkNameProperty = property.FindPropertyRelative("linkName");
-            var linkIndexProperty = property.FindPropertyRelative("linkIndex");
-            var linkNamesProperty = property.FindPropertyRelative("linkNames");
             var storyFileProperty = property.FindPropertyRelative("storyFile");
+            var activeNodeNameProperty = property.FindPropertyRelative("activeNodeName");
+            var activeNodeIDProperty = property.FindPropertyRelative("activeNodeID");
+            var activeNodeNamesProperty = property.FindPropertyRelative("nodeNames");
 
             // Begin change check
             EditorGUI.BeginChangeCheck();
@@ -34,18 +34,18 @@ namespace Thimble.Editor
             EditorGUI.indentLevel = 0;
 
             // Draw link name and index properties side by side
-            Rect linkNameRect = new Rect(position.x, position.y, position.width, position.height);
+            Rect activeNodeNameRect = new Rect(position.x, position.y, position.width, position.height);
 
             // Draw a dropdown for all the nodes in the story file
-            int chosenIndexValue = linkIndexProperty.intValue;
+            int chosenIndexValue = activeNodeIDProperty.intValue;
             List<string> listNames = new List<string>();
 
             // Draw the story file property field, if it exists, otherwise draw a text field with the none value
-            if (linkNamesProperty != null && listNames.Count >= 0)
+            if (activeNodeNamesProperty != null && listNames.Count >= 0)
             {
-                for (int i = 0; i < linkNamesProperty.arraySize; i++)
+                for (int i = 0; i < activeNodeNamesProperty.arraySize; i++)
                 {
-                    listNames.Add(linkNamesProperty.GetArrayElementAtIndex(i).stringValue);
+                    listNames.Add(activeNodeNamesProperty.GetArrayElementAtIndex(i).stringValue);
                 }
 
                 // If the list is empty, set the index to 0
@@ -56,14 +56,14 @@ namespace Thimble.Editor
                     // Draw a text field for the link name
                     chosenIndexValue = 0;
                     listNames = new List<string>{ "None" };
-                    chosenIndexValue = EditorGUI.Popup(linkNameRect, chosenIndexValue, listNames.ToArray());
+                    chosenIndexValue = EditorGUI.Popup(activeNodeNameRect, chosenIndexValue, listNames.ToArray());
                 }
                 else
                 {
                     // Draw the dropdown and set the chosen index value
-                    chosenIndexValue = EditorGUI.Popup(linkNameRect, chosenIndexValue, listNames.ToArray());
-                    linkNameProperty.stringValue = listNames[chosenIndexValue];
-                    linkIndexProperty.intValue = chosenIndexValue;
+                    chosenIndexValue = EditorGUI.Popup(activeNodeNameRect, chosenIndexValue, listNames.ToArray());
+                    activeNodeNameProperty.stringValue = listNames[chosenIndexValue];
+                    activeNodeIDProperty.intValue = chosenIndexValue;
                 }
             }
             else
@@ -71,7 +71,7 @@ namespace Thimble.Editor
                 // Draw a text field for the link name
                 chosenIndexValue = 0;
                 listNames = new List<string>{ "None" };
-                chosenIndexValue = EditorGUI.Popup(linkNameRect, chosenIndexValue, listNames.ToArray());
+                chosenIndexValue = EditorGUI.Popup(activeNodeNameRect, chosenIndexValue, listNames.ToArray());
             }
 
             // Check if changes were made
