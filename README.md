@@ -100,7 +100,7 @@
 	- A Dialogue Runner Referencer on your GameObject that has your Dialogue Runner.
 		- If you are missing a Dialogue Runner Referencer, add one by dragging it onto the GameObject with the Dialogue Runner component.
 	- A CommandData ScriptableObject.
-		- If you are missing a CommandData ScriptableObject, you can create one by right-clicking in the Project window and selecting Create -> Commands -> New Command Data.
+		- If you are missing a CommandData ScriptableObject, you can create one by right-clicking in the Project window and selecting Create -> Thimble -> Commands -> New Command Data.
 - By default, there should be a Command Data ScriptableObject in the Runtime/Data folder and a Dialogue Runner Prefab with a Dialogue Runner Referencer component to use as a reference.
 
 # Minimum Function Set-Up Requirements:
@@ -227,9 +227,49 @@
 	- A Variable Storage Referencer on your GameObject that has your Dialogue Runner.
 		- If you are missing a Variable Storage Referencer, add one by dragging it onto the GameObject with the Variable Storage component.
 	- A VariableData ScriptableObject.
-		- If you are missing a VariableData ScriptableObject, you can create one by right-clicking in the Project window and selecting Create -> Variables -> New Variable Data.
+		- If you are missing a VariableData ScriptableObject, you can create one by right-clicking in the Project window and selecting Create -> Thimble -> Variables -> New Variable Data.
 - By default, there should be a Variable Data ScriptableObject in the Runtime/Data folder and a Dialogue Runner Prefab with a Variable Storage Referencer component to use as a reference.
-  
+
+# Yarn File Parsing:
+- There is a struct called Node Pointer that you can use as a way to get the name of all the nodes in your Yarn Files
+- To do so, you can do something like this:
+	```csharp
+	public TextAsset storyFile;
+  	NodePointer startNode;
+ 	private void OnValidate()
+ 	{
+	 	startNode.SetStoryFile(storyFile);
+		startNode.ParseForTitles();
+	}
+	```
+- Or this:
+	```csharp
+  	private void OnValidate()
+ 	{
+	 	startNode.SetNodeNames(storyFile);
+	}
+ 	```
+- Afterwards, when dragging the reference into the inspector, it should update with a completed popup with all your node names.
+- To reference your currently selected node, you can call it like this:
+	```csharp
+  	private string GetNode()
+ 	{
+	 	return startNode.activeNodeName;
+	}
+ 	```
+- There are also a few ways to set the active node and the node list
+- Such as:
+	```csharp
+  	private void SetPointer()
+ 	{
+	 	startNode.SetNodeByName(string name)
+ 	 	startNode.SetNodeByID(int index)
+ 	 	startNode.SetNodeNames(TextAsset file)
+ 	 	startNode.SetNodeNames(List<string> names)
+	}
+ 	```
+ - There is also a scriptable object called Node Reference that features this behavior and renames itself to match the name of the active node name
+ - You can find it under Create -> Thimble -> New Node Reference
 --------------------------------
 
 - That's it! You should now have a custom command system that can be easily added to the Yarn Spinner Dialogue Runner and logged in the Command Editor Window.
