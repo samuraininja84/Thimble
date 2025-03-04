@@ -12,7 +12,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Removed
 
-## [1.1.0] - 2024-12-16
+## [1.2.0] - 2025-03-04
 
 ### Added
 * Added Parsing Struct and Scriptable Object For Selecting Nodes & Their Content From Yarn Files
