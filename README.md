@@ -206,13 +206,13 @@
 - From here, you can use Variable Handler to set and get variables like this:
 	- Set Methods:
  		```csharp
- 		VariableHandler.SetVariable(InMemoryVariableStorage, VariableData, VariableName, Value) //value = string/float/int
+ 		VariableHandler.SetVariable(InMemoryVariableStorage, VariableData, VariableName, Value) //value = string/float/bool
    		VariableHandler.SetAllVariables(InMemoryVariableStorage storage, VariableData variableData, Dictionary<string, float> floatVariables, Dictionary<string, string> stringVariables, Dictionary<string, bool> boolVariables)
    		VariableHandler.Clear(InMemoryVariableStorage storage)
    		```
    	- Get Methods:
    	  	```csharp
- 		VariableHandler.GetVariable(InMemoryVariableStorage, VariableData, VariableName, out Value) //value = string/float/int
+ 		VariableHandler.GetVariable(InMemoryVariableStorage, VariableData, VariableName, out Value) //value = string/float/bool
    		VariableHandler.GetStringVariables(InMemoryVariableStorage storage) // Dictionary<string, string>
    	 	VariableHandler.GetFloatVariables(InMemoryVariableStorage storage) // Dictionary<string, float>
    	  	VariableHandler.GetBoolVariables(InMemoryVariableStorage storage) // Dictionary<string, bool>
