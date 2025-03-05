@@ -231,7 +231,7 @@
 		- If you are missing a VariableData ScriptableObject, you can create one by right-clicking in the Project window and selecting Create -> Thimble -> Variables -> New Variable Data.
 - By default, there should be a Variable Data ScriptableObject in the Runtime/Data folder and a Dialogue Runner Prefab with a Variable Storage Referencer component to use as a reference.
 
-# Yarn File Parsing:
+# Yarn Script Parsing:
 - There is a struct called Node Pointer that you can use as a way to get the name of all the nodes in your Yarn Files
 - To do so, you can do something like this:
 	```csharp
@@ -263,19 +263,27 @@
 	```csharp
   	private void SetPointer()
  	{
-	 	startNode.SetNodeByName(string name)
- 	 	startNode.SetNodeByID(int index)
- 	 	startNode.SetNodeNames(TextAsset file)
- 	 	startNode.SetNodeNames(List<string> names)
+	 	startNode.SetNodeByName(string name) // Sets the current node by a matching string
+ 	 	startNode.SetNodeByID(int index) // Sets the current node name by an index
+ 	 	startNode.SetNodeNames(TextAsset file) // Sets the enum values with a Yarn File
+ 	 	startNode.SetNodeNames(List<string> names) // Sets the enum values with a list of strings
 	}
+ 	```
+- On top of setting the names inside the node pointer or the current name, you can also retrieve them
+- This can be done with these methods:
+	```csharp
+  	public List<string> ParseForTitles() // Returns all of the titles in the Yarn Script from top to bottom
+ 	public List<string> ParseForContent() // Returns a parsed list of the content of each Yarn Node from top to bottom
+ 	public List<int> ParseForContentIndices() // Returns a list of numbers for all the lines with in between the "---" & "===" markers
+ 	public string MarkedContent() // Returns a string of everything in the script besides the title, tags, and node position
  	```
  - There is also a scriptable object called Node Reference that features this behavior and renames itself to match the name of the active node name
  - You can find it under Create -> Thimble -> New Node Reference
  - This references similarly to Node Pointer with these get methods for the pointer's value
 	```csharp
-  	public string GetActiveNodeName()
-        public List<string> GetTitles()
-        public List<string> GetContent()
+  	public string GetActiveNodeName() // Returns the pointer's currently selected node's name
+        public List<string> GetTitles() // Returns all of the titles in the Yarn Script from top to bottom
+        public List<string> GetContent() // Returns a parsed list of the content of each Yarn Node from top to bottom
  	```
 --------------------------------
 
