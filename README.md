@@ -222,8 +222,9 @@
 - You can use the Variable Verifier Window to see the Variables added to the In-Memory Variable Storage.
 - This window will show all the variables added to the In-Memory Variable Storage.
 - Open the Variable Verifier Window by selecting Tools -> Thimble -> Variable Verifier.
-- Enter Play Mode and open the Variable Verifier Window. You will see a list of all the Functions added to the In-Memory Variable Storage.
-- If it's empty, that may be because you are missing (at least) one of two things: 
+- Enter Play Mode, open the Variable Verifier Window, and press the Get Variables Button.
+- You shoudl see a list of all the Functions added to the In-Memory Variable Storage.
+- If it's empty, that may be because you are missing (at least) one of three things: 
 	- A Variable Storage Referencer on your GameObject that has your Dialogue Runner.
 		- If you are missing a Variable Storage Referencer, add one by dragging it onto the GameObject with the Variable Storage component.
 	- A VariableData ScriptableObject.
@@ -235,7 +236,7 @@
 - To do so, you can do something like this:
 	```csharp
 	public TextAsset storyFile;
-  	NodePointer startNode;
+  	public NodePointer startNode;
  	private void OnValidate()
  	{
 	 	startNode.SetStoryFile(storyFile);
