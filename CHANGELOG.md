@@ -22,7 +22,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 * Variable Verification Window for setting and getting Variables
 
-# [1.0.0](2024-12-08)
+# [1.0.0](https://github.com/samuraininja84/Thimble) (2024-12-08)
 
 ### Added
 * Full Command and Function Support
