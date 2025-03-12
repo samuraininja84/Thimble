@@ -12,6 +12,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Removed
 
+[1.3.0](https://github.com/aarthificial-gamedev/typewriter/compare/v1.2.0...v1.3.0) (2023-10-06)
+
 ## [1.2.0] (2025-03-04)
 
 ### Added
