@@ -112,6 +112,9 @@ namespace Thimble
 
         public void SetValue(InMemoryVariableStorage storage, string variableName, string value)
         {
+            // Check if the variable name starts with a "$", if not add it
+            if (!variableName.StartsWith("$")) variableName = "$" + variableName;
+
             // If the variable does not exist in the variable storage, log an error and return
             if (!storage.Contains(variableName))
             {
@@ -134,6 +137,9 @@ namespace Thimble
 
         public void SetValue(InMemoryVariableStorage storage, string variableName, float value)
         {
+            // Check if the variable name starts with a "$", if not add it
+            if (!variableName.StartsWith("$")) variableName = "$" + variableName;
+
             // If the variable does not exist in the variable storage, log an error and return
             if (!storage.Contains(variableName))
             {
@@ -156,6 +162,9 @@ namespace Thimble
 
         public void SetValue(InMemoryVariableStorage storage, string variableName, bool value)
         {
+            // Check if the variable name starts with a "$", if not add it
+            if (!variableName.StartsWith("$")) variableName = "$" + variableName;
+
             // If the variable does not exist in the variable storage, log an error and return
             if (!storage.Contains(variableName))
             {
@@ -194,6 +203,9 @@ namespace Thimble
 
         public string GetVariable(InMemoryVariableStorage storage, string variableName, string value = "")
         {
+            // Check if the variable name starts with a "$", if not add it
+            if (!variableName.StartsWith("$")) variableName = "$" + variableName;
+
             // If the variable does not exist in the variable storage, log an error and return an empty string
             if (!storage.Contains(variableName))
             {
@@ -211,6 +223,9 @@ namespace Thimble
 
         public float GetVariable(InMemoryVariableStorage storage, string variableName, float value = 0f)
         {
+            // Check if the variable name starts with a "$", if not add it
+            if (!variableName.StartsWith("$")) variableName = "$" + variableName;
+
             // If the variable does not exist in the variable storage, log an error and return 0f
             if (!storage.Contains(variableName))
             {
@@ -228,6 +243,9 @@ namespace Thimble
 
         public bool GetVariable(InMemoryVariableStorage storage, string variableName, bool value = false)
         {
+            // Check if the variable name starts with a "$", if not add it
+            if (!variableName.StartsWith("$")) variableName = "$" + variableName;
+
             // If the variable does not exist in the variable storage, log an error and return false
             if (!storage.Contains(variableName))
             {
