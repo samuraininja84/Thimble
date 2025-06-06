@@ -12,16 +12,12 @@ namespace Thimble.Editor
         private Vector2 scrollPosition = Vector2.zero;
 
         [MenuItem("Tools/Thimble/Command Center")]
-        public static void ShowWindow()
-        {
-            GetWindow<CommandDataEditorWindow>("Command Center");
-        }
+        public static void ShowWindow() => GetWindow<CommandDataEditorWindow>("Command Center");
+
+        private void OnEnable() => commandDatas = GetCommandData();
 
         private void OnGUI()
         {
-            // Get all command data from the folder path if the command data is null or if the command dats is not equal to the command data from the folder path
-            if (!HasAllCommandData()) commandDatas = GetCommandData();
-
             // Get the height of the window
             float windowHeight = position.height;
 
@@ -56,6 +52,9 @@ namespace Thimble.Editor
                 // Display an error message if no command datas are found in the folder path
                 EditorGUILayout.HelpBox("No Command Data is found in the folder path. Please create a Command Data in the folder path.", MessageType.Error);
             }
+
+            // Draw a button to refresh the command data
+            if (GUILayout.Button("Refresh Command Data")) commandDatas = GetCommandData();
 
             // End the scroll view
             EditorGUILayout.EndScrollView();
@@ -209,17 +208,9 @@ namespace Thimble.Editor
                 .ToArray();
         }
 
-        private bool CommandDataExists()
-        {
-            // Check if command data is not null and has a length greater than 0
-            return commandDatas != null && commandDatas.Length > 0;
-        }
+        private bool CommandDataExists() => commandDatas != null && commandDatas.Length > 0;
 
-        private bool HasAllCommandData()
-        {
-            // Check if the command data is not null and is equal to the command data from the folder path
-            return commandDatas != null && commandDatas == GetCommandData();
-        }
+        private bool HasAllCommandData() => commandDatas != null && commandDatas == GetCommandData();
 
         private bool HasActiveCommands(CommandData commandData)
         {
@@ -231,6 +222,8 @@ namespace Thimble.Editor
                     if (command.CommandActive()) return true;
                 }
             }
+
+            // If no commands are active, return false
             return false;
         }
 
@@ -244,19 +237,18 @@ namespace Thimble.Editor
                     if (!command.CommandActive()) return true;
                 }
             }
+
+            // If no commands are inactive, return false
             return false;
         }
 
-        private bool HasCommands(CommandData commandData)
-        {
-            // Check if the command data has commands
-            return commandData.commands.Count > 0;
-        }
+        private bool HasCommands(CommandData commandData) => commandData.commands.Count > 0;
 
-        private string FormatDataName(string commandDataName)
-        {
-            // Add spaces after each capital letter in the command data name
-            return string.Concat(commandDataName.Select(x => char.IsUpper(x) ? " " + x : x.ToString())).TrimStart(' ');
-        }
+        /// <summary>
+        /// Formats a command data name by inserting spaces before uppercase letters.
+        /// </summary>
+        /// <param name="commandDataName">The input string to format. Cannot be null.</param>
+        /// <returns>A formatted string with spaces inserted before uppercase letters in the input string.</returns>
+        private string FormatDataName(string commandDataName) => string.Concat(commandDataName.Select(x => char.IsUpper(x) ? " " + x : x.ToString())).TrimStart(' ');
     }
 }
