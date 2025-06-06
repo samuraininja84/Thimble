@@ -21,8 +21,8 @@ namespace Thimble
         public List<Variable> boolVariables = new List<Variable>();
 
         public Action OnVariableCreated;
-        public Action OnVariablesChanged;
-        public Action OnVariablesRemoved;
+        public Action OnVariableChanged;
+        public Action OnVariableRemoved;
 
         #region Variable Management
 
@@ -349,7 +349,7 @@ namespace Thimble
             }
 
             // Invoke the OnVariableRemoved event to notify listeners that a variable has been removed
-            if (removed) OnVariablesRemoved?.Invoke();
+            if (removed) OnVariableRemoved?.Invoke();
         }
 
         public bool HasAllVariables(InMemoryVariableStorage storage)
