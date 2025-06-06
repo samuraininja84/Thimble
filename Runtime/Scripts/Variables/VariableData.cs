@@ -20,9 +20,13 @@ namespace Thimble
         [Header("Bool Variables")]
         public List<Variable> boolVariables = new List<Variable>();
 
-        public Action OnVariableCreated;
-        public Action OnVariableModified;
-        public Action OnVariableRemoved;
+        public delegate void OnVariableCreated();
+        public delegate void OnVariableModified();
+        public delegate void OnVariableRemoved();
+
+        public event OnVariableCreated OnVariableCreated;
+        public event OnVariableModified OnVariableModified;
+        public event OnVariableRemoved OnVariableRemoved;
 
         #region Variable Management
 
@@ -140,8 +144,8 @@ namespace Thimble
                 }
             }
 
-            //// Invoke the OnVariableModified event to notify listeners that a variable has changed
-            //OnVariableModified?.Invoke();
+            // Invoke the OnVariableModified event to notify listeners that a variable has changed
+            OnVariableModified?.Invoke();
         }
 
         public void SetValue(InMemoryVariableStorage storage, string variableName, float value)
