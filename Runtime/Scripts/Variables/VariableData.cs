@@ -140,8 +140,8 @@ namespace Thimble
                 }
             }
 
-            // Invoke the OnVariableModified event to notify listeners that a variable has changed
-            OnVariableModified?.Invoke();
+            //// Invoke the OnVariableModified event to notify listeners that a variable has changed
+            //OnVariableModified?.Invoke();
         }
 
         public void SetValue(InMemoryVariableStorage storage, string variableName, float value)
@@ -168,8 +168,8 @@ namespace Thimble
                 }
             }
 
-            // Invoke the OnVariableModified event to notify listeners that a variable has changed
-            OnVariableModified.Invoke();
+            //// Invoke the OnVariableModified event to notify listeners that a variable has changed
+            //OnVariableModified.Invoke();
         }
 
         public void SetValue(InMemoryVariableStorage storage, string variableName, bool value)
@@ -196,8 +196,8 @@ namespace Thimble
                 }
             }
 
-            // Invoke the OnVariableModified event to notify listeners that a variable has changed
-            OnVariableModified.Invoke();
+            //// Invoke the OnVariableModified event to notify listeners that a variable has changed
+            //OnVariableModified.Invoke();
         }
 
         public void SetAllVariables(InMemoryVariableStorage storage, Dictionary<string, float> floatVariables, Dictionary<string, string> stringVariables, Dictionary<string, bool> boolVariables)
@@ -208,8 +208,8 @@ namespace Thimble
             // Get all variables from the storage
             GetAllVariables(storage);
 
-            // Invoke the OnVariableModified event to notify listeners that a variable has changed
-            OnVariableModified.Invoke();
+            //// Invoke the OnVariableModified event to notify listeners that a variable has changed
+            //OnVariableModified.Invoke();
         }
 
         public void ClearAllVariables(InMemoryVariableStorage storage)
@@ -219,9 +219,6 @@ namespace Thimble
 
             // Clear all variable lists
             Clear();
-
-            // Invoke the OnVariableModified event to notify listeners that a variable has changed
-            OnVariableRemoved?.Invoke();
         }
 
         #endregion
@@ -319,8 +316,8 @@ namespace Thimble
                 added = true;
             }
 
-            // Invoke the OnVariableModified event to notify listeners that a variable has changed
-            if (added) OnVariableCreated?.Invoke();
+            //// Invoke the OnVariableModified event to notify listeners that a variable has changed
+            //if (added) OnVariableCreated?.Invoke();
         }
 
         public void Remove(Variable variable)
@@ -345,8 +342,8 @@ namespace Thimble
                 removed = true;
             }
 
-            // Invoke the OnVariableRemoved event to notify listeners that a variable has been removed
-            if (removed) OnVariableRemoved?.Invoke();
+            //// Invoke the OnVariableRemoved event to notify listeners that a variable has been removed
+            //if (removed) OnVariableRemoved?.Invoke();
         }
 
         public bool HasAllVariables(InMemoryVariableStorage storage)
@@ -458,6 +455,9 @@ namespace Thimble
             stringVariables.Clear();
             floatVariables.Clear();
             boolVariables.Clear();
+
+            //// Invoke the OnVariableModified event to notify listeners that a variable has changed
+            //OnVariableRemoved?.Invoke();
         }
 
         #endregion
