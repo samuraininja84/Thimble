@@ -1,6 +1,6 @@
 {
   "name": "com.samuraininja.thimble",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "displayName": "Thimble",
   "description": "A Custom Logging & Debugging System for YarnSpinner.",
   "unity": "2022.3",
