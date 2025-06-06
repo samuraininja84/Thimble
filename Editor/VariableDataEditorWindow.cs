@@ -1,6 +1,6 @@
 using System.Linq;
-using UnityEditor;
 using UnityEngine;
+using UnityEditor;
 using Yarn.Unity;
 
 namespace Thimble.Editor
@@ -17,16 +17,14 @@ namespace Thimble.Editor
         private Vector2 scrollPosition = Vector2.zero;
 
         [MenuItem("Tools/Thimble/Variable Verification")]
-        public static void ShowWindow()
-        {
-            GetWindow<VariableDataEditorWindow>("Variable Verification");
-        }
+        public static void ShowWindow() => GetWindow<VariableDataEditorWindow>("Variable Verification");
+
+        private void OnEnable() => variableData = GetVariableData();
+
+        private void OnDisable() => ResetValues();
 
         private void OnGUI()
         {
-            // Get all variable data from the folder path if the variable data is null or if the variable dats is not equal to the variable data from the folder path
-            if (!HasAllVariableData()) variableData = GetVariableData();
-
             // Get the height of the window
             float windowHeight = position.height;
 
@@ -77,9 +75,12 @@ namespace Thimble.Editor
                 // Display the variable data label field
                 DrawHeader("Variable Data");
 
-                // Display an error message if no variable datas are found in the folder path
-                EditorGUILayout.HelpBox("No Variable Data is found in the folder path. Please create a Variable Data in the folder path.", MessageType.Error);
+                // Display an error message if no variable datas are found in the project
+                EditorGUILayout.HelpBox("No Variable Data has been found in the project.", MessageType.Error);
             }
+
+            // Display a button to refresh the variable data
+            if (GUILayout.Button("Refresh Variable Data")) variableData = GetVariableData();
 
             // End the scroll view
             EditorGUILayout.EndScrollView();
@@ -270,58 +271,27 @@ namespace Thimble.Editor
                 .ToArray();
         }
 
-        private bool VariableDataExists()
-        {
-            // Check if variable data is not null and has a length greater than 0
-            return variableData != null && variableData.Length > 0;
-        }
+        private bool VariableDataExists() => variableData != null && variableData.Length > 0;
 
-        private bool HasAllVariableData()
-        {
-            // Check if the variable data is not null and is equal to the variable data from the folder path
-            return variableData != null && variableData == GetVariableData();
-        }
+        private bool HasAllVariableData() => variableData != null && variableData == GetVariableData();
 
-        private bool HasStringVariables(VariableData variableData)
-        {
-            // Check if the variable data has active variables
-            return variableData.stringVariables.Count > 0;
-        }
+        private bool HasStringVariables(VariableData variableData) => variableData.stringVariables.Count > 0;
 
-        private bool HasFloatVariables(VariableData variableData)
-        {
-            // Check if the variable data has active variables
-            return variableData.floatVariables.Count > 0;
-        }
+        private bool HasFloatVariables(VariableData variableData) => variableData.floatVariables.Count > 0;
 
-        private bool HasBoolVariables(VariableData variableData)
-        {
-            // Check if the variable data has active variables
-            return variableData.boolVariables.Count > 0;
-        }
+        private bool HasBoolVariables(VariableData variableData) => variableData.boolVariables.Count > 0;
 
-        private bool HasVariables(VariableData variableData)
-        {
-            // Check if the variable data has variables
-            return HasStringVariables(variableData) || HasFloatVariables(variableData) || HasBoolVariables(variableData);
-        }
+        private bool HasVariables(VariableData variableData) => HasStringVariables(variableData) || HasFloatVariables(variableData) || HasBoolVariables(variableData);
 
-        private bool HasAllVariables(InMemoryVariableStorage storage, VariableData variableData)
-        {
-            // Check if the variables are equal to the variable storage
-            return variableData.Equal(storage);
-        }
+        private bool HasAllVariables(InMemoryVariableStorage storage, VariableData variableData) => variableData.Equal(storage);
 
-        private bool Equal(InMemoryVariableStorage storage, VariableData variableData)
-        {
-            // Check if the variables are equal to the variable storage
-            return variableData.Equal(storage);
-        }
+        private bool Equal(InMemoryVariableStorage storage, VariableData variableData) => variableData.Equal(storage);
 
-        private string FormatDataName(string variableDataName)
-        {
-            // Add spaces after each capital letter in the variable data name
-            return string.Concat(variableDataName.Select(x => char.IsUpper(x) ? " " + x : x.ToString())).TrimStart(' ');
-        }
+        /// <summary>
+        /// Formats a variable name by inserting spaces before uppercase letters.
+        /// </summary>
+        /// <param name="variableDataName">The name of the variable to format. Cannot be null.</param>
+        /// <returns>A formatted string with spaces inserted before uppercase letters in <paramref name="variableDataName"/>.</returns>
+        private string FormatDataName(string variableDataName) => string.Concat(variableDataName.Select(x => char.IsUpper(x) ? " " + x : x.ToString())).TrimStart(' ');
     }
 }
