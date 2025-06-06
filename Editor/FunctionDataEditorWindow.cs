@@ -12,16 +12,12 @@ namespace Thimble.Editor
         private Vector2 scrollPosition = Vector2.zero;
 
         [MenuItem("Tools/Thimble/Function Finder")]
-        public static void ShowWindow()
-        {
-            GetWindow<FunctionDataEditorWindow>("Function Finder");
-        }
+        public static void ShowWindow() => GetWindow<FunctionDataEditorWindow>("Function Finder");
+
+        private void OnEnable() => functionDatas = GetFunctionData();
 
         private void OnGUI()
         {
-            // Get all function data from the folder path if the function data is null or if the function dats is not equal to the function data from the folder path
-            if (!HasAllFunctionData()) functionDatas = GetFunctionData();
-
             // Get the height of the window
             float windowHeight = position.height;
 
@@ -56,6 +52,9 @@ namespace Thimble.Editor
                 // Display an error message if no function datas are found in the folder path
                 EditorGUILayout.HelpBox("No Function Data is found in the folder path. Please create a Function Data in the folder path.", MessageType.Error);
             }
+
+            // Display a button to refresh the function data
+            if (GUILayout.Button("Refresh Function Data")) functionDatas = GetFunctionData();
 
             // End the scroll view
             EditorGUILayout.EndScrollView();
@@ -209,17 +208,9 @@ namespace Thimble.Editor
                 .ToArray();
         }
 
-        private bool FunctionDataExists()
-        {
-            // Check if function data is not null and has a length greater than 0
-            return functionDatas != null && functionDatas.Length > 0;
-        }
+        private bool FunctionDataExists() => functionDatas != null && functionDatas.Length > 0;
 
-        private bool HasAllFunctionData()
-        {
-            // Check if the function data is not null and is equal to the function data from the folder path
-            return functionDatas != null && functionDatas == GetFunctionData();
-        }
+        private bool HasAllFunctionData() => functionDatas != null && functionDatas == GetFunctionData();
 
         private bool HasActiveFunctions(FunctionData functionData)
         {
@@ -231,6 +222,8 @@ namespace Thimble.Editor
                     if (function.FunctionActive()) return true;
                 }
             }
+
+            // If no active functions are found, return false
             return false;
         }
 
@@ -244,19 +237,18 @@ namespace Thimble.Editor
                     if (function.FunctionActive()) return true;
                 }
             }
+
+            // If no active functions are found, return false
             return false;
         }
 
-        private bool HasFunctions(FunctionData functionData)
-        {
-            // Check if the function data has functions
-            return functionData.functions.Count > 0;
-        }
+        private bool HasFunctions(FunctionData functionData) => functionData.functions.Count > 0;
 
-        private string FormatDataName(string functionDataName)
-        {
-            // Add spaces after each capital letter in the function data name
-            return string.Concat(functionDataName.Select(x => char.IsUpper(x) ? " " + x : x.ToString())).TrimStart(' ');
-        }
+        /// <summary>
+        /// Formats a given data name by inserting spaces before uppercase letters.
+        /// </summary>
+        /// <param name="functionDataName">The input string to format. Typically represents a camel-cased or Pascal-cased name.</param>
+        /// <returns>A formatted string where spaces are inserted before uppercase letters in the input.</returns>
+        private string FormatDataName(string functionDataName) => string.Concat(functionDataName.Select(x => char.IsUpper(x) ? " " + x : x.ToString())).TrimStart(' ');
     }
 }
