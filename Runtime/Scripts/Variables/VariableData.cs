@@ -20,9 +20,9 @@ namespace Thimble
         [Header("Bool Variables")]
         public List<Variable> boolVariables = new List<Variable>();
 
-        public static Action OnVariableCreated;
-        public static Action OnVariableModified;
-        public static Action OnVariableRemoved;
+        public Action OnVariableCreated;
+        public Action OnVariableModified;
+        public Action OnVariableRemoved;
 
         #region Variable Management
 
