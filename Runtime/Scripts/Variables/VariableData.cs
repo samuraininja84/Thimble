@@ -20,13 +20,13 @@ namespace Thimble
         [Header("Bool Variables")]
         public List<Variable> boolVariables = new List<Variable>();
 
-        public delegate void OnVariableCreated();
-        public delegate void OnVariableModified();
-        public delegate void OnVariableRemoved();
+        public delegate void OnCreation();
+        public delegate void OnModified();
+        public delegate void OnRemoved();
 
-        public event OnVariableCreated OnVariableCreated;
-        public event OnVariableModified OnVariableModified;
-        public event OnVariableRemoved OnVariableRemoved;
+        public event OnCreation OnVariableCreated;
+        public event OnModified OnVariableModified;
+        public event OnRemoved OnVariableRemoved;
 
         #region Variable Management
 
