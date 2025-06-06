@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Yarn.Unity;
@@ -19,10 +20,15 @@ namespace Thimble
         [Header("Bool Variables")]
         public List<Variable> boolVariables = new List<Variable>();
 
+        public Action OnVariableCreated;
+        public Action OnVariablesChanged;
+        public Action OnVariablesRemoved;
+
         #region Variable Management
 
         public void SortVariables()
         {
+            // Sort the string, float, and bool variables by their names
             stringVariables.Sort((x, y) => x.Name.CompareTo(y.Name));
             floatVariables.Sort((x, y) => x.Name.CompareTo(y.Name));
             boolVariables.Sort((x, y) => x.Name.CompareTo(y.Name));
@@ -50,19 +56,28 @@ namespace Thimble
 
             // Get all the variables from the storage
             GetAllVariables(storage);
+
+            // Invoke the OnVariableChanged event to notify listeners that a variable has changed
+            OnVariableChanged?.Invoke();
         }
 
         public void GetVariables(InMemoryVariableStorage storage)
         {
+            // Clear all variable lists before getting new variables
             Clear();
+
+            // Get all variables types from the storage
             GetStringVariables(storage);
             GetFloatVariables(storage);
             GetBoolVariables(storage);
+
+            // Sort the variables after getting them
             SortVariables();
         }
 
         public void GetStringVariables(InMemoryVariableStorage storage)
         {
+            // Get all the string variables from the storage and create them in the variable data
             Dictionary<string, string> stringVariables = storage.GetAllVariables().Item2;
             foreach (KeyValuePair<string, string> variable in stringVariables)
             {
@@ -72,6 +87,7 @@ namespace Thimble
 
         public void GetFloatVariables(InMemoryVariableStorage storage)
         {
+            // Get all the float variables from the storage and create them in the variable data
             Dictionary<string, float> floatVariables = storage.GetAllVariables().Item1;
             foreach (KeyValuePair<string, float> variable in floatVariables)
             {
@@ -81,6 +97,7 @@ namespace Thimble
 
         public void GetBoolVariables(InMemoryVariableStorage storage)
         {
+            // Get all the bool variables from the storage and create them in the variable data
             Dictionary<string, bool> boolVariables = storage.GetAllVariables().Item3;
             foreach (KeyValuePair<string, bool> variable in boolVariables)
             {
@@ -88,23 +105,15 @@ namespace Thimble
             }
         }
 
-        public void CreateVariable(string name, string value)
-        {
-            Variable variable = new Variable(name, value);
-            Add(variable);
-        }
+        #endregion
 
-        public void CreateVariable(string name, float value)
-        {
-            Variable variable = new Variable(name, value);
-            Add(variable);
-        }
+        #region Create Variable Methods
 
-        public void CreateVariable(string name, bool value)
-        {
-            Variable variable = new Variable(name, value);
-            Add(variable);
-        }
+        public void CreateVariable(string name, string value) => Add(new Variable(name, value));
+
+        public void CreateVariable(string name, float value) => Add(new Variable(name, value));
+
+        public void CreateVariable(string name, bool value) => Add(new Variable(name, value));
 
         #endregion
 
@@ -133,6 +142,9 @@ namespace Thimble
                     variable.StringValue = value;
                 }
             }
+
+            // Invoke the OnVariableChanged event to notify listeners that a variable has changed
+            OnVariableChanged?.Invoke();
         }
 
         public void SetValue(InMemoryVariableStorage storage, string variableName, float value)
@@ -158,6 +170,9 @@ namespace Thimble
                     variable.FloatValue = value;
                 }
             }
+
+            // Invoke the OnVariableChanged event to notify listeners that a variable has changed
+            OnVariableChanged?.Invoke();
         }
 
         public void SetValue(InMemoryVariableStorage storage, string variableName, bool value)
@@ -183,18 +198,33 @@ namespace Thimble
                     variable.BoolValue = value;
                 }
             }
+
+            // Invoke the OnVariableChanged event to notify listeners that a variable has changed
+            OnVariableChanged?.Invoke();
         }
 
         public void SetAllVariables(InMemoryVariableStorage storage, Dictionary<string, float> floatVariables, Dictionary<string, string> stringVariables, Dictionary<string, bool> boolVariables)
         {
+            // Set all string variables in the storage
             storage.SetAllVariables(floatVariables, stringVariables, boolVariables);
+
+            // Get all variables from the storage
             GetAllVariables(storage);
+
+            // Invoke the OnVariableChanged event to notify listeners that a variable has changed
+            OnVariableChanged?.Invoke();
         }
 
         public void ClearAllVariables(InMemoryVariableStorage storage)
         {
+            // Clear the variable storage
             storage.Clear();
+
+            // Clear all variable lists
             Clear();
+
+            // Invoke the OnVariableChanged event to notify listeners that a variable has changed
+            OnVariableChanged?.Invoke();
         }
 
         #endregion
@@ -272,34 +302,54 @@ namespace Thimble
 
         public void Add(Variable variable)
         {
+            // Initialize the added variable to false
+            bool added = false;
+
+            // Check if the variable is already in the appropriate list and add it if not
             if (variable.UseString && !stringVariables.Contains(variable))
             {
                 stringVariables.Add(variable);
+                added = true;
             }
             else if (variable.UseFloat && !floatVariables.Contains(variable))
             {
                 floatVariables.Add(variable);
+                added = true;
             }
             else if (variable.UseBool && !boolVariables.Contains(variable))
             {
                 boolVariables.Add(variable);
+                added = true;
             }
+
+            // Invoke the OnVariableChanged event to notify listeners that a variable has changed
+            if (added) OnVariableCreated?.Invoke();
         }
 
         public void Remove(Variable variable)
         {
+            // Initialize the removed variable to false
+            bool removed = false;
+
+            // Check if the variable is in the appropriate list and remove it
             if (variable.UseString && stringVariables.Contains(variable))
             {
                 stringVariables.Remove(variable);
+                removed = true;
             }
             else if (variable.UseFloat && floatVariables.Contains(variable))
             {
                 floatVariables.Remove(variable);
+                removed = true;
             }
             else if (variable.UseBool && boolVariables.Contains(variable))
             {
                 boolVariables.Remove(variable);
+                removed = true;
             }
+
+            // Invoke the OnVariableRemoved event to notify listeners that a variable has been removed
+            if (removed) OnVariablesRemoved?.Invoke();
         }
 
         public bool HasAllVariables(InMemoryVariableStorage storage)
@@ -407,6 +457,7 @@ namespace Thimble
 
         public void Clear()
         {
+            // Clear all variable lists
             stringVariables.Clear();
             floatVariables.Clear();
             boolVariables.Clear();
