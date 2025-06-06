@@ -16,6 +16,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 * Actions for OnVariableCreated, OnVariablesChanged, & OnVariablesRemoved.
+* Performance Updates For Editor Windows
 
 # [1.2.1](https://github.com/samuraininja84/Thimble/compare/v1.2.0...v1.2.1) (2025-03-31)
 
