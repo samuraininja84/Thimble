@@ -35,12 +35,11 @@ namespace Thimble.Editor
             if (VariableDataExists())
             {
                 // Display the variable data label field
-                DrawHeader("Variable Data");
+                DrawHeader("Variable Data Fields");
 
                 // Display all variable datas with their respective variable storage, variables, and variable tools
                 for (int i = 0; i < variableData.Length; i++)
                 {
-                    EditorGUILayout.LabelField("Variable Data: " + FormatDataName(variableData[i].name), EditorStyles.boldLabel);
                     DrawVariableData(variableData[i]);
                     EditorGUILayout.Space();
 
@@ -108,7 +107,7 @@ namespace Thimble.Editor
         private void DrawVariableData(VariableData variableData, InMemoryVariableStorage variableStorage = null)
         {
             // Display the variable data field
-            EditorGUILayout.LabelField("Variable Fields", EditorStyles.boldLabel);
+            EditorGUILayout.LabelField("Variable Data: " + FormatDataName(variableData[i].name), EditorStyles.boldLabel);
             EditorGUI.BeginDisabledGroup(true);
             variableData = (VariableData)EditorGUILayout.ObjectField("Variable Data", variableData, typeof(VariableData), false);
             EditorGUI.EndDisabledGroup();
