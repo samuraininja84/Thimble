@@ -107,7 +107,7 @@ namespace Thimble.Editor
         private void DrawVariableData(VariableData variableData, InMemoryVariableStorage variableStorage = null)
         {
             // Display the variable data field
-            EditorGUILayout.LabelField("Variable Data: " + FormatDataName(variableData[i].name), EditorStyles.boldLabel);
+            EditorGUILayout.LabelField("Variable Data: " + FormatDataName(variableData.name), EditorStyles.boldLabel);
             EditorGUI.BeginDisabledGroup(true);
             variableData = (VariableData)EditorGUILayout.ObjectField("Variable Data", variableData, typeof(VariableData), false);
             EditorGUI.EndDisabledGroup();
