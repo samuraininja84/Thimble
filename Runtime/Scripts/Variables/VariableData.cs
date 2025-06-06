@@ -4,7 +4,11 @@ using UnityEngine;
 using Yarn.Unity;
 
 namespace Thimble
-{
+{        
+    public delegate void OnCreation(); 
+    public delegate void OnModified();
+    public delegate void OnRemoved();
+
     [CreateAssetMenu(fileName = "New Variable Data", menuName = "Thimble/Variables/New Variable Data")]
     public class VariableData : ScriptableObject
     {
@@ -20,13 +24,16 @@ namespace Thimble
         [Header("Bool Variables")]
         public List<Variable> boolVariables = new List<Variable>();
 
-        public delegate void OnCreation();
-        public delegate void OnModified();
-        public delegate void OnRemoved();
-
         public event OnCreation OnVariableCreated;
         public event OnModified OnVariableModified;
         public event OnRemoved OnVariableRemoved;
+
+        private void OnEnable()
+        {
+            OnVariableCreated = null;
+            OnVariableModified = null;
+            OnVariableRemoved = null;
+        }
 
         #region Variable Management
 
