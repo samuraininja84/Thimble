@@ -233,16 +233,33 @@
 - By default, there should be a Variable Data ScriptableObject in the Runtime/Data folder and a Dialogue Runner Prefab with a Variable Storage Referencer component to use as a reference.
 
 # Yarn Script Parsing:
-- There is an attribute called 
-	```csharp
-	public TextAsset storyFile;
-  	public NodePointer startNode;
- 	private void OnValidate()
- 	{
-	 	startNode.SetStoryFile(storyFile);
-		startNode.ParseForTitles();
-	}
-	```
+There are three attributes called Yarn Node Dropdown, Yarn Yarn Speaker Dropdown, and Command Dropdown.
+- Yarn Node Dropdown
+	- Yarn Node Dropdown can be used to select any node within a given file path for use on a string.
+	- This can be used like this:
+		```csharp
+		[YarnNodeDropdown("Assets/Resources/Dialogue/Yarn")]
+		public string startNode;
+		```
+	- Then you can use a Dialogue Runner's Start Node Functionality like with any other string.
+
+- Yarn Speaker Dropdown
+	- Yarn Speaker Dropdown can be used to find any command within a given file path for use on a string.
+	- This can be used like this:
+		```csharp
+		[YarnSpeakerDropdown("Assets/Resources/Dialogue/Yarn")]
+		public string currentSpeaker;
+		```
+	- This could be good for simply debugging the names in your story or you could use it as a way to map speaker to certain GameObjects if you're using a custom dialogue system.
+
+- Yarn Command Dropdown
+	- Yarn Command Dropdown can be used to find any command within a given file path for use on a string.
+	- This can be used like this:
+		```csharp
+		[YarnCommandDropdown("Assets/Resources/Dialogue/Yarn")]
+		public string selectedCommand;
+		```
+	- I didn't really have a specific use case in mind for this, but I added it anyway. Recommend me a use if you find one for it.
 --------------------------------
 
 - That's it! You should now have a custom command system that can be easily added to the Yarn Spinner Dialogue Runner and logged in the Command Editor Window.
