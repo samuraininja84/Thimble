@@ -12,6 +12,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Removed
 
+# [1.3.0](https://github.com/samuraininja84/Thimble/compare/v1.2.2...v1.3.0) (2025-06-18)
+
+### Added
+* New Attributes for selecting Yarn Node, Speakers, and Commands from Yarn files
+
+### Removed
+* Node Pointer Parsing Struct and Node Reference Scriptable Object For Selecting Nodes & Their Content From Yarn Files
+
 # [1.2.2](https://github.com/samuraininja84/Thimble/compare/v1.2.1...v1.2.2) (2025-06-06)
 
 ### Added
