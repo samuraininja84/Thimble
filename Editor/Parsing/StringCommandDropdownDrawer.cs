@@ -14,9 +14,9 @@ namespace Thimble.Editor
         private bool initialized = false;
 
         private static readonly HashSet<string> excludedCommands = new HashSet<string>
-    {
-        "set", "declare", "endif", "if", "stop", "command"
-    };
+        {
+            "set", "declare", "endif", "if", "stop", "command"
+        };
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {

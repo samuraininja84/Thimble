@@ -6,10 +6,9 @@ namespace Thimble.Editor
     [CustomPropertyDrawer(typeof(Variable))]
     public class VariablePropertyDrawer : PropertyDrawer
     {
-        public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
-        {
-            return EditorGUIUtility.singleLineHeight;
-        }
+        private float height = EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
+
+        public override float GetPropertyHeight(SerializedProperty property, GUIContent label) => height;
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
