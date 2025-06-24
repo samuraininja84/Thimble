@@ -252,6 +252,15 @@ There are three attributes called Yarn Node Dropdown, Yarn Speaker Dropdown, and
 		```
 	- This could be good for simply debugging the names in your story, or you could use it as a way to map speakers to certain GameObjects if you're using a custom dialogue system.
 
+- Yarn Variable Dropdown
+	- Yarn Variable Dropdown can be used to find any declared variable within a given file path for use on a string.
+	- This can be used like this:
+		```csharp
+		[YarnVariableDropdown("Assets/Resources/Dialogue/Yarn")]
+		public string variableName;
+		```
+	- Intended for use as a helper attribute to get / set values for selected variables from Variable Storage.
+
 - Yarn Command Dropdown
 	- Yarn Command Dropdown can be used to find any command within a given file path for use on a string.
 	- This can be used like this:
