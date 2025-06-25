@@ -7,5 +7,8 @@
   "author": {
     "name": "Samuraininja84",
     "url": "https://github.com/samuaraininja"
-  }
+  },
+  "hideInEditor": false,
+  "type": "tool",
+  "_fingerprint": "6831cc8cb8b58d0c30559d42ffaa3a0c6f97336b"
 }
