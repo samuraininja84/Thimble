@@ -80,10 +80,10 @@ namespace Thimble.Editor
             EditorGUI.EndDisabledGroup();
 
             // Check if the command data has a dialogue runner before displaying the dialogue runner field, any existing commands, and the command tools
-            if (commandData.dialogueRunner != null)
+            if (commandData.runner != null)
             {
                 // Get the dialogue runner from the command data
-                if (dialogueRunner == null) dialogueRunner = commandData.dialogueRunner;
+                if (dialogueRunner == null) dialogueRunner = commandData.runner;
 
                 // Display the dialogue runner field if the command data is not null
                 EditorGUI.BeginDisabledGroup(true);
@@ -117,13 +117,13 @@ namespace Thimble.Editor
                             // Add a button to deactivate the command if it is active
                             if (GUILayout.Button("Deactivate"))
                             {
-                                commandData.DeactivateCommand(dialogueRunner, command);
+                                commandData.DeactivateCommand(command);
                             }
 
                             // Add a button to remove the command
                             if (GUILayout.Button("Remove"))
                             {
-                                commandData.RemoveCommand(dialogueRunner, command);
+                                commandData.RemoveCommand(command);
                             }
 
                             EditorGUILayout.EndHorizontal();
@@ -157,13 +157,13 @@ namespace Thimble.Editor
                             // Add a button to activate the command if it is inactive
                             if (GUILayout.Button("Activate") && !command.CommandActive())
                             {
-                                commandData.ActivateCommand(dialogueRunner, command);
+                                commandData.ActivateCommand(command);
                             }
 
                             // Add a button to remove the command
                             if (GUILayout.Button("Remove"))
                             {
-                                commandData.RemoveCommand(dialogueRunner, command);
+                                commandData.RemoveCommand(command);
                             }
 
                             EditorGUILayout.EndHorizontal();
@@ -178,19 +178,19 @@ namespace Thimble.Editor
                     EditorGUILayout.LabelField("Command Tools", EditorStyles.boldLabel);
                     if (GUILayout.Button("Activate All Commands"))
                     {
-                        commandData.ActivateAllCommands(dialogueRunner);
+                        commandData.ActivateAllCommands();
                     }
                     if (GUILayout.Button("Deactivate All Commands"))
                     {
-                        commandData.DeactivateAllCommands(dialogueRunner);
+                        commandData.DeactivateAllCommands();
                     }
                     if (GUILayout.Button("Clear All Commands"))
                     {
-                        commandData.ClearAllCommands(dialogueRunner);
+                        commandData.ClearAllCommands();
                     }
                 }
             }
-            else if (commandData.dialogueRunner == null)
+            else if (commandData.runner == null)
             {
                 // Display an error message if the dialogue runner is null
                 EditorGUILayout.Space();
@@ -212,35 +212,9 @@ namespace Thimble.Editor
 
         private bool HasAllCommandData() => commandDatas != null && commandDatas == GetCommandData();
 
-        private bool HasActiveCommands(CommandData commandData)
-        {
-            // Check if all commands are active
-            if (commandData.commands.Count > 0)
-            {
-                foreach (Command command in commandData.commands)
-                {
-                    if (command.CommandActive()) return true;
-                }
-            }
+        private bool HasActiveCommands(CommandData commandData) => commandData.commands.Exists(command => command.CommandActive());
 
-            // If no commands are active, return false
-            return false;
-        }
-
-        private bool HasInactiveCommands(CommandData commandData)
-        {
-            // Check if all commands are inactive
-            if (commandData.commands.Count > 0)
-            {
-                foreach (Command command in commandData.commands)
-                {
-                    if (!command.CommandActive()) return true;
-                }
-            }
-
-            // If no commands are inactive, return false
-            return false;
-        }
+        private bool HasInactiveCommands(CommandData commandData) => commandData.commands.Exists(command => !command.CommandActive());
 
         private bool HasCommands(CommandData commandData) => commandData.commands.Count > 0;
 

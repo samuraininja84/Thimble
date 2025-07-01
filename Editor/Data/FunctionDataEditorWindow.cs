@@ -80,10 +80,10 @@ namespace Thimble.Editor
             EditorGUI.EndDisabledGroup();
 
             // Check if the function data has a dialogue runner before displaying the dialogue runner field, any existing functions, and the function tools
-            if (functionData.dialogueRunner != null)
+            if (functionData.runner != null)
             {
                 // Get the dialogue runner from the function data
-                if (dialogueRunner == null) dialogueRunner = functionData.dialogueRunner;
+                if (dialogueRunner == null) dialogueRunner = functionData.runner;
 
                 // Display the dialogue runner field if the function data is not null
                 EditorGUI.BeginDisabledGroup(true);
@@ -117,13 +117,13 @@ namespace Thimble.Editor
                             // Add a button to deactivate the function if it is active
                             if (GUILayout.Button("Deactivate"))
                             {
-                                functionData.DeactivateFunction(dialogueRunner, function);
+                                functionData.DeactivateFunction(function);
                             }
 
                             // Add a button to remove the function
                             if (GUILayout.Button("Remove"))
                             {
-                                functionData.RemoveFunction(dialogueRunner, function);
+                                functionData.RemoveFunction(function);
                             }
 
                             EditorGUILayout.EndHorizontal();
@@ -157,13 +157,13 @@ namespace Thimble.Editor
                             // Add a button to activate the function if it is inactive
                             if (GUILayout.Button("Activate") && !function.FunctionActive())
                             {
-                                functionData.ActivateFunction(dialogueRunner, function);
+                                functionData.ActivateFunction(function);
                             }
 
                             // Add a button to remove the function
                             if (GUILayout.Button("Remove"))
                             {
-                                functionData.RemoveFunction(dialogueRunner, function);
+                                functionData.RemoveFunction(function);
                             }
 
                             EditorGUILayout.EndHorizontal();
@@ -178,19 +178,19 @@ namespace Thimble.Editor
                     EditorGUILayout.LabelField("Function Tools", EditorStyles.boldLabel);
                     if (GUILayout.Button("Activate All Functions"))
                     {
-                        functionData.ActivateAllFunctions(dialogueRunner);
+                        functionData.ActivateAllFunctions();
                     }
                     if (GUILayout.Button("Deactivate All Functions"))
                     {
-                        functionData.DeactivateAllFunctions(dialogueRunner);
+                        functionData.DeactivateAllFunctions();
                     }
                     if (GUILayout.Button("Clear All Functions"))
                     {
-                        functionData.ClearAllFunctions(dialogueRunner);
+                        functionData.ClearAllFunctions();
                     }
                 }
             }
-            else if (functionData.dialogueRunner == null)
+            else if (functionData.runner == null)
             {
                 // Display an error message if the dialogue runner is null
                 EditorGUILayout.Space();
@@ -212,35 +212,9 @@ namespace Thimble.Editor
 
         private bool HasAllFunctionData() => functionDatas != null && functionDatas == GetFunctionData();
 
-        private bool HasActiveFunctions(FunctionData functionData)
-        {
-            // Check if all functions are active
-            if (functionData.functions.Count > 0)
-            {
-                foreach (Function function in functionData.functions)
-                {
-                    if (function.FunctionActive()) return true;
-                }
-            }
+        private bool HasActiveFunctions(FunctionData functionData) => functionData.functions.Exists(function => function.FunctionActive());
 
-            // If no active functions are found, return false
-            return false;
-        }
-
-        private bool HasInactiveFunctions(FunctionData functionData)
-        {
-            // Check if all functions are inactive
-            if (functionData.functions.Count > 0)
-            {
-                foreach (Function function in functionData.functions)
-                {
-                    if (function.FunctionActive()) return true;
-                }
-            }
-
-            // If no active functions are found, return false
-            return false;
-        }
+        private bool HasInactiveFunctions(FunctionData functionData) => functionData.functions.Exists(function => !function.FunctionActive());
 
         private bool HasFunctions(FunctionData functionData) => functionData.functions.Count > 0;
 

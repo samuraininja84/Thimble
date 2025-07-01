@@ -8,31 +8,33 @@ namespace Thimble
     public class CommandData : ScriptableObject
     {
         [Header("Dialogue Runner")]
-        public DialogueRunner dialogueRunner;
+        public DialogueRunner runner;
 
         [Header("Commands")]
-        public List<Command> commands = new List<Command>();
+        public List<Command> commands = new();
+
+        public void SetRunner(DialogueRunner runner) => this.runner = runner;
 
         #region Command Methods
 
-        public void AddCommand(DialogueRunner runner, Command command)
+        public void AddCommand(Command command)
         {
             // Add the command to the list of commands and set the command state to inactive
             Add(command);
             command.SetCommandState(CommandState.Inactive);
         }
 
-        public void RemoveCommand(DialogueRunner runner, Command command)
+        public void RemoveCommand(Command command)
         {
             // Check if the command is in the list of commands, if it is, remove it
             if (commands.Contains(command))
             {
-                DeactivateCommand(runner, command);
+                DeactivateCommand(command);
                 Remove(command);
             }
         }
 
-        public void RemoveCommand(DialogueRunner runner, string commandName)
+        public void RemoveCommand(string commandName)
         {
             // Find the command with the matching name, if it exists, remove it
             Command commandToRemove = null;
@@ -45,22 +47,15 @@ namespace Thimble
                 }
             }
 
+            // If the command was found, deactivate it and remove it from the list
             if (commandToRemove != null)
             {
-                DeactivateCommand(runner, commandToRemove);
+                DeactivateCommand(commandToRemove);
                 Remove(commandToRemove);
             }
         }
 
-        public void ActivateAllCommands(DialogueRunner runner)
-        {
-            foreach (Command command in commands)
-            {
-                ActivateCommand(runner, command);
-            }
-        }
-
-        public void ActivateCommand(DialogueRunner runner, Command command)
+        public void ActivateCommand(Command command)
         {
             // Add the command to the list of commands if it is not already in the list
             Add(command);
@@ -69,23 +64,19 @@ namespace Thimble
             command.AddCommand(runner);
         }
 
-        public void DeactivateAllCommands(DialogueRunner runner)
-        {
-            foreach (Command command in commands)
-            {
-                DeactivateCommand(runner, command);
-            }
-        }
-
-        public void DeactivateCommand(DialogueRunner runner, Command command)
+        public void DeactivateCommand(Command command)
         {
             if (!command.CommandActive()) return;
             else command.RemoveCommand(runner);
         }
 
-        public void ClearAllCommands(DialogueRunner runner)
+        public void DeactivateAllCommands() => commands.ForEach(command => DeactivateCommand(command));
+
+        public void ActivateAllCommands() => commands.ForEach(command => ActivateCommand(command));
+
+        public void ClearAllCommands()
         {
-            DeactivateAllCommands(runner);
+            DeactivateAllCommands();
             commands.Clear();
         }
 
@@ -102,6 +93,8 @@ namespace Thimble
         {
             if (commands.Contains(command)) commands.Remove(command);
         }
+
+        public void Clear() => commands.Clear();
 
         #endregion
     }

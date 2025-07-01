@@ -10,8 +10,15 @@ namespace Thimble
     /// </remarks>
     public class YarnVariableDropdownAttribute : PropertyAttribute
     {
+        /// <summary>
+        /// Represents the path to a folder in the file system.
+        /// </summary>
         public string FolderPath;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="YarnVariableDropdownAttribute"/> class with the specified folder path.
+        /// </summary>
+        /// <param name="folderPath">The path to the folder containing Yarn variables. This value is used to populate the dropdown with available variables.</param>
         public YarnVariableDropdownAttribute(string folderPath)
         {
             FolderPath = folderPath;

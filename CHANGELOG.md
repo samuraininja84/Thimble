@@ -12,6 +12,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Removed
 
+# [1.4.0](https://github.com/samuraininja84/Thimble/compare/v1.3.1...v1.4.0) (2025-06-24)
+
+### Changed
+* Path for Yarn Variable Dropdown Attribute
+* Updated Command Data, Function Data, Variable Data and Variable Struct
+* Simplified Methods For Thimble
+
 # [1.3.1](https://github.com/samuraininja84/Thimble/compare/v1.3.0...v1.3.1) (2025-06-24)
 
 ### Added

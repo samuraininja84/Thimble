@@ -104,7 +104,7 @@ namespace Thimble.Editor
             EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
         }
 
-        private void DrawVariableData(VariableData variableData, InMemoryVariableStorage variableStorage = null)
+        private void DrawVariableData(VariableData variableData, VariableStorageBehaviour storage = null)
         {
             // Display the variable data field
             EditorGUILayout.LabelField("Variable Data: " + FormatDataName(variableData.name), EditorStyles.boldLabel);
@@ -116,14 +116,14 @@ namespace Thimble.Editor
             variableDataObject.Update();
 
             // Check if the variable data has a variable storage before displaying the variable storage field, any existing variables, and the variable tools
-            if (variableData.variableStorage != null)
+            if (variableData.storage != null)
             {
                 // Get the variable storage from the variable data
-                if (variableStorage == null) variableStorage = variableData.variableStorage;
+                if (storage == null) storage = variableData.storage;
 
                 // Display the variable storage field if the variable data is not null
                 EditorGUI.BeginDisabledGroup(true);
-                variableStorage = (InMemoryVariableStorage)EditorGUILayout.ObjectField("Variable Storage", variableStorage, typeof(InMemoryVariableStorage), true);
+                storage = (VariableStorageBehaviour)EditorGUILayout.ObjectField("Variable Storage", storage, typeof(VariableStorageBehaviour), true);
                 EditorGUI.EndDisabledGroup();
                 EditorGUILayout.Space();
 
@@ -142,12 +142,12 @@ namespace Thimble.Editor
 
                         EditorGUILayout.BeginHorizontal();
 
-                        EditorGUILayout.LabelField(variable.Name + ": " + variable.StringValue);
+                        EditorGUILayout.LabelField(variable.Name + ": " + variable.stringValue);
 
                         // Open a window to set the variable value
                         if (GUILayout.Button("Set Value"))
                         {
-                            variableData.SetValue(variableStorage, variable.Name, stringInput);
+                            variableData.SetValue(variable.Name, stringInput);
                             ResetValues();
                         }
 
@@ -170,12 +170,12 @@ namespace Thimble.Editor
 
                         EditorGUILayout.BeginHorizontal();
 
-                        EditorGUILayout.LabelField(variable.Name + ": " + variable.FloatValue.ToString());
+                        EditorGUILayout.LabelField(variable.Name + ": " + variable.floatValue.ToString());
 
                         // Add a button to set the variable value
                         if (GUILayout.Button("Set Value"))
                         {
-                            variableData.SetValue(variableStorage, variable.Name, floatInput);
+                            variableData.SetValue(variable.Name, floatInput);
                             ResetValues();
                         }
 
@@ -198,12 +198,12 @@ namespace Thimble.Editor
 
                         EditorGUILayout.BeginHorizontal();
 
-                        EditorGUILayout.LabelField(variable.Name + ": " + variable.BoolValue.ToString());
+                        EditorGUILayout.LabelField(variable.Name + ": " + variable.boolValue.ToString());
 
                         // Add a button to set the variable value
                         if (GUILayout.Button("Set Value"))
                         {
-                            variableData.SetValue(variableStorage, variable.Name, boolInput);
+                            variableData.SetValue(variable.Name, boolInput);
                             ResetValues();
                         }
 
@@ -218,24 +218,18 @@ namespace Thimble.Editor
                 if (HasVariables(variableData))
                 {
                     // Get all variables from the variable data if they are not equal to the variable storage
-                    if (!HasAllVariables(variableStorage, variableData))
-                    {
-                        variableData.GetVariables(variableStorage);
-                    }
+                    if (!HasAllVariables(variableData)) variableData.GetVariables();
 
-                    // If the variables are not equal to the variable storage, display the update variables button
-                    if (!Equal(variableStorage, variableData))
+                    // Display the update variables button
+                    if (GUILayout.Button("Update Variables"))
                     {
-                        if (GUILayout.Button("Update Variables"))
-                        {
-                            variableData.UpdateVariables(variableStorage);
-                        }
+                        variableData.UpdateVariables();
                     }
 
                     // Display the clear all variables button
                     if (GUILayout.Button("Clear All Variables"))
                     {
-                        variableData.ClearAllVariables(variableStorage);
+                        variableData.ClearAllVariables();
                     }
                 }
                 else if (!HasVariables(variableData))
@@ -246,11 +240,11 @@ namespace Thimble.Editor
                     // Display the get variables button if there are no variables
                     if (GUILayout.Button("Get Variables"))
                     {
-                        variableData.GetVariables(variableStorage);
+                        variableData.GetVariables();
                     }
                 }
             }
-            else if (variableData.variableStorage == null)
+            else if (variableData.storage == null)
             {
                 // Display an error message if the variable storage is null
                 EditorGUILayout.Space();
@@ -282,9 +276,9 @@ namespace Thimble.Editor
 
         private bool HasVariables(VariableData variableData) => HasStringVariables(variableData) || HasFloatVariables(variableData) || HasBoolVariables(variableData);
 
-        private bool HasAllVariables(InMemoryVariableStorage storage, VariableData variableData) => variableData.Equal(storage);
+        private bool HasAllVariables(VariableData variableData) => variableData.Equal();
 
-        private bool Equal(InMemoryVariableStorage storage, VariableData variableData) => variableData.Equal(storage);
+        private bool Equal(VariableData variableData) => variableData.Equal();
 
         /// <summary>
         /// Formats a variable name by inserting spaces before uppercase letters.

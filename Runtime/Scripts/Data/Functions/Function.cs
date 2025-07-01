@@ -23,25 +23,20 @@ namespace Thimble
 
         #region Public Methods
 
-        public void SetFunctionState(FunctionState state)
-        {
-            functionState = state;
-        }
+        public void SetFunctionState(FunctionState state) => functionState = state;
 
         public string GetFunctionInfo()
         {
-            return $"Command Tier: {FunctionTierToString()}\nFunction Origin: {functionOrigin}\nFunction Name: {functionName}\nFunction Description: {functionDescription}\nFunction Syntax: {functionSyntax}";
+            return $"Command Tier: {FunctionTierToString()}\n" +
+                $"Function Origin: {functionOrigin}\n" +
+                $"Function Name: {functionName}\n" +
+                $"Function Description: {functionDescription}\n" +
+                $"Function Syntax: {functionSyntax}";
         }
 
-        public string FunctionTierToString()
-        {
-            return functionTier.ToString().Insert(4, " ");
-        }
+        public string FunctionTierToString() => functionTier.ToString().Insert(4, " ");
 
-        public bool FunctionActive()
-        {
-            return functionState == FunctionState.Active;
-        }
+        public bool FunctionActive() => functionState == FunctionState.Active;
 
         #endregion
     }

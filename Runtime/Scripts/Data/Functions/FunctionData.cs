@@ -8,31 +8,33 @@ namespace Thimble
     public class FunctionData : ScriptableObject
     {
         [Header("Dialogue Runner")]
-        public DialogueRunner dialogueRunner;
+        public DialogueRunner runner;
 
         [Header("Functions")]
-        public List<Function> functions = new List<Function>();
+        public List<Function> functions = new();
+
+        public void SetRunner(DialogueRunner runner) => this.runner = runner;
 
         #region Function Methods
 
-        public void AddFunction(DialogueRunner runner, Function function)
+        public void AddFunction(Function function)
         {
             // Add the function to the list of functions and set the function state to inactive
             Add(function);
             function.SetFunctionState(FunctionState.Inactive);
         }
 
-        public void RemoveFunction(DialogueRunner runner, Function function)
+        public void RemoveFunction(Function function)
         {
             // Check if the function is in the list of functions, if it is, remove it
             if (functions.Contains(function))
             {
-                DeactivateFunction(runner, function);
+                DeactivateFunction(function);
                 Remove(function);
             }
         }
 
-        public void RemoveFunction(DialogueRunner runner, string functionName)
+        public void RemoveFunction(string functionName)
         {
             // Find the function with the matching name, if it exists, remove it
             Function functionToRemove = null;
@@ -47,20 +49,14 @@ namespace Thimble
 
             if (functionToRemove != null)
             {
-                DeactivateFunction(runner, functionToRemove);
+                DeactivateFunction(functionToRemove);
                 Remove(functionToRemove);
             }
         }
 
-        public void ActivateAllFunctions(DialogueRunner runner)
-        {
-            foreach (Function function in functions)
-            {
-                ActivateFunction(runner, function);
-            }
-        }
+        public void ActivateAllFunctions() => functions.ForEach(function => ActivateFunction(function));
 
-        public void ActivateFunction(DialogueRunner runner, Function function)
+        public void ActivateFunction(Function function)
         {
             // Add the function to the list of functions if it is not already in the list
             Add(function);
@@ -69,23 +65,17 @@ namespace Thimble
             function.AddFunction(runner);
         }
 
-        public void DeactivateAllFunctions(DialogueRunner runner)
-        {
-            foreach (Function function in functions)
-            {
-                DeactivateFunction(runner, function);
-            }
-        }
+        public void DeactivateAllFunctions() => functions.ForEach(function => DeactivateFunction(function));
 
-        public void DeactivateFunction(DialogueRunner runner, Function function)
+        public void DeactivateFunction(Function function)
         {
             if (!function.FunctionActive()) return;
             else function.RemoveFunction(runner);
         }
 
-        public void ClearAllFunctions(DialogueRunner runner)
+        public void ClearAllFunctions()
         {
-            DeactivateAllFunctions(runner);
+            DeactivateAllFunctions();
             functions.Clear();
         }
 
@@ -102,6 +92,8 @@ namespace Thimble
         {
             if (functions.Contains(function)) functions.Remove(function);
         }
+
+        public void Clear() => functions.Clear();
 
         #endregion
     }

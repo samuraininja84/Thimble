@@ -1,5 +1,5 @@
-using UnityEditor;
 using UnityEngine;
+using UnityEditor;
 
 namespace Thimble.Editor
 {
@@ -15,33 +15,39 @@ namespace Thimble.Editor
             // Begin change check
             EditorGUI.BeginChangeCheck();
 
-            // Get prefix property and name property
+            // Get the current property being drawn
+            Variable current = (Variable)fieldInfo.GetValue(property.serializedObject.targetObject);
+
+            // Get type property and name property
+            var typeProperty = property.FindPropertyRelative("Type");
             var nameProperty = property.FindPropertyRelative("Name");
 
             // Get value properties
-            var floatValueProperty = property.FindPropertyRelative("FloatValue");
-            var stringValueProperty = property.FindPropertyRelative("StringValue");
-            var boolValueProperty = property.FindPropertyRelative("BoolValue");
-
-            // Get use value properties
-            var useFloatProperty = property.FindPropertyRelative("UseFloat");
-            var useStringProperty = property.FindPropertyRelative("UseString");
-            var useBoolProperty = property.FindPropertyRelative("UseBool");
+            var floatValueProperty = property.FindPropertyRelative("floatValue");
+            var stringValueProperty = property.FindPropertyRelative("stringValue");
+            var boolValueProperty = property.FindPropertyRelative("boolValue");
 
             // Get shown property
             var shownProperty = null as SerializedProperty;
-            if (useFloatProperty.boolValue == true) shownProperty = floatValueProperty;
-            if (useStringProperty.boolValue == true) shownProperty = stringValueProperty;
-            if (useBoolProperty.boolValue == true) shownProperty = boolValueProperty;
-            if (useFloatProperty.boolValue == false && useStringProperty.boolValue == false && useBoolProperty.boolValue == false)
+            switch ((VariableType)typeProperty.intValue)
             {
-                shownProperty = stringValueProperty;
-                useStringProperty.boolValue = true;
+                case VariableType.Float:
+                    shownProperty = floatValueProperty;
+                    break;
+                case VariableType.String:
+                    shownProperty = stringValueProperty;
+                    break;
+                case VariableType.Bool:
+                    shownProperty = boolValueProperty;
+                    break;
             }
 
             // Begin property
             EditorGUI.BeginProperty(position, label, property);
-            position.width -= 24f;
+
+            // Adjust position for label
+            float gap = 3f;
+            position.width -= gap;
 
             // Draw label and get position
             Rect labelPosition = position;
@@ -53,13 +59,12 @@ namespace Thimble.Editor
 
             // Calculate the divider based on the use value properties
             float divider = 2f;
-            if (useBoolProperty.boolValue == true) divider = 1.065f;
+            if (current.IsBool) divider = 1.065f;
 
             // Calculate the width and offset for the name and value properties
             float width = position.width / divider;
             float prefixWidth = 15f;
             float offset = 36f;
-            float gap = 3f;
 
             // Draw name property and show value property side by side
             Rect prefixSymbolRect = new Rect(position.x, position.y, (position.width + prefixWidth) - position.width, position.height);
@@ -78,44 +83,36 @@ namespace Thimble.Editor
             EditorGUI.PropertyField(nameRect, nameProperty, GUIContent.none);
             EditorGUI.PropertyField(valueRect, shownProperty, GUIContent.none);
 
-            // Offset the position for the dropdown button
-            position.x += position.width + 24;
-            position.width = position.height = EditorGUI.GetPropertyHeight(shownProperty);
-            position.x -= position.width;
-
-            // Get the button style for the useConstantProperty
-            GUIStyle buttonStyle = EditorStyles.miniButton;
-            buttonStyle.padding = new RectOffset(1, 1, 1, 1);
-
-            // Get the content for the buttons
-            GUIContent settingsContent = EditorGUIUtility.IconContent("d_Settings");
-
-            // Draw the dropdown button to select the variable type
-            if (EditorGUI.DropdownButton(position, settingsContent, FocusType.Passive, buttonStyle))
+            // Create a right-click context menu for the property
+            bool hasClicked = Event.current.type == EventType.MouseUp  && Event.current.button == 1;
+            if (hasClicked && position.Contains(Event.current.mousePosition))
             {
-                var menu = new GenericMenu();
-                menu.AddItem(new GUIContent("Use String"), useStringProperty.boolValue, () =>
+                // Create a context menu
+                GenericMenu menu = new();
+
+                // Add items to the context menu based on the current type of the variable
+                menu.AddItem(new GUIContent("Use String"), IsType(typeProperty, VariableType.String), () =>
                 {
-                    useStringProperty.boolValue = true;
-                    useFloatProperty.boolValue = false;
-                    useBoolProperty.boolValue = false;
+                    typeProperty.enumValueIndex = (int)VariableType.String;
                     property.serializedObject.ApplyModifiedProperties();
                 });
-                menu.AddItem(new GUIContent("Use Float"), useFloatProperty.boolValue, () =>
+                menu.AddItem(new GUIContent("Use Float"), IsType(typeProperty, VariableType.Float), () =>
                 {
-                    useStringProperty.boolValue = false;
-                    useFloatProperty.boolValue = true;
-                    useBoolProperty.boolValue = false;
+                    typeProperty.enumValueIndex = (int)VariableType.Float;
                     property.serializedObject.ApplyModifiedProperties();
                 });
-                menu.AddItem(new GUIContent("Use Bool"), useBoolProperty.boolValue, () =>
+                menu.AddItem(new GUIContent("Use Bool"), IsType(typeProperty, VariableType.Bool), () =>
                 {
-                    useStringProperty.boolValue = false;
-                    useFloatProperty.boolValue = false;
-                    useBoolProperty.boolValue = true;
+                    // Switch to bool type
+                    typeProperty.enumValueIndex = (int)VariableType.Bool;
                     property.serializedObject.ApplyModifiedProperties();
                 });
+
+                // Show the context menu
                 menu.ShowAsContext();
+
+                // Consume the event to prevent it from propagating
+                Event.current.Use();
             }
 
             // Check if changes were made
@@ -130,5 +127,14 @@ namespace Thimble.Editor
             // End property
             EditorGUI.EndProperty();
         }
+
+        /// <summary>
+        /// Determines whether the specified <see cref="SerializedProperty"/> matches the given <see cref="VariableType"/>.
+        /// </summary>
+        /// <param name="property">The serialized property to evaluate. Must not be <see langword="null"/>.</param>
+        /// <param name="type">The variable type to compare against.</param>
+        /// <returns><see langword="true"/> if the <paramref name="property"/> corresponds to the specified <paramref
+        /// name="type"/>; otherwise, <see langword="false"/>.</returns>
+        private bool IsType(SerializedProperty property, VariableType type) => property.enumValueIndex == (int)type;
     }
 }

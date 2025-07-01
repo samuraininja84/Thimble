@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Yarn.Unity;
 
 namespace Thimble
@@ -159,36 +158,39 @@ namespace Thimble
 
         #region Command Data Methods
 
-        public static void AddCommand(DialogueRunner runner, CommandData commandData, Command command, List<Command> commandList = null)
+        public static void AddCommand(CommandData commandData, Command command, DialogueRunner runner = null)
         {
-            commandData.AddCommand(runner, command);
-            if (commandList != null && !commandList.Contains(command)) commandList.Add(command);
+            // Set the runner if it is not already set
+            commandData.runner = runner;
+            commandData.AddCommand(command);
         }
 
-        public static void RemoveCommand(DialogueRunner runner, CommandData commandData, Command command, List<Command> commandList = null)
+        public static void RemoveCommand(CommandData commandData, Command command, DialogueRunner runner = null)
         {
-            commandData.RemoveCommand(runner, command);
-            if (commandList != null && commandList.Contains(command)) commandList.Remove(command);
+            // Set the runner if it is not already set
+            commandData.runner = runner;
+            commandData.RemoveCommand(command);
         }
 
-        public static void RemoveCommand(DialogueRunner runner, CommandData commandData, string commandName, List<Command> commandList = null)
+        public static void RemoveCommand(CommandData commandData, string commandName, DialogueRunner runner = null)
         {
-            commandData.RemoveCommand(runner, commandName);
-            if (commandList != null)
-            {
-                Command command = commandList.Find(c => c.commandName == commandName);
-                if (command != null) commandList.Remove(command);
-            }
+            // Set the runner if it is not already set
+            commandData.runner = runner;
+            commandData.RemoveCommand(commandName);
         }
 
-        public static void ActivateCommand(DialogueRunner runner, CommandData commandData, Command command)
+        public static void ActivateCommand(CommandData commandData, Command command, DialogueRunner runner = null)
         {
-            commandData.ActivateCommand(runner, command);
+            // Set the runner if it is not already set
+            commandData.runner = runner;
+            commandData.ActivateCommand(command);
         }
 
-        public static void DeactivateCommand(DialogueRunner runner, CommandData commandData, Command command)
+        public static void DeactivateCommand(CommandData commandData, Command command, DialogueRunner runner = null)
         {
-            commandData.DeactivateCommand(runner, command);
+            // Set the runner if it is not already set
+            commandData.runner = runner;
+            commandData.DeactivateCommand(command);
         }
 
         #endregion
