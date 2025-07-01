@@ -34,13 +34,13 @@
 	- You can do so like this:
 		```csharp
 		Command command = CommandHandler.CreateCommand<string>(name, "setName", SetName, "Sets the player's name", "<<setName {name}>>");
-		CommandHandler.ActivateCommand(runner, commandData, command);
+		CommandHandler.ActivateCommand(commandData, command, runner);
 		```
 	- Or like this:
 		```csharp
 		Tier1Command<string> commandT1 = new Tier1Command<string>(name, "setName", SetName, "Sets the player's name", "<<setName {name}>>");
 		Command command = CommandHandler.CreateCommand(commandT1);
-		CommandHandler.ActivateCommand(runner, commandData, command);
+		CommandHandler.ActivateCommand(commandData, command, runner);
 		```
 
 # Command Creation / Activation Tips:
@@ -50,7 +50,7 @@
 	- You would use the CreateCommand method like this:
  		```csharp
 		Command command = CommandHandler.CreateCommand(name, "activatePlayer", ActivatePlayer, "Activates the player", "<<activatePlayer>>");
-		CommandHandler.ActivateCommand(runner, commandData, command);
+		CommandHandler.ActivateCommand(commandData, command, runner);
    		```
 	- Or the Tier0Command method like this:
 		```csharp
@@ -61,7 +61,7 @@
 	- You would use the CreateCommand method like this:
 		```csharp
 		Command command = CommandHandler.CreateCommand<string, int>(name, "setDetails", SetDetails, "Sets the player's name and age", "<<setDetails {name} {age}>>");
-		CommandHandler.ActivateCommand(runner, commandData, command);
+		CommandHandler.ActivateCommand(commandData, command, runner);
   		```
 	- Or a Tier{int}Command method like this:
 		```csharp
@@ -83,8 +83,8 @@
 - Inside the DeactivateCommands Method, you can put any commands you would like to Turn Off using the Deactivate Command or RemoveCommand Methods.
 	- You can do so like this:
 		```csharp
-		CommandHandler.DeactivateCommand(runner, commandData, command);
-		CommandHandler.RemoveCommand(runner, commandData, command);
+		CommandHandler.DeactivateCommand(commandData, command, runner);
+		CommandHandler.RemoveCommand(commandData, command, runner);
 		```
 
 # Command Deactivation / Removal Tips: 
@@ -130,13 +130,13 @@
 	- You can do so like this:
 		```csharp
 		Function Function = FunctionHandler.CreateFunction<string>(name, "setName", SetName, "Sets the player's name", "<<setName {name}>>");
-		FunctionHandler.ActivateFunction(runner, FunctionData, Function);
+		FunctionHandler.ActivateFunction(FunctionData, Function, runner);
 		```
 	- Or like this:
 		```csharp
 		Tier1Function<string> FunctionT1 = new Tier1Function<string>(name, "setName", SetName, "Sets the player's name", "<<setName {name}>>");
 		Function Function = FunctionHandler.CreateFunction(FunctionT1);
-		FunctionHandler.ActivateFunction(runner, FunctionData, Function);
+		FunctionHandler.ActivateFunction(FunctionData, Function, runner);
 		```
 
 # Function Creation / Activation Tips:
@@ -146,7 +146,7 @@
 	- You would use the CreateFunction method like this:
  		```csharp
 		Function Function = FunctionHandler.CreateFunction(name, "activatePlayer", ActivatePlayer, "Activates the player", "<<activatePlayer>>");
-		FunctionHandler.ActivateFunction(runner, FunctionData, Function);
+		FunctionHandler.ActivateFunction(FunctionData, Function, runner);
    		```
 	- Or the Tier0Function method like this:
 		```csharp
@@ -157,7 +157,7 @@
 	- You would use the CreateFunction method like this:
 		```csharp
 		Function Function = FunctionHandler.CreateFunction<string, int>(name, "setDetails", SetDetails, "Sets the player's name and age", "<<setDetails {name} {age}>>");
-		FunctionHandler.ActivateFunction(runner, FunctionData, Function);
+		FunctionHandler.ActivateFunction(FunctionData, Function, runner);
   		```
 	- Or a Tier{int}Function method like this:
 		```csharp
@@ -179,8 +179,8 @@
 - Inside the DeactivateFunctions Method, you can put any Functions you would like to Turn Off using the Deactivate Function or RemoveFunction Methods.
 	- You can do so like this:
 		```csharp
-		FunctionHandler.DeactivateFunction(runner, FunctionData, Function);
-		FunctionHandler.RemoveFunction(runner, FunctionData, Function);
+		FunctionHandler.DeactivateFunction(FunctionData, Function, runner);
+		FunctionHandler.RemoveFunction(FunctionData, Function, runner);
 		```
 
 # Function Deactivation / Removal Tips: 
