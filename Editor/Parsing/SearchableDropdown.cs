@@ -73,7 +73,7 @@ namespace Thimble.Editor
             }
 
             // Define a style for the close button as mini button
-            GUIStyle closeButtonStyle = EditorStyles.miniButton;
+            GUIStyle closeButtonStyle = new GUIStyle(EditorStyles.miniButton);
             closeButtonStyle.padding = new RectOffset(1, 1, 1, 1);
             closeButtonStyle.fixedHeight = EditorGUIUtility.singleLineHeight;
             closeButtonStyle.fixedWidth = 25;
