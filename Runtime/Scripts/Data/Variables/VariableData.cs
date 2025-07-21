@@ -38,6 +38,13 @@ namespace Thimble
         [ContextMenu("Update Variables")]
         public void UpdateVariables()
         {
+            // If the storage is null, log an error and return
+            if (storage == null)
+            {
+                Debug.LogError("Variable storage is not set. Please set the variable storage before updating variables.");
+                return;
+            }
+
             // Add all the string variables to the dictionaries
             foreach (Variable variable in stringVariables)
             {
@@ -188,7 +195,7 @@ namespace Thimble
         public void ClearAllVariables()
         {
             // Clear the variable storage
-            storage.Clear();
+            storage?.Clear();
 
             // Clear all variable lists
             Clear();
