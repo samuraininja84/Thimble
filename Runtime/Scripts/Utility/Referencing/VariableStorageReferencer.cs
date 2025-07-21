@@ -37,7 +37,7 @@ namespace Thimble
             foreach (VariableData data in variableData)
             {
                 // Set the Yarn Project for each variable data
-                data.SetYarnProject(yarnProject);
+                data.SetProject(yarnProject);
 
                 // Initialize the variable data
                 data.Initialize();
