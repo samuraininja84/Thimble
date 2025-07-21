@@ -9,6 +9,7 @@ namespace Thimble
     public class VariableData : ScriptableObject
     {
         [Header("Yarn Spinner")]
+        public YarnProject yarnProject;
         public VariableStorageBehaviour storage;
 
         [Header("String Variables")]
@@ -25,6 +26,44 @@ namespace Thimble
         public void AddChangeListener(Action<string, object> onChange) => storage.AddChangeListener(onChange);
 
         #region Variable Management
+
+        [ContextMenu("Initialize Variables")]
+        public void Initialize()
+        {
+            // If the project is null, log an error and return
+            if (yarnProject == null)
+            {
+                Debug.LogError("Yarn Project is not set. Please set the Yarn Project before initializing variables.");
+                return;
+            }
+
+            // Clear all variable lists before initializing
+            Clear();
+
+            // Get the initial values from the Yarn Project
+            var values = yarnProject.InitialValues;
+
+            // Iterate through the variable data and populate the dictionaries based on the variable type
+            foreach (var pair in values)
+            {
+                // Get the value from the pair
+                var value = pair.Value;
+
+                // Check the type of the value and add it to the appropriate dictionary
+                switch (value)
+                {
+                    case string stringValue:
+                        CreateVariable(pair.Key, stringValue);
+                        break;
+                    case float floatValue:
+                        CreateVariable(pair.Key, floatValue);
+                        break;
+                    case bool boolValue:
+                        CreateVariable(pair.Key, boolValue);
+                        break;
+                }
+            }
+        }
 
         [ContextMenu("Sort Variables")]
         public void SortVariables()
