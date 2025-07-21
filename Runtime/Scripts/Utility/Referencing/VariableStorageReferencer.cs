@@ -33,11 +33,21 @@ namespace Thimble
             // Workaround for an isssue with getting declarations from Yarn Project
             FindIntialValues(variableStorage);
 
-            // If there variables defined, iterate through them and set their storage
-            variableData.ForEach(data => data.SetStorage(variableStorage));
+            // If there are variable data defined, proceed to set them up
+            foreach (VariableData data in variableData)
+            {
+                // Set the Yarn Project for each variable data
+                data.SetYarnProject(yarnProject);
 
-            // Get the variables from the storage
-            variableData.ForEach(data => data.GetVariables());
+                // Initialize the variable data
+                data.Initialize();
+
+                // Set the variable storage for each variable data
+                data.SetStorage(variableStorage);
+
+                // Get the variables from the storage
+                data.GetVariables();
+            }
         }
 
         /// <summary>
@@ -54,7 +64,7 @@ namespace Thimble
             var initialValues = GetInitialValues();
 
             // Set all variables to their initial values
-            variableData.ForEach(data => data.SetAllVariables(initialValues.floats, initialValues.strings, initialValues.bools));
+            variableData.ForEach(data => data.Initialize());
         }
 
         /// <summary>
