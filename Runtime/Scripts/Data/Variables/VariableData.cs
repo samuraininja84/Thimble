@@ -21,6 +21,8 @@ namespace Thimble
         [Header("Bool Variables")]
         public List<Variable> boolVariables = new();
 
+        public void SetProject(YarnProject project) => yarnProject = project;
+
         public void SetStorage(VariableStorageBehaviour storage) => this.storage = storage;
 
         public void AddChangeListener(Action<string, object> onChange) => storage.AddChangeListener(onChange);
