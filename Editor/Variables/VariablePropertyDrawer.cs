@@ -15,9 +15,6 @@ namespace Thimble.Editor
             // Begin change check
             EditorGUI.BeginChangeCheck();
 
-            // Get the current property being drawn
-            Variable current = (Variable)fieldInfo.GetValue(property.serializedObject.targetObject);
-
             // Get type property and name property
             var typeProperty = property.FindPropertyRelative("Type");
             var nameProperty = property.FindPropertyRelative("Name");
@@ -59,7 +56,7 @@ namespace Thimble.Editor
 
             // Calculate the divider based on the use value properties
             float divider = 2f;
-            if (current.IsBool) divider = 1.065f;
+            if (boolValueProperty.boolValue) divider = 1.065f;
 
             // Calculate the width and offset for the name and value properties
             float width = position.width / divider;

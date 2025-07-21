@@ -29,7 +29,7 @@ namespace Thimble
             // If the storage is null, try to get it from the component
             variableStorage = GetVariableStorage();
 
-            // Workaround for sssue with getting declarations from Yarn Project
+            // Workaround for an isssue with getting declarations from Yarn Project
             FindIntialValues(variableStorage);
 
             // If there variables defined, iterate through them and set their storage
@@ -44,7 +44,17 @@ namespace Thimble
         /// </summary>
         /// <remarks>This method iterates through all variables in the collection, if any exist,  and sets
         /// their storage to <see langword="null"/> before clearing their data.</remarks>
-        private void RemoveVariableStorage() => variableData.ForEach(data => data.SetStorage(null));
+        private void RemoveVariableStorage()
+        {
+            // Clear the variable storage reference for each variable
+            variableData.ForEach(data => data.SetStorage(null));
+
+            // Get the initial values from the Yarn Project
+            var initialValues = GetInitialValues();
+
+            // Set all variables to their initial values
+            variableData.ForEach(data => data.SetAllVariables(initialValues.floats, initialValues.strings, initialValues.bools));
+        }
 
         /// <summary>
         /// Retrieves the variable storage instance used by the component.
@@ -64,27 +74,56 @@ namespace Thimble
         /// </remarks>
         private void FindIntialValues(VariableStorageBehaviour storage)
         {
+            var initialValues = GetInitialValues();
+            storage.SetAllVariables(initialValues.floats, initialValues.strings, initialValues.bools);
+        }
+
+        /// <summary>
+        /// Retrieves the initial set of variables categorized by type from the Yarn project.
+        /// </summary>
+        /// <remarks>This method extracts initial variable values from a Yarn project and organizes them
+        /// into separate dictionaries based on their types: float, string, and bool. These dictionaries can be used to
+        /// initialize or reset the state of a dialogue system.</remarks>
+        /// <returns>A tuple containing three dictionaries:  <list type="bullet"> <item> <description>A dictionary of float
+        /// variables, keyed by variable name.</description> </item> <item> <description>A dictionary of string
+        /// variables, keyed by variable name.</description> </item> <item> <description>A dictionary of bool variables,
+        /// keyed by variable name.</description> </item> </list></returns>
+        private (Dictionary<string, float> floats, Dictionary<string, string> strings, Dictionary<string, bool> bools) GetInitialValues()
+        {
+            // Get the Yarn Project from the Dialogue Runner
             var project = FindFirstObjectByType<DialogueRunner>().YarnProject;
+
+            // Get the initial values from the Yarn Project
             var values = project.InitialValues;
+
+            // Initialize dictionaries to hold different variable types
+            var floatVariables = new Dictionary<string, float>();
+            var stringVariables = new Dictionary<string, string>();
+            var boolVariables = new Dictionary<string, bool>();
+
+            // Iterate through the variable data and populate the dictionaries based on the variable type
             foreach (var pair in values)
             {
+                // Get the value from the pair
                 var value = pair.Value;
+
+                // Check the type of the value and add it to the appropriate dictionary
                 switch (value)
                 {
                     case string stringValue:
-                        storage.SetValue(pair.Key, stringValue);
+                        stringVariables.Add(pair.Key, stringValue);
                         break;
                     case float floatValue:
-                        storage.SetValue(pair.Key, floatValue);
+                        floatVariables.Add(pair.Key, floatValue);
                         break;
                     case bool boolValue:
-                        storage.SetValue(pair.Key, boolValue);
-                        break;
-                    default:
-                        Debug.LogWarning($"Unsupported variable type for key '{pair.Key}': {value.GetType()}");
+                        boolVariables.Add(pair.Key, boolValue);
                         break;
                 }
             }
+
+            // Return the dictionaries containing the variables
+            return (floatVariables, stringVariables, boolVariables);
         }
     }
 }
