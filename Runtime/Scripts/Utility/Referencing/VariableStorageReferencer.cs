@@ -9,6 +9,7 @@ namespace Thimble
     public class VariableStorageReferencer : MonoBehaviour
     {
         [Header("Yarn Spinner")]
+        public YarnProject yarnProject;
         public VariableStorageBehaviour variableStorage;
 
         [Header("Variables")]
@@ -90,11 +91,8 @@ namespace Thimble
         /// keyed by variable name.</description> </item> </list></returns>
         private (Dictionary<string, float> floats, Dictionary<string, string> strings, Dictionary<string, bool> bools) GetInitialValues()
         {
-            // Get the Yarn Project from the Dialogue Runner
-            var project = FindFirstObjectByType<DialogueRunner>().YarnProject;
-
             // Get the initial values from the Yarn Project
-            var values = project.InitialValues;
+            var values = yarnProject.InitialValues;
 
             // Initialize dictionaries to hold different variable types
             var floatVariables = new Dictionary<string, float>();
