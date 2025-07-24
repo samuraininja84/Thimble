@@ -4,10 +4,22 @@
   "displayName": "Thimble",
   "description": "A Custom Logging & Debugging System for YarnSpinner.",
   "unity": "2022.3",
+  "documentationUrl": "https://github.com/samuraininja84/Thimble/blob/main/README.md",
+  "changelogUrl": "https://github.com/samuraininja84/Thimble/blob/main/CHANGELOG.md",
+  "licensesUrl": "https://github.com/samuraininja84/Thimble/blob/main/LICENSE.md",
   "author": {
     "name": "Samuraininja84",
-    "url": "https://github.com/samuaraininja"
+    "url": "https://github.com/samuraininja84"
   },
+  "keywords": [
+    "logging",
+    "debugging",
+    "yarnspinner",
+    "wrapper",
+    "tool",
+    "editor",
+    "utility"
+  ],
   "hideInEditor": false,
   "type": "tool",
   "_fingerprint": "6831cc8cb8b58d0c30559d42ffaa3a0c6f97336b"
