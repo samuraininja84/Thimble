@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54cfb406f23af9e47a990c4daa30a5d2, type: 3}
+  m_Name: Thimble
+  m_EditorClassIdentifier: 
+  displayName: Thimble
+  packageName: Thimble
+  displayPriority: 0
+  exportOptions: 3
+  exportFolder: C:/Users/aaron/Documents/GitHub/UnityPackages/Custom
+  packageContent:
+  - fileMode: 0
+    fileObject: {fileID: 102900000, guid: 334a6a888ccb9ca4583879ae68b2ba0c, type: 3}
+    folderPath: C:/Users/aaron/Documents/GitHub/Dwalm/Assets/Plugins/Artisan/Sanctuary/Runtime
+  - fileMode: 0
+    fileObject: {fileID: 102900000, guid: 0e8137e3d5246df4bafbcc59496e0b53, type: 3}
+    folderPath: C:/Users/aaron/Documents/GitHub/Dwalm/Assets/Plugins/Artisan/Sanctuary/Editor
+  - fileMode: 0
+    fileObject: {fileID: 4900000, guid: 1d67590f27b377149894498678393572, type: 3}
+    folderPath: 
+  - fileMode: 0
+    fileObject: {fileID: 4900000, guid: 86ba2da60a5507f4bab6cf63b2bbff5c, type: 3}
+    folderPath: 
+  - fileMode: 0
+    fileObject: {fileID: 4900000, guid: 757b4aca9048a4b43abf2d23feabef95, type: 3}
+    folderPath: 
+  - fileMode: 0
+    fileObject: {fileID: 4900000, guid: b85557057775e344b96eb71f1ec3382a, type: 3}
+    folderPath: 

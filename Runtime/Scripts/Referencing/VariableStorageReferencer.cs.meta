@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: f9c72927e6df448439bc4c27dda71e2d
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - yarnProject: {fileID: 7545569452688597077, guid: 623dbce2ea1cb1441bb0702b2cde74fd,
+      type: 3}
+  - variableStorage: {instanceID: 0}
+  - variableData: {fileID: 11400000, guid: a9c344831623039419eba7ffd68f14c9, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

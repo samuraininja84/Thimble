@@ -9,10 +9,37 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bfb5f50bb30d9024dae2f2a8491a3e67, type: 3}
+  m_Script: {fileID: 11500000, guid: 9d306272b9b549a42826948e8967a857, type: 3}
   m_Name: RuntimeVariableData
   m_EditorClassIdentifier: 
+  yarnProject: {fileID: 7545569452688597077, guid: 623dbce2ea1cb1441bb0702b2cde74fd,
+    type: 3}
   storage: {fileID: 0}
-  stringVariables: []
-  floatVariables: []
-  boolVariables: []
+  stringVariables:
+  - Type: 0
+    Name: timeOfDay
+    stringValue: evening
+    floatValue: 0
+    boolValue: 0
+  - Type: 0
+    Name: location
+    stringValue: roof
+    floatValue: 0
+    boolValue: 0
+  floatVariables:
+  - Type: 1
+    Name: memorySection
+    stringValue: 
+    floatValue: 0
+    boolValue: 0
+  boolVariables:
+  - Type: 2
+    Name: Yarn.Internal.Once.Roof.124316f3
+    stringValue: 
+    floatValue: 0
+    boolValue: 0
+  - Type: 2
+    Name: isChild
+    stringValue: 
+    floatValue: 0
+    boolValue: 1

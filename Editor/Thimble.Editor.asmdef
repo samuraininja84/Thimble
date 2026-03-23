@@ -2,7 +2,7 @@
     "name": "Thimble.Editor",
     "rootNamespace": "Thimble",
     "references": [
-        "GUID:97f5e635f85dc47488b5d01de78245c3",
+        "GUID:9c93cb2464779224aa0ebc2b404c3fc6",
         "GUID:34aa492b82754644eac2f903cd496268"
     ],
     "includePlatforms": [
