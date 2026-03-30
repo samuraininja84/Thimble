@@ -34,6 +34,8 @@ namespace Thimble
         public bool IsFloat => Type == VariableType.Float;
         public bool IsBool => Type == VariableType.Bool;
 
+        #region Conversion Operators
+
         // Implicit conversion operators to convert Variable to different types
         public static implicit operator string(Variable value) => value.ConvertValue<string>();
         public static implicit operator float(Variable value) => value.ConvertValue<float>();
@@ -51,10 +53,9 @@ namespace Thimble
         public static bool operator ==(Variable left, bool right) => left.IsBool && left.boolValue == right;
         public static bool operator !=(Variable left, bool right) => !(left == right);
 
-        // Helper methods for safe type conversions of the value types without the cost of boxing
-        T AsString<T>(string value) => typeof(T) == typeof(string) && value is T correctType ? correctType : default;
-        T AsFloat<T>(float value) => typeof(T) == typeof(float) && value is T correctType ? correctType : default;
-        T AsBool<T>(bool value) => typeof(T) == typeof(bool) && value is T correctType ? correctType : default;
+        #endregion
+
+        #region Constructors
 
         public Variable(string name, string stringValue)
         {
@@ -82,6 +83,8 @@ namespace Thimble
             this.boolValue = boolValue;
             Type = VariableType.Bool;
         }
+
+        #endregion
 
         public void SetValue(string value)
         {
@@ -186,7 +189,7 @@ namespace Thimble
         /// cref="VariableType.String"/> for <see cref="string"/>,  <see cref="VariableType.Float"/> for <see
         /// cref="float"/> or <see cref="int"/>,  and <see cref="VariableType.Bool"/> for <see cref="bool"/>.</returns>
         /// <exception cref="NotSupportedException">Thrown if the provided <paramref name="type"/> is not supported.</exception>
-        public static VariableType VariableTypeOf(Type type)
+        public static VariableType TypeOf(Type type)
         {
             return type switch
             {
@@ -241,6 +244,12 @@ namespace Thimble
                 _ => throw new InvalidCastException($"Cannot convert AnyValue of type {Type} to {typeof(T).Name}")
             };
         }
+
+        private T AsString<T>(string value) => typeof(T) == typeof(string) && value is T correctType ? correctType : default;
+
+        private T AsFloat<T>(float value) => typeof(T) == typeof(float) && value is T correctType ? correctType : default;
+
+        private T AsBool<T>(bool value) => typeof(T) == typeof(bool) && value is T correctType ? correctType : default;
 
         /// <summary>
         /// Determines whether the current <see cref="Variable"/> instance is equal to another <see cref="Variable"/>
@@ -314,12 +323,5 @@ namespace Thimble
         /// identical values produce the same hash code.</remarks>
         /// <returns>An integer representing the hash code for the current instance.</returns>
         public override int GetHashCode() => (Type, stringValue, floatValue, boolValue).GetHashCode();
-    }
-
-    public enum VariableType 
-    { 
-        String,
-        Float, 
-        Bool
     }
 }

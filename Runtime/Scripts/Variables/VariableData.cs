@@ -21,6 +21,47 @@ namespace Thimble
         [Header("Bool Variables")]
         public List<Variable> boolVariables = new();
 
+        protected static VariableData instance;
+
+        /// <summary>
+        /// The singleton instance of the <see cref="VariableData"/>. 
+        /// </summary>
+        /// <remarks>
+        /// This property provides access to the single instance of the <see cref="VariableData"/> class, ensuring that only one instance exists throughout the application. 
+        /// If an instance does not already exist, it attempts to find and load one from the project's assets. 
+        /// If no instance is found, it will return null until an instance is created or assigned.
+        /// </remarks>
+        public static VariableData Instance
+        {
+            get
+            {
+#if UNITY_EDITOR
+                // Only look for an instance if there isn't one already assigned, to avoid unnecessary searches
+                if (!HasInstance)
+                {
+                    // Search the project for assets of type VariableData and get their GUIDs
+                    var guids = UnityEditor.AssetDatabase.FindAssets("t:" + nameof(VariableData));
+
+                    // If at least one VariableData asset is found, load the first one
+                    if (guids.Length > 0) instance = (VariableData)UnityEditor.AssetDatabase.LoadMainAssetAtPath(UnityEditor.AssetDatabase.GUIDToAssetPath(guids[0]));
+                }
+#endif
+                // Return the instance
+                return instance;
+            }
+        }
+
+        /// <summary>
+        /// A boolean property that indicates whether an instance of the <see cref="VariableData"/> exists.
+        /// </summary>
+        public static bool HasInstance => instance != null;
+
+        private void OnEnable()
+        {
+            // If there is no existing instance, assign this instance to the static instance variable.
+            if (!HasInstance) instance = this;
+        }
+
         public void SetProject(YarnProject project) => yarnProject = project;
 
         public void SetStorage(VariableStorageBehaviour storage) => this.storage = storage;

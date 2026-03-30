@@ -6,9 +6,7 @@ namespace Thimble.Editor
     [CustomPropertyDrawer(typeof(Variable))]
     public class VariablePropertyDrawer : PropertyDrawer
     {
-        private float height = EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
-
-        public override float GetPropertyHeight(SerializedProperty property, GUIContent label) => height;
+        public override float GetPropertyHeight(SerializedProperty property, GUIContent label) => EditorGUIUtility.singleLineHeight;
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
@@ -83,7 +81,7 @@ namespace Thimble.Editor
             EditorGUI.PropertyField(valueRect, shownProperty, GUIContent.none);
 
             // Create a right-click context menu for the property
-            bool hasClicked = Event.current.type == EventType.MouseUp  && Event.current.button == 1;
+            bool hasClicked = Event.current.type == EventType.MouseUp && Event.current.button == 1;
             if (hasClicked && position.Contains(Event.current.mousePosition))
             {
                 // Create a context menu
@@ -117,6 +115,7 @@ namespace Thimble.Editor
             // Check if changes were made
             if (EditorGUI.EndChangeCheck())
             {
+                // Apply modified properties to save changes
                 property.serializedObject.ApplyModifiedProperties();
             }
 
