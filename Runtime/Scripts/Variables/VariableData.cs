@@ -95,7 +95,7 @@ namespace Thimble
                 var value = pair.Value;
 
                 // If the filter internal variables option is enabled and the key contains the internal variable denotator, skip this variable
-                if (filterInternalVariables && key.ToLower().Contains(VariableHandler.InternalVariableDenotator.ToLower())) continue;
+                if (filterInternalVariables && key.Contains(VariableHandler.InternalVariableDenotator, StringComparison.OrdinalIgnoreCase)) continue;
 
                 // Check the type of the value and add it to the appropriate dictionary
                 switch (value)
