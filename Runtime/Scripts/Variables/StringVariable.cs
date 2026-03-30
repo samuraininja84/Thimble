@@ -35,19 +35,39 @@ namespace Thimble
             this.value = value;
         }
 
-        public static StringVariable Default => new StringVariable(VariableExtensions.MissingVariableName, string.Empty);
+        public static StringVariable Default => new StringVariable(VariableHandler.MissingVariableName, string.Empty);
 
         public static StringVariable Create(string name, string value) => new StringVariable(name, value);
 
         public void SetName(string name) => Name = name;
 
-        public void SetValue(string value) => Value = value;
+        public void SetValue(string value)
+        {
+            // If the variable name is empty, return without setting the value to avoid creating an entry in VariableData with an empty name
+            if (string.IsNullOrEmpty(Name) || string.Equals(Name, VariableHandler.MissingVariableName, StringComparison.OrdinalIgnoreCase)) return;
+
+            // Set the variable value in the VariableData using the variable's name
+            VariableData.Instance.SetVariable(Name, value);
+
+            // Update the value in case it was changed in the VariableData
+            Value = value;
+        }
 
         public void SetValue(IVariable<string> variable) => Value = variable.Value;
 
-        public string GetName() => VariableExtensions.Prefix + Name;
+        public string GetName() => VariableHandler.Prefix + Name;
 
-        public string GetValue() => Value;
+        public string GetValue()
+        {
+            // If the variable name is empty, return the current value without trying to get it from VariableData
+            if (string.IsNullOrEmpty(Name) || string.Equals(Name, VariableHandler.MissingVariableName, StringComparison.OrdinalIgnoreCase)) return Value;
+
+            // Try to get the variable value from the VariableData using the variable's name
+            VariableData.Instance.GetVariable(Name, out string value);
+
+            // Update the value in case it was changed in the VariableData
+            return Value = value;
+        }
 
         public bool Equals(IVariable<string> other)
         {

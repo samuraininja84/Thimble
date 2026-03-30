@@ -35,13 +35,13 @@ namespace Thimble.Editor
             Rect valueRect = new Rect(position.x + position.width / 2 + gap, position.y, position.width / 2 - gap, position.height);
 
             // Draw name and value properties
-            EditorVariableExtensions.DrawVariableSelector(nameRect, nameProperty, VariableType.Float);
+            EditorVariableExtensions.DrawVariableSelector(nameRect, nameProperty, valueProperty, VariableType.Float);
 
             // Get the current name value to determine if the value field should be enabled
             string name = nameProperty.stringValue;
 
-            // Disable the value field if the name is empty to prevent editing the value without a name
-            GUI.enabled = !string.IsNullOrEmpty(name) && name != VariableExtensions.MissingVariableName;
+            // Disable the value field if the name isn't empty to prevent editing the value with a valid name
+            GUI.enabled = string.IsNullOrEmpty(name) || string.Equals(name, VariableHandler.MissingVariableName, System.StringComparison.OrdinalIgnoreCase);
             EditorGUI.PropertyField(valueRect, valueProperty, GUIContent.none);
             GUI.enabled = true;
 

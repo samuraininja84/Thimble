@@ -35,19 +35,39 @@ namespace Thimble
             this.value = value;
         }
 
-        public static BoolVariable Default => new BoolVariable(VariableExtensions.MissingVariableName, false);
+        public static BoolVariable Default => new BoolVariable(VariableHandler.MissingVariableName, false);
 
         public static BoolVariable Create(string name, bool value) => new BoolVariable(name, value);
 
         public void SetName(string name) => Name = name;
 
-        public void SetValue(bool value) => Value = value;
+        public void SetValue(bool value)
+        {
+            // If the variable name is empty, return without setting the value to avoid creating an entry in VariableData with an empty name
+            if (string.IsNullOrEmpty(Name) || string.Equals(Name, VariableHandler.MissingVariableName, StringComparison.OrdinalIgnoreCase)) return;
+
+            // Set the variable value in the VariableData using the variable's name
+            VariableData.Instance.SetVariable(Name, value);
+
+            // Update the value in case it was changed in the VariableData
+            Value = value;
+        }
 
         public void SetValue(IVariable<bool> variable) => Value = variable.Value;
 
-        public string GetName() => VariableExtensions.Prefix + Name;
+        public string GetName() => VariableHandler.Prefix + Name;
 
-        public bool GetValue() => Value;
+        public bool GetValue()
+        {
+            // If the variable name is empty, return the current value without trying to get it from VariableData
+            if (string.IsNullOrEmpty(Name) || string.Equals(Name, VariableHandler.MissingVariableName, StringComparison.OrdinalIgnoreCase)) return Value;
+
+            // Try to get the variable value from the VariableData using the variable's name
+            VariableData.Instance.GetVariable(Name, out bool value);
+
+            // Update the value in case it was changed in the VariableData
+            return Value = value;
+        }
 
         public bool Equals(IVariable<bool> other)
         {

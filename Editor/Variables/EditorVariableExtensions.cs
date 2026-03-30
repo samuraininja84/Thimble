@@ -5,7 +5,7 @@ namespace Thimble.Editor
 {
     public static class EditorVariableExtensions
     {
-        public static void DrawVariableSelector(Rect position, SerializedProperty nameProperty, VariableType type)
+        public static void DrawVariableSelector(Rect position, SerializedProperty nameProperty, SerializedProperty valueProperty, VariableType type)
         {
             // Get the label
             var label = new GUIContent();
@@ -31,18 +31,18 @@ namespace Thimble.Editor
             if (!hasVariables)
             {
                 // Define a null label using the variable extensions prefix and the missing variable name constant
-                string nullLabel = VariableExtensions.Prefix + VariableExtensions.MissingVariableName;
+                string nullLabel = VariableHandler.Prefix + VariableHandler.MissingVariableName;
 
                 // Set the label to the null label to indicate that there are no variables available for selection
                 label.text = nullLabel;
 
                 // Set the name property to the missing variable name constant
-                nameProperty.stringValue = VariableExtensions.MissingVariableName;
+                nameProperty.stringValue = VariableHandler.MissingVariableName;
             }
             else
             {
                 // Set the label to the area name and the connection name at the current index
-                label.text = VariableExtensions.Prefix + nameProperty.stringValue;
+                label.text = VariableHandler.Prefix + nameProperty.stringValue;
 
                 // Get the size for the label from the mini pull down style
                 var size = EditorStyles.miniPullDown.CalcSize(label);
@@ -55,10 +55,28 @@ namespace Thimble.Editor
                 }
             }
 
+            // Define a method to apply the selected variable from the popup to the name and value properties
             void ApplySelection(string selection)
             {
                 // Set the name property to the selected variable name when a selection is made in the popup
                 nameProperty.stringValue = selection;
+
+                // Get the value of the selected variable from the VariableData instance and set the value property accordingly based on the variable type
+                switch (type)
+                {
+                    case VariableType.Float:
+                        VariableData.Instance.GetVariable(selection, out float floatValue);
+                        valueProperty.floatValue = floatValue;
+                        break;
+                    case VariableType.String:
+                        VariableData.Instance.GetVariable(selection, out string stringValue);
+                        valueProperty.stringValue = stringValue;
+                        break;
+                    case VariableType.Bool:
+                        VariableData.Instance.GetVariable(selection, out bool boolValue);
+                        valueProperty.boolValue = boolValue;
+                        break;
+                }
 
                 // Apply modified properties
                 nameProperty.serializedObject.ApplyModifiedProperties();

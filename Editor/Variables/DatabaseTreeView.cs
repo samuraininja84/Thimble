@@ -36,7 +36,7 @@ namespace Thimble.Editor
             var groups = new List<TreeViewItem>();
 
             // Add a default "None" option at the top of the list for users to select if they want to clear the variable selection
-            Root.AddChild(CollectionTreeViewItem.Create(VariableExtensions.Prefix + VariableExtensions.MissingVariableName, id++, VariableExtensions.MissingVariableName));
+            Root.AddChild(CollectionTreeViewItem.Create(VariableHandler.MissingVariableName, id++, VariableHandler.MissingVariableName));
 
             // Create a group for each variable type to organize the variables in the tree view. For example, we can create a group for float variables, another for int variables, etc.
             var floatGroup = new TreeViewItem(id++) { displayName = "Float Variables" };
@@ -47,7 +47,7 @@ namespace Thimble.Editor
             foreach (var variable in VariableData.Instance.floatVariables)
             {
                 // Add each variable as a child of the float group with its name formatted for display. Use the variable's name as the label, and assign an icon if desired.
-                floatGroup.AddChild(CollectionTreeViewItem.Create(VariableExtensions.Prefix + variable.Name, id++, variable.Name));
+                floatGroup.AddChild(CollectionTreeViewItem.Create(variable.Name, id++, variable.Name));
             }
 
             // Add the float group to the list of groups if it has any children
@@ -57,7 +57,7 @@ namespace Thimble.Editor
             foreach (var variable in VariableData.Instance.stringVariables)
             {
                 // Add each variable as a child of the string group with its name formatted for display. Use the variable's name as the label, and assign an icon if desired.
-                stringGroup.AddChild(CollectionTreeViewItem.Create(VariableExtensions.Prefix + variable.Name, id++, variable.Name));
+                stringGroup.AddChild(CollectionTreeViewItem.Create(variable.Name, id++, variable.Name));
             }
 
             // Add the string group to the list of groups if it has any children
@@ -67,7 +67,7 @@ namespace Thimble.Editor
             foreach (var variable in VariableData.Instance.boolVariables)
             {
                 // Add each variable as a child of the bool group with its name formatted for display. Use the variable's name as the label, and assign an icon if desired.
-                boolGroup.AddChild(CollectionTreeViewItem.Create(VariableExtensions.Prefix + variable.Name, id++, variable.Name));
+                boolGroup.AddChild(CollectionTreeViewItem.Create(variable.Name, id++, variable.Name));
             }
 
             // Add the bool group to the list of groups if it has any children

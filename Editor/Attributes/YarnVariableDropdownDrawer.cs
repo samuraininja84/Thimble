@@ -27,6 +27,17 @@ namespace Thimble.Editor
         /// </summary>
         private readonly Regex TypeRegex = new Regex(@"<<declare\s+\$[a-zA-Z_][a-zA-Z0-9_]*\s*=\s*(.*?)>>", RegexOptions.Compiled);
 
+        /// <summary>
+        /// Draws a custom property field in the Unity Inspector that displays a dropdown list of Yarn variables for selection.
+        /// </summary>
+        /// <remarks>
+        /// This method is intended for use within a custom property drawer in the Unity Editor.
+        /// It provides a searchable dropdown for selecting Yarn variables, improving usability when assigning variable names. 
+        /// The dropdown options are loaded from the folder path specified by the associated YarnVariableDropdownAttribute.
+        /// </remarks>
+        /// <param name="position">The rectangle on the screen to use for the property GUI.</param>
+        /// <param name="property">The serialized property being drawn in the Inspector.</param>
+        /// <param name="label">The label to display for the property field.</param>
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             // Check if the options have been initialized; if not, load them from the specified folder path
