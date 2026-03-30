@@ -13,5 +13,8 @@ namespace Thimble
         public FloatVariable newFloatVariable = FloatVariable.Default;
         public StringVariable newStringVariable = StringVariable.Default;
         public BoolVariable newBoolVariable = BoolVariable.Default;
+
+        [Header("Other")]
+        [YarnVariableDropdown("Assets/Resources/Dialogue/Yarn")] public string variableName;
     }
 }

@@ -11,6 +11,7 @@ namespace Thimble
         [Header("Yarn Spinner")]
         public YarnProject yarnProject;
         public VariableStorageBehaviour storage;
+        public bool filterInternalVariables = true;
 
         [Header("String Variables")]
         public List<Variable> stringVariables = new();
@@ -86,26 +87,27 @@ namespace Thimble
             // Clear all variable lists before initializing
             Clear();
 
-            // Get the initial values from the Yarn Project
-            var values = yarnProject.InitialValues;
-
             // Iterate through the variable data and populate the dictionaries based on the variable type
-            foreach (var pair in values)
+            foreach (var pair in yarnProject.InitialValues)
             {
-                // Get the value from the pair
+                // Get the key and value from the pair
+                var key = pair.Key;
                 var value = pair.Value;
+
+                // If the filter internal variables option is enabled and the key contains the internal variable denotator, skip this variable
+                if (filterInternalVariables && key.ToLower().Contains(VariableHandler.InternalVariableDenotator.ToLower())) continue;
 
                 // Check the type of the value and add it to the appropriate dictionary
                 switch (value)
                 {
                     case string stringValue:
-                        CreateVariable(pair.Key, stringValue);
+                        CreateVariable(key, stringValue);
                         break;
                     case float floatValue:
-                        CreateVariable(pair.Key, floatValue);
+                        CreateVariable(key, floatValue);
                         break;
                     case bool boolValue:
-                        CreateVariable(pair.Key, boolValue);
+                        CreateVariable(key, boolValue);
                         break;
                 }
             }
@@ -202,11 +204,11 @@ namespace Thimble
 
         #region Create Variable Methods
 
-        public void CreateVariable(string name, string value) => Add(new Variable(name, value));
+        public void CreateVariable(string name, string value) => stringVariables.Add(new Variable(name, value));
 
-        public void CreateVariable(string name, float value) => Add(new Variable(name, value));
+        public void CreateVariable(string name, float value) => floatVariables.Add(new Variable(name, value));
 
-        public void CreateVariable(string name, bool value) => Add(new Variable(name, value));
+        public void CreateVariable(string name, bool value) => boolVariables.Add(new Variable(name, value));
 
         #endregion
 
@@ -458,23 +460,6 @@ namespace Thimble
         #endregion
 
         #region List Management
-
-        public void Add(Variable variable)
-        {
-            // Check if the variable is already in the appropriate list and add it if not
-            if (variable.IsString && !stringVariables.Contains(variable))
-            {
-                stringVariables.Add(variable);
-            }
-            else if (variable.IsFloat && !floatVariables.Contains(variable))
-            {
-                floatVariables.Add(variable);
-            }
-            else if (variable.IsBool && !boolVariables.Contains(variable))
-            {
-                boolVariables.Add(variable);
-            }
-        }
 
         public void Remove(Variable variable)
         {
