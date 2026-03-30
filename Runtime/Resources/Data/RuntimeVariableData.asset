@@ -15,7 +15,7 @@ MonoBehaviour:
   yarnProject: {fileID: 7545569452688597077, guid: 623dbce2ea1cb1441bb0702b2cde74fd,
     type: 3}
   storage: {fileID: 0}
-  filterInternalVariables: 1
+  filterInternalVariables: 0
   stringVariables:
     m_keys:
     - $timeOfDay
@@ -30,8 +30,21 @@ MonoBehaviour:
     - 0
   boolVariables:
     m_keys:
+    - $Yarn.Internal.Once.Roof.124316f3
     - $isChild
+    - $Yarn.Internal.Once.Roof.661fd65c
+    - $Yarn.Internal.Once.Kitchen_Dinner.31040c2a
     - $spokenAboutTable
     - $tableSet
+    - $Yarn.Internal.Once.Kitchen_Knife.2789ea84
     - $knifeIncident
-    m_values: 01000000
+    - $Yarn.Internal.Once.LivingRoom_TV.a89bed63
+    - $Yarn.Internal.Once.Fall_Recovery.d980b3b4
+    - $Yarn.Internal.Once.UnsettlingDream.16d73451
+    - $Yarn.Internal.Once.BottleDrop.527a4d11
+    - $Yarn.Internal.Once.Dream_Introduction.8a2414b4
+    - $Yarn.Internal.Once.Tower_Down.60814b3a
+    - $Yarn.Internal.Once.Tower_Pit_Room.0e0c740f
+    - $Yarn.Internal.Once.Tower_Fall.67c82570
+    - $Yarn.Internal.Once.LiftOut.921ec1ab
+    m_values: 0001000000000000000000000000000000

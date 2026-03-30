@@ -9,7 +9,7 @@ namespace Thimble.Editor
     {
         public CommandData[] commandDatas;
         public FunctionData[] functionDatas;
-        public VariableData[] variableData;
+        public VariableData variableData => VariableData.Instance;
 
         public string stringInput = string.Empty;
         public float floatInput = 0f;
@@ -41,7 +41,6 @@ namespace Thimble.Editor
         {
             commandDatas = GetCommandData();
             functionDatas = GetFunctionData();
-            variableData = GetVariableData();
         }
 
         private void OnDisable() => ResetValues();
@@ -483,30 +482,14 @@ namespace Thimble.Editor
             // Check that the variable data is not null before drawing them
             if (VariableDataExists())
             {
-                // Display all variable datas with their respective variable storage, variables, and variable tools
-                for (int i = 0; i < variableData.Length; i++)
-                {
-                    // Draw the variable data
-                    DrawVariableData(variableData[i]);
-
-                    // Add a space after each variable data
-                    EditorGUILayout.Space();
-
-                    // Add a line to separate the variable datas
-                    if (i < variableData.Length - 1) EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
-
-                    // Add a space between the variable datas
-                    EditorGUILayout.Space();
-                }
+                // Display the variable data with its respective variable storage, variables, and variable tools
+                DrawVariableData(variableData);
             }
             else if (!VariableDataExists())
             {
                 // Display an error message if no variable datas are found in the project
                 EditorGUILayout.HelpBox("No Variable Data has been found in the project.", MessageType.Error);
             }
-
-            // Display a button to refresh the variable data
-            if (GUILayout.Button("Refresh Variable Data")) variableData = GetVariableData();
 
             // Add a space to separate the variable data from the variable values section
             EditorGUILayout.Space();
@@ -736,7 +719,7 @@ namespace Thimble.Editor
 
         private bool HasBoolVariables(VariableData variableData) => variableData.boolVariables.Count > 0;
 
-        private bool VariableDataExists() => variableData != null && variableData.Length > 0;
+        private bool VariableDataExists() => VariableData.Instance != null;
 
         private bool HasAllVariables(VariableData variableData) => variableData.Equal();
 
@@ -746,15 +729,6 @@ namespace Thimble.Editor
         /// <param name="variableDataName">The name of the variable to format. Cannot be null.</param>
         /// <returns>A formatted string with spaces inserted before uppercase letters in <paramref name="variableDataName"/>.</returns>
         private string FormatDataName(string variableDataName) => string.Concat(variableDataName.Select(x => char.IsUpper(x) ? " " + x : x.ToString())).TrimStart(' ');
-
-        private VariableData[] GetVariableData()
-        {
-            // Get all variable data from the folder path
-            return AssetDatabase.FindAssets("t:VariableData", null)
-                .Select(AssetDatabase.GUIDToAssetPath)
-                .Select(AssetDatabase.LoadAssetAtPath<VariableData>)
-                .ToArray();
-        }
 
         private void ResetValues()
         {

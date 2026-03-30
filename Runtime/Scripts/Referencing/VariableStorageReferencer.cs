@@ -11,7 +11,8 @@ namespace Thimble
         [Header("References")]
         public YarnProject yarnProject;
         public VariableStorageBehaviour variableStorage;
-        public VariableData variableData;
+
+        public VariableData VariableData => VariableData.Instance;
 
         private void Awake() => SetVariableStorage();
 
@@ -33,16 +34,16 @@ namespace Thimble
             FindIntialValues(variableStorage);
 
             // Set the Yarn Project for each variable data
-            variableData.SetProject(yarnProject);
+            VariableData.SetProject(yarnProject);
 
             // Initialize the variable data
-            variableData.Initialize();
+            VariableData.Initialize();
 
             // Set the variable storage for each variable data
-            variableData.SetStorage(variableStorage);
+            VariableData.SetStorage(variableStorage);
 
             // Get the variables from the storage
-            variableData.RefreshVariables();
+            VariableData.RefreshVariables();
         }
 
         /// <summary>
@@ -52,10 +53,10 @@ namespace Thimble
         private void RemoveVariableStorage()
         {
             // If there are no variables, return
-            variableData.SetStorage(null);
+            VariableData.SetStorage(null);
 
             // Initialize the variable data
-            variableData.Initialize();
+            VariableData.Initialize();
         }
 
         /// <summary>
