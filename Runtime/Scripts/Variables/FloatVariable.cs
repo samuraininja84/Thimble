@@ -43,7 +43,7 @@ namespace Thimble
 
         public void SetValue(IVariable<float> variable) => Value = variable.Value;
 
-        public string GetName() => VariableHandler.Prefix + Name;
+        public string GetName() => Name.AppendYarnPrefix();
 
         public float GetValue()
         {

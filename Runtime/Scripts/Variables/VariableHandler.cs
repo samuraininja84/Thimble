@@ -29,6 +29,56 @@ namespace Thimble
         /// <returns><see langword="true"/> if the absolute difference between <paramref name="a"/> and <paramref name="b"/> is less than or equal to <paramref name="epsilon"/>; otherwise, <see langword="false"/>.</returns>
         public static bool Approximately(this float a, float b, float epsilon = 1E-06f) => UnityEngine.Mathf.Abs(a - b) <= epsilon;
 
+        /// <summary>
+        /// Appends the defined prefix to the given variable name if it does not already start with the prefix. 
+        /// </summary>
+        /// <param name="variableName">The variable name to which the prefix should be appended if it does not already start with it.</param>
+        /// <returns>A string that starts with the defined prefix, either by returning the original variable name if it already starts with the prefix or by prepending the prefix to it.</returns>
+        public static string AppendYarnPrefix(this string variableName) => variableName.StartsWith(Prefix) ? variableName : Prefix + variableName;
+
+        /// <summary>
+        /// Converts the specified dictionary to a new instance of SerializableDictionary containing the same key-value pairs.
+        /// </summary>
+        /// <remarks>
+        /// Use this method to create a serializable representation of a Dictionary instance, which can be useful for scenarios such as XML or binary serialization. 
+        /// The returned SerializableDictionary is a new instance and modifications to it do not affect the original dictionary.
+        /// </remarks>
+        /// <typeparam name="TKey">The type of keys in the dictionary.</typeparam>
+        /// <typeparam name="TValue">The type of values in the dictionary.</typeparam>
+        /// <param name="dictionary">The dictionary to convert. Cannot be null.</param>
+        /// <returns>A SerializableDictionary containing all key-value pairs from the specified dictionary.</returns>
+        public static SerializableDictionary<TKey, TValue> ConvertTo<TKey, TValue>(this Dictionary<TKey, TValue> dictionary)
+        {
+            // Create a new instance of SerializableDictionary to hold the converted key-value pairs
+            var serializableDictionary = new SerializableDictionary<TKey, TValue>();
+
+            // Populate the SerializableDictionary with the key-value pairs from the original dictionary
+            foreach (var kvp in dictionary) serializableDictionary.Add(kvp.Key, kvp.Value);
+
+            // Return the populated SerializableDictionary
+            return serializableDictionary;
+        }
+
+        /// <summary>
+        /// Converts a SerializableDictionary to a standard Dictionary containing the same key-value pairs.
+        /// </summary>
+        /// <remarks>The returned Dictionary is a separate instance and modifications to it do not affect the original SerializableDictionary.</remarks>
+        /// <typeparam name="TKey">The type of keys in the dictionary.</typeparam>
+        /// <typeparam name="TValue">The type of values in the dictionary.</typeparam>
+        /// <param name="serializableDictionary">The SerializableDictionary instance to convert. Cannot be null.</param>
+        /// <returns>A new Dictionary containing all key-value pairs from the specified SerializableDictionary.</returns>
+        public static Dictionary<TKey, TValue> ConvertTo<TKey, TValue>(this SerializableDictionary<TKey, TValue> serializableDictionary)
+        {
+            // Create a new instance of Dictionary to hold the converted key-value pairs
+            var dictionary = new Dictionary<TKey, TValue>();
+
+            // Populate the Dictionary with the key-value pairs from the SerializableDictionary
+            foreach (var kvp in serializableDictionary) dictionary.Add(kvp.Key, kvp.Value);
+
+            // Return the populated Dictionary
+            return dictionary;
+        }
+
         #region Variable Setters
 
         public static void SetVariable(this VariableData variableData, string variableName, string value) => variableData.SetValue(variableName, value);

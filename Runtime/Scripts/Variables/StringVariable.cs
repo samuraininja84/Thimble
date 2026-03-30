@@ -55,7 +55,7 @@ namespace Thimble
 
         public void SetValue(IVariable<string> variable) => Value = variable.Value;
 
-        public string GetName() => VariableHandler.Prefix + Name;
+        public string GetName() => Name.AppendYarnPrefix();
 
         public string GetValue()
         {

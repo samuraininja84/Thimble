@@ -594,19 +594,19 @@ namespace Thimble.Editor
                     for (int i = 0; i < variableData.stringVariables.Count; i++)
                     {
                         // Get the variable from the variable data and display it if it is active
-                        Variable variable = variableData.stringVariables[i];
+                        var variable = variableData.stringVariables.ElementAt(i);
 
                         // Start the horizontal layout
                         EditorGUILayout.BeginHorizontal();
 
                         // Display the variable name and value
-                        EditorGUILayout.LabelField(variable.Name + ": " + variable.stringValue);
+                        EditorGUILayout.LabelField(variable.Key + ": " + variable.Value);
 
                         // Open a window to set the variable value
                         if (GUILayout.Button("Set Value"))
                         {
                             // Set the variable value using the input field value
-                            variableData.SetValue(variable.Name, stringInput);
+                            variableData.SetValue(variable.Key, stringInput);
 
                             // Reset the input fields after setting the variable value
                             ResetValues();
@@ -632,19 +632,19 @@ namespace Thimble.Editor
                     for (int i = 0; i < variableData.floatVariables.Count; i++)
                     {
                         // Get the variable from the variable data and display it if it is active
-                        Variable variable = variableData.floatVariables[i];
+                        var variable = variableData.floatVariables.ElementAt(i);
 
                         // Start the horizontal layout
                         EditorGUILayout.BeginHorizontal();
 
                         // Display the variable name and value
-                        EditorGUILayout.LabelField(variable.Name + ": " + variable.floatValue.ToString());
+                        EditorGUILayout.LabelField(variable.Key + ": " + variable.Value.ToString());
 
                         // Add a button to set the variable value
                         if (GUILayout.Button("Set Value"))
                         {
                             // Set the variable value using the input field value
-                            variableData.SetValue(variable.Name, floatInput);
+                            variableData.SetValue(variable.Key, floatInput);
 
                             // Reset the input fields after setting the variable value
                             ResetValues();
@@ -670,19 +670,19 @@ namespace Thimble.Editor
                     for (int i = 0; i < variableData.boolVariables.Count; i++)
                     {
                         // Get the variable from the variable data and display it if it is active
-                        Variable variable = variableData.boolVariables[i];
+                        var variable = variableData.boolVariables.ElementAt(i);
 
                         // Start the horizontal layout
                         EditorGUILayout.BeginHorizontal();
 
                         // Display the variable name and value
-                        EditorGUILayout.LabelField(variable.Name + ": " + variable.boolValue.ToString());
+                        EditorGUILayout.LabelField(variable.Key + ": " + variable.Value.ToString());
 
                         // Add a button to set the variable value
                         if (GUILayout.Button("Set Value"))
                         {
                             // Set the variable value using the input field value
-                            variableData.SetValue(variable.Name, boolInput);
+                            variableData.SetValue(variable.Key, boolInput);
 
                             // Reset the input fields after setting the variable value
                             ResetValues();

@@ -30,11 +30,8 @@ namespace Thimble.Editor
             // If there are no bool variables available for selection, set the label to "None" and the name property to "None"
             if (!hasVariables)
             {
-                // Define a null label using the variable extensions prefix and the missing variable name constant
-                string nullLabel = VariableHandler.Prefix + VariableHandler.MissingVariableName;
-
                 // Set the label to the null label to indicate that there are no variables available for selection
-                label.text = nullLabel;
+                label.text = VariableHandler.MissingVariableName.AppendYarnPrefix();
 
                 // Set the name property to the missing variable name constant
                 nameProperty.stringValue = VariableHandler.MissingVariableName;
@@ -42,7 +39,7 @@ namespace Thimble.Editor
             else
             {
                 // Set the label to the area name and the connection name at the current index
-                label.text = VariableHandler.Prefix + nameProperty.stringValue;
+                label.text = nameProperty.stringValue;
 
                 // Get the size for the label from the mini pull down style
                 var size = EditorStyles.miniPullDown.CalcSize(label);

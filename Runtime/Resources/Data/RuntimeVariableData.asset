@@ -17,40 +17,21 @@ MonoBehaviour:
   storage: {fileID: 0}
   filterInternalVariables: 1
   stringVariables:
-  - Type: 0
-    Name: timeOfDay
-    stringValue: evening
-    floatValue: 0
-    boolValue: 0
-  - Type: 0
-    Name: location
-    stringValue: roof
-    floatValue: 0
-    boolValue: 0
+    m_keys:
+    - $timeOfDay
+    - $location
+    m_values:
+    - evening
+    - roof
   floatVariables:
-  - Type: 1
-    Name: memorySection
-    stringValue: 
-    floatValue: 0
-    boolValue: 0
+    m_keys:
+    - $memorySection
+    m_values:
+    - 0
   boolVariables:
-  - Type: 2
-    Name: isChild
-    stringValue: 
-    floatValue: 0
-    boolValue: 1
-  - Type: 2
-    Name: spokenAboutTable
-    stringValue: 
-    floatValue: 0
-    boolValue: 0
-  - Type: 2
-    Name: tableSet
-    stringValue: 
-    floatValue: 0
-    boolValue: 0
-  - Type: 2
-    Name: knifeIncident
-    stringValue: 
-    floatValue: 0
-    boolValue: 0
+    m_keys:
+    - $isChild
+    - $spokenAboutTable
+    - $tableSet
+    - $knifeIncident
+    m_values: 01000000
