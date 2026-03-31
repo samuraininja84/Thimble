@@ -693,7 +693,7 @@ namespace Thimble.Editor
                     if (GUILayout.Button("Update Variables")) variableData.UpdateVariables();
 
                     // Display the clear all variables button
-                    if (GUILayout.Button("Clear All Variables")) variableData.ClearAllVariables();
+                    if (GUILayout.Button("Clear Variables")) variableData.Clear();
                 }
                 else if (!HasVariables(variableData))
                 {

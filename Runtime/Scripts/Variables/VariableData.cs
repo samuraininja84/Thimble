@@ -12,7 +12,7 @@ namespace Thimble
         [Header("Yarn Spinner")]
         public YarnProject yarnProject;
         public VariableStorageBehaviour storage;
-        public bool filterInternalVariables = true;
+        public bool filterInternalVariables = false;
 
         [Header("String Variables")]
         public SerializableDictionary<string, string> stringVariables = new();
@@ -22,6 +22,11 @@ namespace Thimble
 
         [Header("Bool Variables")]
         public SerializableDictionary<string, bool> boolVariables = new();
+
+        public static Action OnVariableUpdate;
+        public static Action<string, string> OnStringVariableChange;
+        public static Action<string, float> OnFloatVariableChange;
+        public static Action<string, bool> OnBoolVariableChange;
 
         protected static VariableData instance;
 
@@ -64,11 +69,49 @@ namespace Thimble
             if (!HasInstance) instance = this;
         }
 
+        #region Reference Setters
+
         public void SetProject(YarnProject project) => yarnProject = project;
 
         public void SetStorage(VariableStorageBehaviour storage) => this.storage = storage;
 
+        #endregion
+
+        #region Listener Management
+
         public void AddChangeListener(Action<string, object> onChange) => storage.AddChangeListener(onChange);
+
+        public void AddChangeListener<T>(string variableName, Action<T> onChange) => storage.AddChangeListener(variableName, onChange);
+
+        public void AddUpdateListener(Action onUpdate) => OnVariableUpdate += onUpdate;
+
+        public void RemoveUpdateListener(Action onUpdate) => OnVariableUpdate -= onUpdate;
+
+        public void AddStringListener(Action<string, string> onChange) => OnStringVariableChange += onChange;
+
+        public void RemoveStringListener(Action<string, string> onChange) => OnStringVariableChange -= onChange;
+
+        public void AddFloatListener(Action<string, float> onChange) => OnFloatVariableChange += onChange;
+
+        public void RemoveFloatListener(Action<string, float> onChange) => OnFloatVariableChange -= onChange;
+
+        public void AddBoolListener(Action<string, bool> onChange) => OnBoolVariableChange += onChange;
+
+        public void RemoveBoolListener(Action<string, bool> onChange) => OnBoolVariableChange -= onChange;
+
+        #endregion
+
+        #region Invoke Listeners
+
+        public void InvokeVariableUpdate() => OnVariableUpdate?.Invoke();
+
+        public void InvokeStringChange(string name, string value) => OnStringVariableChange?.Invoke(name, value);
+
+        public void InvokeFloatChange(string name, float value) => OnFloatVariableChange?.Invoke(name, value);
+
+        public void InvokeBoolChange(string name, bool value) => OnBoolVariableChange?.Invoke(name, value);
+
+        #endregion
 
         #region Variable Management
 
@@ -161,6 +204,107 @@ namespace Thimble
             SortVariables();
         }
 
+        [ContextMenu("Clear Variables")]
+        public void Clear()
+        {
+            // Clear the variable storage
+            storage?.Clear();
+
+            // Clear all variable lists
+            stringVariables.Clear();
+            floatVariables.Clear();
+            boolVariables.Clear();
+        }
+
+        public bool Equal()
+        {
+            // Initialize the equal variable to true
+            bool equal = true;
+
+            // Check if the string variables are equal to the storage
+            foreach (var variable in stringVariables)
+            {
+                // Try to get the value of the variable from the storage and compare it to the variable value
+                if (storage.TryGetValue(variable.Key, out string value))
+                {
+                    // If the variable value is not equal to the value in the storage, log an error and set equal to false
+                    if (!value.Equals(variable.Value, StringComparison.OrdinalIgnoreCase))
+                    {
+                        // Set equal to false if the variable value is not equal to the value in the storage
+                        equal = false;
+
+                        // If the variable value is not equal to the value in the storage, log an error and return false
+                        return equal;
+                    }
+                }
+                else
+                {
+                    // If the variable does not exist in the variable storage, log an error and set equal to false
+                    equal = false;
+
+                    // If the variable does not exist in the variable storage, log an error and return false
+                    return equal;
+                }
+            }
+
+            // Check if the float variables are equal to the storage
+            foreach (var variable in floatVariables)
+            {
+                // Try to get the value of the variable from the storage and compare it to the variable value
+                if (storage.TryGetValue(variable.Key, out float value))
+                {
+                    // If the variable value is not approximately equal to the value in the storage, log an error and set equal to false
+                    if (!variable.Value.Approximately(value))
+                    {
+                        // Set equal to false if the variable value is not approximately equal to the value in the storage
+                        equal = false;
+
+                        // If the variable value is not approximately equal to the value in the storage, log an error and return false
+                        return equal;
+                    }
+                }
+                else
+                {
+                    // If the variable does not exist in the variable storage, log an error and set equal to false
+                    equal = false;
+
+                    // If the variable does not exist in the variable storage, log an error and return false
+                    return equal;
+                }
+            }
+
+            // Check if the bool variables are equal to the storage
+            foreach (var variable in boolVariables)
+            {
+                // Try to get the value of the variable from the storage and compare it to the variable value
+                if (storage.TryGetValue(variable.Key, out bool value))
+                {
+                    // If the variable value is not equal to the value in the storage, log an error and set equal to false
+                    if (variable.Value != value)
+                    {
+                        // Set equal to false if the variable value is not equal to the value in the storage
+                        equal = false;
+
+                        // If the variable value is not equal to the value in the storage, log an error and return false
+                        return equal;
+                    }
+                }
+                else
+                {
+                    // If the variable does not exist in the variable storage, log an error and set equal to false
+                    equal = false;
+
+                    // If the variable does not exist in the variable storage, log an error and return false
+                    return equal;
+                }
+            }
+
+            // Return the equal variable
+            return equal;
+        }
+
+        public bool Empty() => stringVariables.Count == 0 && floatVariables.Count == 0 && boolVariables.Count == 0;
+
         #endregion
 
         #region Create Variable Methods
@@ -195,6 +339,12 @@ namespace Thimble
 
             // Find the variable in the variables list and update the value
             stringVariables[name] = value;
+
+            // Invoke the string variable change event after setting the value
+            InvokeStringChange(name, value);
+
+            // Invoke the variable update event after setting all variables
+            InvokeVariableUpdate();
         }
 
         public void SetValue(string name, float value)
@@ -217,6 +367,12 @@ namespace Thimble
 
             // Find the variable in the variables list and update the value
             floatVariables[name] = value;
+
+            // Invoke the float variable change event after setting the value
+            InvokeFloatChange(name, value);
+
+            // Invoke the variable update event after setting all variables
+            InvokeVariableUpdate();
         }
 
         public void SetValue(string name, bool value)
@@ -239,6 +395,12 @@ namespace Thimble
 
             // Find the variable in the variables list and update the value
             boolVariables[name] = value;
+
+            // Invoke the bool variable change event after setting the value
+            InvokeBoolChange(name, value);
+
+            // Invoke the variable update event after setting all variables
+            InvokeVariableUpdate();
         }
 
         public void SetAllVariables(Dictionary<string, float> floatVariables, Dictionary<string, string> stringVariables, Dictionary<string, bool> boolVariables)
@@ -246,18 +408,8 @@ namespace Thimble
             // Set all string variables in the storage
             storage.SetAllVariables(floatVariables, stringVariables, boolVariables);
 
-            // Get all variables from the storage
-            GetAllVariables();
-        }
-
-        [ContextMenu("Clear All Variables")]
-        public void ClearAllVariables()
-        {
-            // Clear the variable storage
-            storage?.Clear();
-
-            // Clear all variable lists
-            Clear();
+            // Invoke the variable update event after setting all variables
+            InvokeVariableUpdate();
         }
 
         #endregion
@@ -412,116 +564,6 @@ namespace Thimble
         }
 
         public (Dictionary<string, float>, Dictionary<string, string>, Dictionary<string, bool>) GetAllVariables() => storage.GetAllVariables();
-
-        #endregion
-
-        #region List Management
-
-        public void Remove(string name)
-        {
-            // Check if the variable is in the appropriate list and remove it
-            if (stringVariables.Any(v => v.Key.Equals(name, StringComparison.OrdinalIgnoreCase))) stringVariables.Remove(name);
-            else if (floatVariables.Any(v => v.Key.Equals(name, StringComparison.OrdinalIgnoreCase))) floatVariables.Remove(name);
-            else if (boolVariables.Any(v => v.Key.Equals(name, StringComparison.OrdinalIgnoreCase))) boolVariables.Remove(name);
-            else Debug.LogWarning("Variable: " + name + " does not exist in any variable list.");
-        }
-
-        public bool Equal()
-        {
-            // Initialize the equal variable to true
-            bool equal = true;
-
-            // Check if the string variables are equal to the storage
-            foreach (var variable in stringVariables)
-            {
-                // Try to get the value of the variable from the storage and compare it to the variable value
-                if (storage.TryGetValue(variable.Key, out string value))
-                {
-                    // If the variable value is not equal to the value in the storage, log an error and set equal to false
-                    if (!value.Equals(variable.Value, StringComparison.OrdinalIgnoreCase))
-                    {
-                        // Set equal to false if the variable value is not equal to the value in the storage
-                        equal = false;
-
-                        // If the variable value is not equal to the value in the storage, log an error and return false
-                        return equal;
-                    }
-                }
-                else
-                {
-                    // If the variable does not exist in the variable storage, log an error and set equal to false
-                    equal = false;
-
-                    // If the variable does not exist in the variable storage, log an error and return false
-                    return equal;
-                }
-            }
-
-            // Check if the float variables are equal to the storage
-            foreach (var variable in floatVariables)
-            {
-                // Try to get the value of the variable from the storage and compare it to the variable value
-                if (storage.TryGetValue(variable.Key, out float value))
-                {
-                    // If the variable value is not approximately equal to the value in the storage, log an error and set equal to false
-                    if (!variable.Value.Approximately(value))
-                    {
-                        // Set equal to false if the variable value is not approximately equal to the value in the storage
-                        equal = false;
-
-                        // If the variable value is not approximately equal to the value in the storage, log an error and return false
-                        return equal;
-                    }
-                }
-                else
-                {
-                    // If the variable does not exist in the variable storage, log an error and set equal to false
-                    equal = false;
-
-                    // If the variable does not exist in the variable storage, log an error and return false
-                    return equal;
-                }
-            }
-
-            // Check if the bool variables are equal to the storage
-            foreach (var variable in boolVariables)
-            {
-                // Try to get the value of the variable from the storage and compare it to the variable value
-                if (storage.TryGetValue(variable.Key, out bool value))
-                {
-                    // If the variable value is not equal to the value in the storage, log an error and set equal to false
-                    if (variable.Value != value)
-                    {
-                        // Set equal to false if the variable value is not equal to the value in the storage
-                        equal = false;
-
-                        // If the variable value is not equal to the value in the storage, log an error and return false
-                        return equal;
-                    }
-                }
-                else
-                {
-                    // If the variable does not exist in the variable storage, log an error and set equal to false
-                    equal = false;
-
-                    // If the variable does not exist in the variable storage, log an error and return false
-                    return equal;
-                }
-            }
-
-            // Return the equal variable
-            return equal;
-        }
-
-        public bool Empty() => stringVariables.Count == 0 && floatVariables.Count == 0 && boolVariables.Count == 0;
-
-        public void Clear()
-        {
-            // Clear all variable lists
-            stringVariables.Clear();
-            floatVariables.Clear();
-            boolVariables.Clear();
-        }
 
         #endregion
     }

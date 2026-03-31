@@ -60,13 +60,6 @@ namespace Thimble
         }
 
         /// <summary>
-        /// Retrieves the variable storage instance used by the component.
-        /// </summary>
-        /// <remarks>If the <see cref="variableStorage"/> field is not initialized, this method attempts to retrieve an <see cref="VariableStorageBehaviour"/> component attached to the current GameObject.</remarks>
-        /// <returns>An instance of <see cref="VariableStorageBehaviour"/> representing the variable storage.</returns>
-        private VariableStorageBehaviour GetVariableStorage() => variableStorage ?? GetComponent<VariableStorageBehaviour>();
-
-        /// <summary>
         /// Initializes variables in the game's variable storage using the initial values defined in the Yarn Project.
         /// </summary>
         /// <remarks>
@@ -82,6 +75,13 @@ namespace Thimble
             // Set all variables to their initial values
             storage.SetAllVariables(initialValues.floats, initialValues.strings, initialValues.bools);
         }
+
+        /// <summary>
+        /// Retrieves the variable storage instance used by the component.
+        /// </summary>
+        /// <remarks>If the <see cref="variableStorage"/> field is not initialized, this method attempts to retrieve an <see cref="VariableStorageBehaviour"/> component attached to the current GameObject.</remarks>
+        /// <returns>An instance of <see cref="VariableStorageBehaviour"/> representing the variable storage.</returns>
+        private VariableStorageBehaviour GetVariableStorage() => variableStorage ?? GetComponent<VariableStorageBehaviour>();
 
         /// <summary>
         /// Retrieves the initial set of variables categorized by type from the Yarn project.
