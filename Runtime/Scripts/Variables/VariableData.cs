@@ -155,6 +155,9 @@ namespace Thimble
                         break;
                 }
             }
+
+            // Sort the variables after initializing
+            UpdateVariables();
         }
 
         [ContextMenu("Sort Variables")]
@@ -207,9 +210,6 @@ namespace Thimble
         [ContextMenu("Clear Variables")]
         public void Clear()
         {
-            // Clear the variable storage
-            storage?.Clear();
-
             // Clear all variable lists
             stringVariables.Clear();
             floatVariables.Clear();
