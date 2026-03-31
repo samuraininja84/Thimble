@@ -20,6 +20,9 @@ namespace Thimble.Editor
             // Check if the variable data is null, if it is then we don't need to add it to the preloaded assets.
             if (variableData == null) return;
 
+            // Initialize the variable data to ensure that all of the variables are loaded and ready to be used during the build process.
+            variableData.Initialize();
+
             // Get the preloaded assets from the player settings.
             var preloadedAssets = PlayerSettings.GetPreloadedAssets();
 
