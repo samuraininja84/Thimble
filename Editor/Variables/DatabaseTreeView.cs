@@ -14,6 +14,10 @@ namespace Thimble.Editor
 
         private TreeViewItem Root { get; set; }
 
+        public static bool filterOn => DatabaseTreePopup.filterOn;
+
+        public static string filterName => VariableHandler.InternalVariableDenotator;
+
         public DatabaseTreeView(string currentEntry, Action<string> selectionHandler, VariableType type) : base(new TreeViewState())
         {
             _currentEntry = currentEntry;
@@ -46,6 +50,9 @@ namespace Thimble.Editor
             // Iterate through all float variable in the VariableData instance
             foreach (var variable in VariableData.Instance.floatVariables)
             {
+                // If filtering is on, skip variables that don't contain the filter name (e.g., "Yarn.Internal") in their key.
+                if (filterOn && variable.Key.Contains(filterName, StringComparison.OrdinalIgnoreCase)) continue;
+
                 // Add each variable as a child of the float group with its name formatted for display. Use the variable's name as the label, and assign an icon if desired.
                 floatGroup.AddChild(CollectionTreeViewItem.Create(variable.Key, id++, variable.Key));
             }
@@ -56,6 +63,9 @@ namespace Thimble.Editor
             // Iterate through all string variable in the VariableData instance
             foreach (var variable in VariableData.Instance.stringVariables)
             {
+                // If filtering is on, skip variables that don't contain the filter name (e.g., "Yarn.Internal") in their key.
+                if (filterOn && variable.Key.Contains(filterName, StringComparison.OrdinalIgnoreCase)) continue;
+
                 // Add each variable as a child of the string group with its name formatted for display. Use the variable's name as the label, and assign an icon if desired.
                 stringGroup.AddChild(CollectionTreeViewItem.Create(variable.Key, id++, variable.Key));
             }
@@ -66,6 +76,9 @@ namespace Thimble.Editor
             // Iterate through all bool variable in the VariableData instance
             foreach (var variable in VariableData.Instance.boolVariables)
             {
+                // If filtering is on, skip variables that don't contain the filter name (e.g., "Yarn.Internal") in their key.
+                if (filterOn && variable.Key.Contains(filterName, StringComparison.OrdinalIgnoreCase)) continue;
+
                 // Add each variable as a child of the bool group with its name formatted for display. Use the variable's name as the label, and assign an icon if desired.
                 boolGroup.AddChild(CollectionTreeViewItem.Create(variable.Key, id++, variable.Key));
             }

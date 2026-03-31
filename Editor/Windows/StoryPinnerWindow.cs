@@ -22,7 +22,7 @@ namespace Thimble.Editor
         private Vector2 scrollPosition = Vector2.zero;
 
         private const string windowTitle = "Story Pinner";
-        private const string iconPath = "Assets/Plugins/Artisan/Thimble/Editor/EditorResources/StoryPinner.png";
+        private const string iconPath = IconPathExtensions.IconPath + "StoryPinner.png";
 
         [MenuItem("Window/Thimble/" + windowTitle)]
         public static void Open()
@@ -81,16 +81,20 @@ namespace Thimble.Editor
             switch (sectionIndex)
             {
                 // Draw the command data section
-                case 0: DrawCommandDataSection();
+                case 0:
+                    DrawCommandDataSection();
                     break;
                 // Draw the function data section
-                case 1: DrawFunctionDataSection();
+                case 1:
+                    DrawFunctionDataSection();
                     break;
                 // Draw the variable data section
-                case 2: DrawVariableDataSection();
+                case 2:
+                    DrawVariableDataSection();
                     break;
                 // Default case to handle invalid section index
-                default: Debug.LogError("Invalid section index: " + sectionIndex);
+                default:
+                    Debug.LogError("Invalid section index: " + sectionIndex);
                     break;
             }
         }
@@ -521,7 +525,7 @@ namespace Thimble.Editor
             }
 
             // End the foldout for the variable values
-            EditorGUILayout.EndFoldoutHeaderGroup();            
+            EditorGUILayout.EndFoldoutHeaderGroup();
         }
 
         private void DrawVariableData(VariableData variableData, VariableStorageBehaviour storage = null)

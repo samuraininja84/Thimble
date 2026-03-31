@@ -10,6 +10,12 @@ namespace Thimble.Editor
         private readonly DatabaseTreeView _treeView;
         private bool _shouldClose;
 
+        private static readonly GUIStyle _buttonToggleStyle = new(EditorStyles.miniButton) { padding = RectUtility.One.Multiply(2) };
+        private static readonly string filterIconOn = IconPathExtensions.GetIconPath("FilterOn");
+        private static readonly string filterIconOff = IconPathExtensions.GetIconPath("FilterOff");
+        private static bool lastFilterValue = true;
+        public static bool filterOn = true;
+
         public float Width { get; set; }
 
         public DatabaseTreePopup(DatabaseTreeView contents)
@@ -27,7 +33,7 @@ namespace Thimble.Editor
             const int remainTop = topPadding + searchHeight + border;
 
             // Calculate the width of the toggle button (if any) and adjust the search field width accordingly
-            var toggleWidth = 0;
+            var toggleWidth = 25;
 
             // Calculate the rectangles for the search field, toggle button, and remaining tree view area
             var searchRect = new Rect(border, topPadding, rect.width - toggleWidth - border * 2, searchHeight);
@@ -36,6 +42,23 @@ namespace Thimble.Editor
 
             // Draw the search field at the top of the popup
             _treeView.searchString = _searchField.OnGUI(searchRect, _treeView.searchString);
+
+            // Get the appropriate icon for the toggle button based on the current filter state
+            GUIContent toggleContent = filterOn ? new GUIContent(EditorGUIUtility.FindTexture(filterIconOn)) : new GUIContent(EditorGUIUtility.FindTexture(filterIconOff));
+            toggleContent.tooltip = filterOn ? "Hide Yarn Internal Variables" : "Show All Variables";
+
+            // Draw the toggle button for filtering
+            filterOn = GUI.Toggle(toggleRect, filterOn, toggleContent, _buttonToggleStyle);
+
+            // If the filter state has changed since the last frame, we need to reload the tree view to apply the new filter
+            if (lastFilterValue != filterOn)
+            {
+                // Update the last filter value to the current state of the filter
+                lastFilterValue = filterOn;
+
+                // Reload the tree view to apply the new filter state, which will update the displayed variables based on the filter
+                _treeView.Reload();
+            }
 
             // Draw the tree view in the remaining space below the search field
             _treeView.OnGUI(remainingRect);
