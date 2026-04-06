@@ -32,13 +32,15 @@ MonoBehaviour:
     m_keys:
     - $Yarn.Internal.Once.Roof.124316f3
     - $isChild
-    - $Yarn.Internal.Once.Roof.661fd65c
-    - $Yarn.Internal.Once.Kitchen_Dinner.31040c2a
     - $spokenAboutTable
     - $tableSet
-    - $Yarn.Internal.Once.Kitchen_Knife.2789ea84
+    - $NPC_Comments
+    - $visitedStoreDream
+    - $Yarn.Internal.Once.Roof.4d536055
+    - $Yarn.Internal.Once.Kitchen_Dinner.cbbdf744
+    - $Yarn.Internal.Once.Kitchen_Knife.54302a93
     - $knifeIncident
-    - $Yarn.Internal.Once.LivingRoom_TV.a89bed63
+    - $Yarn.Internal.Once.LivingRoom_TV.db222d74
     - $Yarn.Internal.Once.Fall_Recovery.d980b3b4
     - $Yarn.Internal.Once.UnsettlingDream.16d73451
     - $Yarn.Internal.Once.BottleDrop.527a4d11
@@ -46,5 +48,6 @@ MonoBehaviour:
     - $Yarn.Internal.Once.Tower_Down.60814b3a
     - $Yarn.Internal.Once.Tower_Pit_Room.0e0c740f
     - $Yarn.Internal.Once.Tower_Fall.67c82570
+    - $Yarn.Internal.Once.ExitStore.0914f8ff
     - $Yarn.Internal.Once.LiftOut.921ec1ab
-    m_values: 0001000000000000000000000000000000
+    m_values: 0001000000000000000000000000000000000000

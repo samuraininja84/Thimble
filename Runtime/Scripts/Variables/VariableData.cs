@@ -324,18 +324,22 @@ namespace Thimble
             // Check if the variable name starts with a "$", if not add it
             if (!name.StartsWith("$")) name = "$" + name;
 
-            // If the variable does not exist in the variable storage, log an error and return
-            if (!storage.Contains(base.name))
+            // If the storage is not null, set the value in the storage
+            if (storage != null)
             {
-                // Log an error if the variable does not exist in the variable storage
-                Debug.LogError("Variable " + base.name + " does not exist in the variable storage.");
+                // If the variable does not exist in the variable storage, log an error and return
+                if (!storage.Contains(name))
+                {
+                    // Log an error if the variable does not exist in the variable storage
+                    Debug.LogError("Variable " + name + " does not exist in the variable storage.");
 
-                // Return early if the variable does not exist in the variable storage
-                return;
+                    // Return early if the variable does not exist in the variable storage
+                    return;
+                }
+
+                // Set the value of the variable
+                storage.SetValue(name, value);
             }
-
-            // Set the value of the variable
-            storage.SetValue(name, value);
 
             // Find the variable in the variables list and update the value
             stringVariables[name] = value;
@@ -352,18 +356,22 @@ namespace Thimble
             // Check if the variable name starts with a "$", if not add it
             if (!name.StartsWith("$")) name = "$" + name;
 
-            // If the variable does not exist in the variable storage, log an error and return
-            if (!storage.Contains(base.name))
+            // If the storage is not null, set the value in the storage
+            if (storage != null)
             {
-                // Log an error if the variable does not exist in the variable storage
-                Debug.LogError("Variable " + base.name + " does not exist in the variable storage.");
+                // If the variable does not exist in the variable storage, log an error and return
+                if (!storage.Contains(name))
+                {
+                    // Log an error if the variable does not exist in the variable storage
+                    Debug.LogError("Variable " + name + " does not exist in the variable storage.");
 
-                // Return early if the variable does not exist in the variable storage
-                return;
+                    // Return early if the variable does not exist in the variable storage
+                    return;
+                }
+
+                // Set the value of the variable
+                storage.SetValue(name, value);
             }
-
-            // Set the value of the variable
-            storage.SetValue(name, value);
 
             // Find the variable in the variables list and update the value
             floatVariables[name] = value;
@@ -380,18 +388,22 @@ namespace Thimble
             // Check if the variable name starts with a "$", if not add it
             if (!name.StartsWith("$")) name = "$" + name;
 
-            // If the variable does not exist in the variable storage, log an error and return
-            if (!storage.Contains(name))
+            // If the storage is not null, set the value in the storage
+            if (storage != null)
             {
-                // Log an error if the variable does not exist in the variable storage
-                Debug.LogError("Variable " + name + " does not exist in the variable storage.");
+                // If the variable does not exist in the variable storage, log an error and return
+                if (!storage.Contains(name))
+                {
+                    // Log an error if the variable does not exist in the variable storage
+                    Debug.LogError("Variable " + name + " does not exist in the variable storage.");
 
-                // Return early if the variable does not exist in the variable storage
-                return;
+                    // Return early if the variable does not exist in the variable storage
+                    return;
+                }
+
+                // Set the value of the variable
+                storage.SetValue(name, value);
             }
-
-            // Set the value of the variable
-            storage.SetValue(name, value);
 
             // Find the variable in the variables list and update the value
             boolVariables[name] = value;

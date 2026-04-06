@@ -5,7 +5,7 @@ using UnityEditor.Build.Reporting;
 
 namespace Thimble.Editor
 {
-    public class VariableDataBuildCompiler : IPreprocessBuildWithReport, IPostprocessBuildWithReport
+    internal class VariableDataBuildCompiler : IPreprocessBuildWithReport, IPostprocessBuildWithReport
     {
         private VariableData variableData;
         private bool _removeFromPreloadedAssets;

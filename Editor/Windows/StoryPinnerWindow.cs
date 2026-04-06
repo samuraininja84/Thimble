@@ -16,7 +16,7 @@ namespace Thimble.Editor
         public bool boolInput = false;
         private bool showVariableValues = true;
 
-        private string[] sectionNames = new string[] { "Commands", "Functions", "Variables" };
+        private static string[] sectionNames = new string[] { "Variables", "Commands", "Functions" };
         private int selectedSectionIndex = 0;
 
         private Vector2 scrollPosition = Vector2.zero;
@@ -82,15 +82,15 @@ namespace Thimble.Editor
             {
                 // Draw the command data section
                 case 0:
-                    DrawCommandDataSection();
+                    DrawVariableDataSection();
                     break;
                 // Draw the function data section
                 case 1:
-                    DrawFunctionDataSection();
+                    DrawCommandDataSection();
                     break;
                 // Draw the variable data section
                 case 2:
-                    DrawVariableDataSection();
+                    DrawFunctionDataSection();
                     break;
                 // Default case to handle invalid section index
                 default:
@@ -100,6 +100,229 @@ namespace Thimble.Editor
         }
 
         private void DrawHeader(string headerText, Color color) => EditorGUILayout.LabelField(headerText, HeaderStyle(color));
+
+        #region Variable Data Section
+
+        private void DrawVariableDataSection()
+        {
+            // Display the variable data label field
+            DrawHeader("Variable Data", Color.cyan);
+
+            // Check that the variable data is not null before drawing them
+            if (VariableDataExists())
+            {
+                // Display the variable data with its respective variable storage, variables, and variable tools
+                DrawVariableData(variableData);
+            }
+            else if (!VariableDataExists())
+            {
+                // Display an error message if no variable datas are found in the project
+                EditorGUILayout.HelpBox("No Variable Data has been found in the project.", MessageType.Error);
+            }
+
+            // End the foldout for the variable values
+            EditorGUILayout.EndFoldoutHeaderGroup();
+        }
+
+        private void DrawVariableData(VariableData variableData, VariableStorageBehaviour storage = null)
+        {
+            // Create a label for the variable data name
+            EditorGUILayout.LabelField("Variable Data: " + FormatDataName(variableData.name), EditorStyles.boldLabel);
+
+            // Begin the disabled group for the variable data field
+            EditorGUI.BeginDisabledGroup(true);
+
+            // Display the variable data field
+            variableData = (VariableData)EditorGUILayout.ObjectField("Variable Data", variableData, typeof(VariableData), false);
+
+            // End the disabled group for the variable data field
+            EditorGUI.EndDisabledGroup();
+
+            // Create a serialized object for the variable data
+            SerializedObject variableDataObject = new SerializedObject(variableData);
+
+            // Update the serialized object
+            variableDataObject.Update();
+
+            // Add space after the variable storage field
+            EditorGUILayout.Space();
+
+            // Display the variable data based on if there are any variables in the variable data or not
+            if (variableData.Empty())
+            {
+                // Display an error message if no variables are found
+                EditorGUILayout.LabelField("No variables found", EditorStyles.miniLabel);
+            }
+            else
+            {
+                // Display all string variables with a bold label if there are any string variables
+                EditorGUILayout.LabelField("String Variables", EditorStyles.boldLabel);
+
+                // Check if there are any string variables
+                if (!HasStringVariables(variableData))
+                {
+                    // Display a message if no string variables are found
+                    EditorGUILayout.LabelField("No string variables found", EditorStyles.miniLabel);
+                }
+                else if (HasStringVariables(variableData))
+                {
+                    // Loop through all string variables in the variable data
+                    for (int i = 0; i < variableData.stringVariables.Count; i++)
+                    {
+                        // Get the variable from the variable data and display it if it is active
+                        var variable = variableData.stringVariables.ElementAt(i);
+
+                        // Start the horizontal layout
+                        EditorGUILayout.BeginHorizontal();
+
+                        // Display the variable name and value
+                        string currentValue = EditorGUILayout.TextField(FormatVariableName(variable.Key), variable.Value);
+
+                        // Set the variable value if it has been changed in the input field
+                        if (!currentValue.Equals(variable.Value, System.StringComparison.Ordinal)) VariableData.Instance.SetValue(variable.Key, currentValue);
+
+                        // End the horizontal layouts
+                        EditorGUILayout.EndHorizontal();
+                    }
+                }
+
+                // Display all float variables with a bold label if there are any float variables
+                EditorGUILayout.LabelField("Float Variables", EditorStyles.boldLabel);
+
+                // Check if there are any float variables
+                if (!HasFloatVariables(variableData))
+                {
+                    // Display a message if no float variables are found
+                    EditorGUILayout.LabelField("No float variables found", EditorStyles.miniLabel);
+                }
+                else if (HasFloatVariables(variableData))
+                {
+                    // Loop through all float variables in the variable data
+                    for (int i = 0; i < variableData.floatVariables.Count; i++)
+                    {
+                        // Get the variable from the variable data and display it if it is active
+                        var variable = variableData.floatVariables.ElementAt(i);
+
+                        // Start the horizontal layout
+                        EditorGUILayout.BeginHorizontal();
+
+                        // Display the variable name and value
+                        float currentValue = EditorGUILayout.FloatField(FormatVariableName(variable.Key), variable.Value);
+
+                        // Set the variable value if it has been changed in the input field
+                        if (currentValue != variable.Value) VariableData.Instance.SetValue(variable.Key, currentValue);
+
+                        // End the horizontal layouts
+                        EditorGUILayout.EndHorizontal();
+                    }
+                }
+
+                // Display all bool variables with a bold label if there are any bool variables
+                EditorGUILayout.LabelField("Bool Variables", EditorStyles.boldLabel);
+
+                // Check if there are any bool variables
+                if (!HasBoolVariables(variableData))
+                {
+                    // Display a message if no bool variables are found
+                    EditorGUILayout.LabelField("No bool variables found", EditorStyles.miniLabel);
+                }
+                else if (HasBoolVariables(variableData))
+                {
+                    // Loop through all bool variables in the variable data
+                    for (int i = 0; i < variableData.boolVariables.Count; i++)
+                    {
+                        // Get the variable from the variable data and display it if it is active
+                        var variable = variableData.boolVariables.ElementAt(i);
+
+                        // Start the horizontal layout
+                        EditorGUILayout.BeginHorizontal();
+
+                        // Display the variable name and value
+                        EditorGUILayout.LabelField(FormatVariableName(variable.Key));
+
+                        // Push the value to the right of the variable name
+                        GUILayout.FlexibleSpace();
+
+                        // Display the variable name and value
+                        bool currentValue = EditorGUILayout.Toggle(GUIContent.none, variable.Value);
+
+                        // Set the variable value if it has been changed in the input field
+                        if (currentValue != variable.Value) VariableData.Instance.SetValue(variable.Key, currentValue);
+
+                        // End the horizontal layouts
+                        EditorGUILayout.EndHorizontal();
+                    }
+                }
+
+                // Display a warning if the variable storage is null
+                if (variableData.storage == null)
+                {
+                    EditorGUILayout.Separator();
+                    EditorGUILayout.HelpBox("Variable Storage is null. Variables will not be updated or refreshed in the Yarn Project.", MessageType.None);
+                    EditorGUILayout.HelpBox("This can be assigned manually but using a Variable Storage Referencer is recommended to set the data in the reference at Start.", MessageType.None);
+                    EditorGUILayout.Separator();
+                }
+            }
+
+            // Display variable tools header with a bold label
+            EditorGUILayout.LabelField("Variable Tools", EditorStyles.boldLabel);
+
+            // Display the initialize variables button
+            if (GUILayout.Button("Initialize Variables")) variableData.Initialize();
+
+            // Display the get variables button if we are missing any variables in the variable data compared to the variable storage
+            if (GUILayout.Button("Update From Storage")) variableData.RefreshVariables();
+
+            // Display the update variables button
+            if (GUILayout.Button("Update From Data")) variableData.UpdateVariables();
+
+            // Display the clear all variables button
+            if (GUILayout.Button("Clear Variables")) variableData.Clear();
+
+            // Apply any changes to the serialized object
+            variableDataObject.ApplyModifiedProperties();
+        }
+
+        private bool HasStringVariables(VariableData variableData) => variableData.stringVariables.Count > 0;
+
+        private bool HasFloatVariables(VariableData variableData) => variableData.floatVariables.Count > 0;
+
+        private bool HasBoolVariables(VariableData variableData) => variableData.boolVariables.Count > 0;
+
+        private bool VariableDataExists() => VariableData.Instance != null;
+
+        private string FormatVariableName(string variableName)
+        {
+            // If the variable name is null or empty, return string.Empty
+            if (string.IsNullOrEmpty(variableName)) return string.Empty;
+
+            // If the variable is a Yarn Internal variable, trim the "Yarn.Internal" prefix from the variable name and return the formatted variable name
+            if (variableName.Contains(VariableHandler.InternalVariableDenotator, System.StringComparison.Ordinal))
+            {
+                // Remove the "Yarn.Internal" prefix from the variable name
+                return variableName.Replace(VariableHandler.InternalVariableDenotator + ".", string.Empty);
+            }
+
+            // Return the variable name if it is not a Yarn Internal variable
+            return variableName;
+        }
+
+        /// <summary>
+        /// Formats a variable name by inserting spaces before uppercase letters.
+        /// </summary>
+        /// <param name="variableDataName">The name of the variable to format. Cannot be null.</param>
+        /// <returns>A formatted string with spaces inserted before uppercase letters in <paramref name="variableDataName"/>.</returns>
+        private string FormatDataName(string variableDataName) => string.Concat(variableDataName.Select(x => char.IsUpper(x) ? " " + x : x.ToString())).TrimStart(' ');
+
+        private void ResetValues()
+        {
+            // Reset the input fields for the variable values
+            stringInput = string.Empty;
+            floatInput = 0f;
+            boolInput = false;
+        }
+
+        #endregion
 
         #region Command Data Section
 
@@ -472,274 +695,6 @@ namespace Thimble.Editor
                 .Select(AssetDatabase.GUIDToAssetPath)
                 .Select(AssetDatabase.LoadAssetAtPath<FunctionData>)
                 .ToArray();
-        }
-
-        #endregion
-
-        #region Variable Data Section
-
-        private void DrawVariableDataSection()
-        {
-            // Display the variable data label field
-            DrawHeader("Variable Data", Color.cyan);
-
-            // Check that the variable data is not null before drawing them
-            if (VariableDataExists())
-            {
-                // Display the variable data with its respective variable storage, variables, and variable tools
-                DrawVariableData(variableData);
-            }
-            else if (!VariableDataExists())
-            {
-                // Display an error message if no variable datas are found in the project
-                EditorGUILayout.HelpBox("No Variable Data has been found in the project.", MessageType.Error);
-            }
-
-            // Add a space to separate the variable data from the variable values section
-            EditorGUILayout.Space();
-            EditorGUILayout.Space();
-            EditorGUILayout.Space();
-
-            // Display the variable values label field
-            DrawHeader("Variable Values", Color.cyan);
-
-            // Create a foldout to display the input fields for the variable values
-            showVariableValues = EditorGUILayout.BeginFoldoutHeaderGroup(showVariableValues, "Input Fields: ");
-
-            // Check if the foldout is open before displaying the input fields
-            if (showVariableValues)
-            {
-                // Display the input fields for the variable values
-                stringInput = EditorGUILayout.TextField("New String Value", stringInput);
-                floatInput = EditorGUILayout.FloatField("New Float Value", floatInput);
-                boolInput = EditorGUILayout.Toggle("New Bool Value", boolInput);
-
-                // Add a space after the input fields
-                EditorGUILayout.Space();
-
-                // Display a help box to inform the user how to use the input fields
-                EditorGUILayout.HelpBox("Input the new values for the variables you want to change in these fields before pressing the set value next to a variable.", MessageType.Info);
-
-                // Add a space after the help box
-                EditorGUILayout.Space();
-            }
-
-            // End the foldout for the variable values
-            EditorGUILayout.EndFoldoutHeaderGroup();
-        }
-
-        private void DrawVariableData(VariableData variableData, VariableStorageBehaviour storage = null)
-        {
-            // Create a label for the variable data name
-            EditorGUILayout.LabelField("Variable Data: " + FormatDataName(variableData.name), EditorStyles.boldLabel);
-
-            // Begin the disabled group for the variable data field
-            EditorGUI.BeginDisabledGroup(true);
-
-            // Display the variable data field
-            variableData = (VariableData)EditorGUILayout.ObjectField("Variable Data", variableData, typeof(VariableData), false);
-
-            // End the disabled group for the variable data field
-            EditorGUI.EndDisabledGroup();
-
-            // Create a serialized object for the variable data
-            SerializedObject variableDataObject = new SerializedObject(variableData);
-
-            // Update the serialized object
-            variableDataObject.Update();
-
-            // Check if the variable data has a variable storage before displaying the variable storage field, any existing variables, and the variable tools
-            if (variableData.storage != null)
-            {
-                // Get the variable storage from the variable data
-                if (storage == null) storage = variableData.storage;
-
-                // DBegin the disabled group for the variable storage field
-                EditorGUI.BeginDisabledGroup(true);
-
-                // Display the variable storage field
-                storage = (VariableStorageBehaviour)EditorGUILayout.ObjectField("Variable Storage", storage, typeof(VariableStorageBehaviour), true);
-
-                // End the disabled group for the variable storage field
-                EditorGUI.EndDisabledGroup();
-
-                // Add space after the variable storage field
-                EditorGUILayout.Space();
-
-                // Display all string variables with a bold label if there are any string variables
-                EditorGUILayout.LabelField("String Variables", EditorStyles.boldLabel);
-
-                // Check if there are any string variables
-                if (!HasStringVariables(variableData))
-                {
-                    // Display a message if no string variables are found
-                    EditorGUILayout.LabelField("No string variables found", EditorStyles.miniLabel);
-                }
-                else if (HasStringVariables(variableData))
-                {
-                    // Loop through all string variables in the variable data
-                    for (int i = 0; i < variableData.stringVariables.Count; i++)
-                    {
-                        // Get the variable from the variable data and display it if it is active
-                        var variable = variableData.stringVariables.ElementAt(i);
-
-                        // Start the horizontal layout
-                        EditorGUILayout.BeginHorizontal();
-
-                        // Display the variable name and value
-                        EditorGUILayout.LabelField(variable.Key + ": " + variable.Value);
-
-                        // Open a window to set the variable value
-                        if (GUILayout.Button("Set Value"))
-                        {
-                            // Set the variable value using the input field value
-                            variableData.SetValue(variable.Key, stringInput);
-
-                            // Reset the input fields after setting the variable value
-                            ResetValues();
-                        }
-
-                        // End the horizontal layouts
-                        EditorGUILayout.EndHorizontal();
-                    }
-                }
-
-                // Display all float variables with a bold label if there are any float variables
-                EditorGUILayout.LabelField("Float Variables", EditorStyles.boldLabel);
-
-                // Check if there are any float variables
-                if (!HasFloatVariables(variableData))
-                {
-                    // Display a message if no float variables are found
-                    EditorGUILayout.LabelField("No float variables found", EditorStyles.miniLabel);
-                }
-                else if (HasFloatVariables(variableData))
-                {
-                    // Loop through all float variables in the variable data
-                    for (int i = 0; i < variableData.floatVariables.Count; i++)
-                    {
-                        // Get the variable from the variable data and display it if it is active
-                        var variable = variableData.floatVariables.ElementAt(i);
-
-                        // Start the horizontal layout
-                        EditorGUILayout.BeginHorizontal();
-
-                        // Display the variable name and value
-                        EditorGUILayout.LabelField(variable.Key + ": " + variable.Value.ToString());
-
-                        // Add a button to set the variable value
-                        if (GUILayout.Button("Set Value"))
-                        {
-                            // Set the variable value using the input field value
-                            variableData.SetValue(variable.Key, floatInput);
-
-                            // Reset the input fields after setting the variable value
-                            ResetValues();
-                        }
-
-                        // End the horizontal layouts
-                        EditorGUILayout.EndHorizontal();
-                    }
-                }
-
-                // Display all bool variables with a bold label if there are any bool variables
-                EditorGUILayout.LabelField("Bool Variables", EditorStyles.boldLabel);
-
-                // Check if there are any bool variables
-                if (!HasBoolVariables(variableData))
-                {
-                    // Display a message if no bool variables are found
-                    EditorGUILayout.LabelField("No bool variables found", EditorStyles.miniLabel);
-                }
-                else if (HasBoolVariables(variableData))
-                {
-                    // Loop through all bool variables in the variable data
-                    for (int i = 0; i < variableData.boolVariables.Count; i++)
-                    {
-                        // Get the variable from the variable data and display it if it is active
-                        var variable = variableData.boolVariables.ElementAt(i);
-
-                        // Start the horizontal layout
-                        EditorGUILayout.BeginHorizontal();
-
-                        // Display the variable name and value
-                        EditorGUILayout.LabelField(variable.Key + ": " + variable.Value.ToString());
-
-                        // Add a button to set the variable value
-                        if (GUILayout.Button("Set Value"))
-                        {
-                            // Set the variable value using the input field value
-                            variableData.SetValue(variable.Key, boolInput);
-
-                            // Reset the input fields after setting the variable value
-                            ResetValues();
-                        }
-
-                        // End the horizontal layouts
-                        EditorGUILayout.EndHorizontal();
-                    }
-                }
-
-                // Display variable tools header with a bold label
-                EditorGUILayout.LabelField("Variable Tools", EditorStyles.boldLabel);
-
-                // Display the update variables and clear all variables buttons if there are any variables
-                if (HasVariables(variableData))
-                {
-                    // Get all variables from the variable data if they are not equal to the variable storage
-                    if (!HasAllVariables(variableData)) variableData.RefreshVariables();
-
-                    // Display the update variables button
-                    if (GUILayout.Button("Update Variables")) variableData.UpdateVariables();
-
-                    // Display the clear all variables button
-                    if (GUILayout.Button("Clear Variables")) variableData.Clear();
-                }
-                else if (!HasVariables(variableData))
-                {
-                    // Display an error message if no variables are found
-                    EditorGUILayout.LabelField("No variables found", EditorStyles.miniLabel);
-
-                    // Display the get variables button if there are no variables
-                    if (GUILayout.Button("Get Variables")) variableData.RefreshVariables();
-                }
-            }
-            else if (variableData.storage == null)
-            {
-                // Display an error message if the variable storage is null
-                EditorGUILayout.Space();
-                EditorGUILayout.HelpBox("Variable Storage is null. Please assign a Variable Storage to the Variable Data.", MessageType.Error);
-                EditorGUILayout.HelpBox("This can be assigned manually but using a Variable Storage Referencer is recommended to set the data in the reference at Start.", MessageType.Error);
-            }
-
-            variableDataObject.ApplyModifiedProperties();
-        }
-
-        private bool HasVariables(VariableData variableData) => HasStringVariables(variableData) || HasFloatVariables(variableData) || HasBoolVariables(variableData);
-
-        private bool HasStringVariables(VariableData variableData) => variableData.stringVariables.Count > 0;
-
-        private bool HasFloatVariables(VariableData variableData) => variableData.floatVariables.Count > 0;
-
-        private bool HasBoolVariables(VariableData variableData) => variableData.boolVariables.Count > 0;
-
-        private bool VariableDataExists() => VariableData.Instance != null;
-
-        private bool HasAllVariables(VariableData variableData) => variableData.Equal();
-
-        /// <summary>
-        /// Formats a variable name by inserting spaces before uppercase letters.
-        /// </summary>
-        /// <param name="variableDataName">The name of the variable to format. Cannot be null.</param>
-        /// <returns>A formatted string with spaces inserted before uppercase letters in <paramref name="variableDataName"/>.</returns>
-        private string FormatDataName(string variableDataName) => string.Concat(variableDataName.Select(x => char.IsUpper(x) ? " " + x : x.ToString())).TrimStart(' ');
-
-        private void ResetValues()
-        {
-            // Reset the input fields for the variable values
-            stringInput = string.Empty;
-            floatInput = 0f;
-            boolInput = false;
         }
 
         #endregion
