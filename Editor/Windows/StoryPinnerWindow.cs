@@ -175,8 +175,11 @@ namespace Thimble.Editor
                         // Start the horizontal layout
                         EditorGUILayout.BeginHorizontal();
 
+                        // Get the current value of the variable to display in the input field
+                        string currentValue = variable.Value;
+
                         // Display the variable name and value
-                        string currentValue = EditorGUILayout.TextField(FormatVariableName(variable.Key), variable.Value);
+                        currentValue = EditorGUILayout.TextField(FormatVariableName(variable.Key), currentValue);
 
                         // Set the variable value if it has been changed in the input field
                         if (!currentValue.Equals(variable.Value, System.StringComparison.Ordinal)) VariableData.Instance.SetValue(variable.Key, currentValue);
@@ -206,8 +209,11 @@ namespace Thimble.Editor
                         // Start the horizontal layout
                         EditorGUILayout.BeginHorizontal();
 
+                        // Get the current value of the variable to display in the input field
+                        float currentValue = variable.Value;
+
                         // Display the variable name and value
-                        float currentValue = EditorGUILayout.FloatField(FormatVariableName(variable.Key), variable.Value);
+                        currentValue = EditorGUILayout.FloatField(FormatVariableName(variable.Key), currentValue);
 
                         // Set the variable value if it has been changed in the input field
                         if (currentValue != variable.Value) VariableData.Instance.SetValue(variable.Key, currentValue);
@@ -243,8 +249,11 @@ namespace Thimble.Editor
                         // Push the value to the right of the variable name
                         GUILayout.FlexibleSpace();
 
+                        // Get the current value of the variable to display in the input field
+                        bool currentValue = variable.Value;
+
                         // Display the variable name and value
-                        bool currentValue = EditorGUILayout.Toggle(GUIContent.none, variable.Value);
+                        currentValue = EditorGUILayout.Toggle(GUIContent.none, currentValue);
 
                         // Set the variable value if it has been changed in the input field
                         if (currentValue != variable.Value) VariableData.Instance.SetValue(variable.Key, currentValue);
