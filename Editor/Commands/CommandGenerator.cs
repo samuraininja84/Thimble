@@ -12,7 +12,9 @@ namespace Thimble.Editor
 {
     public class CommandGenerator
     {
-        private static string cachePath = "Assets";
+        private const string cacheKey = "Thimble_CommandInfoCache";
+
+        private static string CachedPath => EditorPrefs.GetString(cacheKey, "Assets");
 
         #region Command Format
 
@@ -89,10 +91,10 @@ namespace Thimble.Editor
         public static void GenerateYSLS()
         {
             // Ask the user where they want to save the generated JSON file
-            cachePath = EditorUtility.SaveFilePanelInProject("Save Command Info", "commands.ysls", "json", "Select a location to save the generated command info JSON file.", cachePath);
+            string path = EditorUtility.SaveFilePanelInProject("Save Command Info", "commands.ysls", "json", "Select a location to save the generated command info JSON file.", CachedPath);
 
             // Check if the user provided a valid path
-            if (string.IsNullOrEmpty(cachePath))
+            if (string.IsNullOrEmpty(path))
             {
                 // Log a warning if the user cancels the save dialog
                 Debug.LogWarning("Command info generation cancelled by user.");
@@ -108,7 +110,10 @@ namespace Thimble.Editor
             string json = FormatValue(formated);
 
             // Write the JSON to the specified file
-            System.IO.File.WriteAllText(cachePath, json);
+            System.IO.File.WriteAllText(path, json);
+
+            // Cache the path where we saved the file for next time
+            EditorPrefs.SetString(cacheKey, path);
 
             // Refresh the AssetDatabase to make sure the new file is recognized by Unity
             AssetDatabase.Refresh();

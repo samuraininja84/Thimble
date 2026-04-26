@@ -79,9 +79,9 @@ namespace Thimble
 
         #region Listener Management
 
-        public void AddChangeListener(Action<string, object> onChange) => storage.AddChangeListener(onChange);
+        public void AddChangeListener(Action<string, object> onChange) => storage?.AddChangeListener(onChange);
 
-        public void AddChangeListener<T>(string variableName, Action<T> onChange) => storage.AddChangeListener(variableName, onChange);
+        public void AddChangeListener<T>(string variableName, Action<T> onChange) => storage?.AddChangeListener(variableName, onChange);
 
         public void AddUpdateListener(Action onUpdate) => OnVariableUpdate += onUpdate;
 
