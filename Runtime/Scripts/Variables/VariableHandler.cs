@@ -37,6 +37,13 @@ namespace Thimble
         public static string AppendYarnPrefix(this string variableName) => variableName.StartsWith(Prefix) ? variableName : Prefix + variableName;
 
         /// <summary>
+        /// Checks if the string equals the <see cref="MissingVariableName"/> denotation;
+        /// </summary>
+        /// <param name="variableName">The variable to compare against.</param>
+        /// <returns>A boolean indicating whether or not this is a valid condition</returns>
+        public static bool HasCondition(this string variableName) => !string.IsNullOrEmpty(variableName) && !string.Equals(variableName.AppendYarnPrefix(), MissingVariableName.AppendYarnPrefix(), System.StringComparison.OrdinalIgnoreCase);
+
+        /// <summary>
         /// Converts the specified dictionary to a new instance of SerializableDictionary containing the same key-value pairs.
         /// </summary>
         /// <remarks>
