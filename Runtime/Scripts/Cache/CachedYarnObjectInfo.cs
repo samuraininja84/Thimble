@@ -2,15 +2,15 @@ using System;
 
 namespace Thimble
 {
-    [System.Serializable]
-    public struct CachedYarnObjectInfo : IEquatable<CachedYarnObjectInfo>
+    [Serializable]
+    public readonly struct CachedYarnObjectInfo : IEquatable<CachedYarnObjectInfo>
     {
-        public string ObjectName;
-        public string ConditionName;
-        public string SceneName;
-        public bool IsLocal;
+        public string ObjectName { get; }
+        public string ConditionName { get; }
+        public string SceneName { get; }
+        public bool IsLocal { get; }
 
-        private int hashCode;
+        private readonly int hashCode;
 
         public CachedYarnObjectInfo(string objectName, string conditionName, string sceneName, bool isLocal)
         {
@@ -19,6 +19,7 @@ namespace Thimble
             SceneName = sceneName;
             IsLocal = isLocal;
 
+            // Calculate the hash code once and store it, since the struct is immutable
             hashCode = HashCode.Combine(ObjectName, ConditionName, SceneName, IsLocal);
         }
 
@@ -28,13 +29,6 @@ namespace Thimble
 
         public override bool Equals(object obj) => obj is CachedYarnObjectInfo other && Equals(other);
 
-        public override int GetHashCode()
-        {
-            // If the hash code hasn't been calculated yet, calculate it now
-            if (hashCode == 0) hashCode = HashCode.Combine(ObjectName, ConditionName, SceneName, IsLocal);
-
-            // Return the cached hash code
-            return hashCode;
-        }
+        public override int GetHashCode() => hashCode;
     }
 }
