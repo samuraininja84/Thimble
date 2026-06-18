@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Thimble
 {
     [Serializable]
-    public struct FloatVariable : IVariable<float>
+    public struct FloatVariable : IVariable<float>, IEquatable<float>, IEquatable<FloatVariable>
     {
         [SerializeField] private string name;
         [SerializeField] private float value;

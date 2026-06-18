@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Thimble
 {
     [Serializable]
-    public struct StringVariable : IVariable<string>
+    public struct StringVariable : IVariable<string>, IEquatable<string>, IEquatable<StringVariable>
     {
         [SerializeField] private string name;
         [SerializeField] private string value;
@@ -87,10 +87,8 @@ namespace Thimble
 
         public override bool Equals(object obj)
         {
-            if (obj is StringVariable variable)
-                return Equals(variable);
-            if (obj is string str)
-                return Equals(str);
+            if (obj is StringVariable variable) return Equals(variable);
+            if (obj is string str) return Equals(str);
             return false;
         }
 

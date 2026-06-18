@@ -7,6 +7,7 @@ using UnityEditor;
 using Yarn.Unity;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using static Thimble.Editor.CommandGenerator;
 
 namespace Thimble.Editor
 {
@@ -134,20 +135,7 @@ namespace Thimble.Editor
                 var attribute = command.Value;
 
                 // Create a CommandInfo object for this command
-                var commandInfo = new CommandInfo
-                {
-                    yarnName = attribute?.Name ?? method.Name,
-                    definitionName = method.Name,
-                    documentation = "", // To-Do: Extend the YarnCommandAttribute to include method documentation, and extract it here
-                    parameters = method.GetParameters().Select(p => new CommandInfo.ParameterInfo
-                    {
-                        name = p.Name,
-                        type = ConvertParameterType(p.ParameterType.Name),
-                        defaultValue = p.HasDefaultValue ? p.DefaultValue?.ToString() ?? "null" : "None",
-                        documentation = "",
-                        isParamsArray = p.GetCustomAttribute<ParamArrayAttribute>() != null
-                    }).ToList()
-                };
+                var commandInfo = CommandInfo.Create(method, attribute);
 
                 // Add the command info to our cache
                 commandInfoCache.Add(commandInfo);
@@ -172,27 +160,7 @@ namespace Thimble.Editor
                 var attribute = function.Value;
 
                 // Create a FunctionInfo object for this function
-                var functionInfo = new FunctionInfo
-                {
-                    yarnName = attribute?.Name ?? method.Name,
-                    definitionName = method.Name,
-                    documentation = "", // To-Do: Extend the YarnFunctionAttribute to include method documentation, and extract it here
-                    async = method.ReturnType == typeof(System.Threading.Tasks.Task) || (method.ReturnType.IsGenericType && method.ReturnType.GetGenericTypeDefinition() == typeof(System.Threading.Tasks.Task<>)),
-                    containsErrors = false, // To-Do: Implement a way to determine if the function can throw errors and include that information in the JSON
-                    parameters = method.GetParameters().Select(p => new FunctionInfo.ParameterInfo
-                    {
-                        name = p.Name,
-                        type = ConvertParameterType(p.ParameterType.Name),
-                        defaultValue = p.HasDefaultValue ? p.DefaultValue?.ToString() ?? "null" : "None",
-                        documentation = "",
-                        isParamsArray = p.GetCustomAttribute<ParamArrayAttribute>() != null
-                    }).ToList(),
-                    @return = new FunctionInfo.ReturnInfo
-                    {
-                        type = ConvertParameterType(method.ReturnType.Name),
-                        description = "" // To-Do: Extend the YarnFunctionAttribute to include return value documentation, and extract it here
-                    }
-                };
+                var functionInfo = FunctionInfo.Create(method, attribute);
 
                 // Add the function info to our cache
                 functionInfoCache.Add(functionInfo);
@@ -229,28 +197,22 @@ namespace Thimble.Editor
         public static string ConvertParameterType(string typeName)
         {
             // Converts C# type names to more user-friendly names for display in the editor. This is a simple mapping, and can be extended as needed.
-            switch (typeName)
+            return typeName switch
             {
-                case "Int32":
-                    return "number";
-                case "Single":
-                    return "number";
-                case "Boolean":
-                    return "bool";
-                case "String":
-                    return "string";
-                // Add more type conversions as needed
-                default:
-                    return typeName; // Return the original type name if no conversion is defined
-            }
+                "Int32" => "number",
+                "Single" => "number",
+                "Boolean" => "bool",
+                "String" => "string",
+                _ => typeName,// Return the original type name if no conversion is defined
+            };
         }
 
         #endregion
 
-        public struct GeneratorFormater
+        public readonly struct GeneratorFormater
         {
-            public List<CommandInfo> commands;
-            public List<FunctionInfo> functions;
+            public readonly List<CommandInfo> commands;
+            public readonly List<FunctionInfo> functions;
 
             public GeneratorFormater(List<CommandInfo> commands, List<FunctionInfo> functions = null)
             {
@@ -264,48 +226,190 @@ namespace Thimble.Editor
         }
 
         [Serializable]
-        public struct CommandInfo
+        public readonly struct CommandInfo : IEquatable<CommandInfo>
         {
-            public string yarnName;
-            public string definitionName;
-            public string documentation;
-            public List<ParameterInfo> parameters;
+            public readonly string yarnName;
+            public readonly string definitionName;
+            public readonly string documentation;
+            public readonly List<YarnParameterInfo> parameters;
 
-            public struct ParameterInfo
+            private readonly int hashCode;
+
+            public CommandInfo(string yarnName, string definitionName, string documentation, List<YarnParameterInfo> parameters)
             {
-                public string name;
-                public string type;
-                public string defaultValue;
-                public string documentation;
-                public bool isParamsArray;
+                // Set the properties of this command based on the provided information.
+                this.yarnName = yarnName;
+                this.definitionName = definitionName;
+                this.documentation = documentation;
+                this.parameters = parameters;
+
+                // Calculate the hash code based on the command's properties
+                hashCode = HashCode.Combine(yarnName) ^ parameters.GetHashCode();
+            }
+
+            public static CommandInfo Create(MethodInfo methodInfo, YarnCommandAttribute attribute)
+            {
+                return new CommandInfo
+                (
+                    yarnName: attribute?.Name ?? methodInfo.Name,
+                    definitionName: methodInfo.Name,
+                    documentation: "", // To-Do: Extend the YarnCommandAttribute to include method documentation, and extract it here
+                    parameters: methodInfo.ToYarnParameters()
+                );
+            }
+
+            public readonly bool Equals(CommandInfo other) => yarnName == other.yarnName && parameters.SequenceEqual(other.parameters);
+
+            public override readonly bool Equals(object obj) => obj is CommandInfo other && Equals(other);
+
+            public override readonly int GetHashCode() => hashCode;
+        }
+
+        [Serializable]
+        public readonly struct FunctionInfo : IEquatable<FunctionInfo>
+        {
+            public readonly string yarnName;
+            public readonly string definitionName;
+            public readonly string documentation;
+            public readonly bool async;
+            public readonly bool containsErrors;
+            public readonly List<YarnParameterInfo> parameters;
+            public readonly ReturnInfo @return;
+
+            [JsonIgnore] private readonly int hashCode;
+
+            public FunctionInfo(string yarnName, string definitionName, string documentation, bool async, bool containsErrors, List<YarnParameterInfo> parameters, ReturnInfo @return)
+            {
+                this.yarnName = yarnName;
+                this.definitionName = definitionName;
+                this.documentation = documentation;
+                this.async = async;
+                this.containsErrors = containsErrors;
+                this.parameters = parameters;
+                this.@return = @return;
+
+                // Calculate the hash code based on the function's properties
+                hashCode = HashCode.Combine(yarnName, async, containsErrors) ^ parameters.GetHashCode() ^ @return.GetHashCode();
+            }
+
+            public static FunctionInfo Create(MethodInfo methodInfo, YarnFunctionAttribute attribute)
+            {
+                return new FunctionInfo
+                (
+                    attribute?.Name ?? methodInfo.Name,
+                    methodInfo.Name,
+                    "", // To-Do: Extend the YarnFunctionAttribute to include method documentation, and extract it here
+                    methodInfo.ReturnType == typeof(System.Threading.Tasks.Task) || (methodInfo.ReturnType.IsGenericType && methodInfo.ReturnType.GetGenericTypeDefinition() == typeof(System.Threading.Tasks.Task<>)),
+                    false, // To-Do: Implement a way to determine if the function can throw errors and include that information in the JSON
+                    methodInfo.ToYarnParameters(),
+                    ReturnInfo.Create(methodInfo.ReturnType.Name, string.Empty) // To-Do: Extend the YarnFunctionAttribute to include return value documentation, and extract it here
+                );
+            }
+
+            public readonly bool Equals(FunctionInfo other) => yarnName == other.yarnName && async == other.async && containsErrors == other.containsErrors && parameters.SequenceEqual(other.parameters) && @return.Equals(other.@return);
+
+            public override readonly bool Equals(object obj) => obj is FunctionInfo other && Equals(other);
+
+            public override readonly int GetHashCode() => hashCode;
+
+            [Serializable]
+            public readonly struct ReturnInfo : IEquatable<ReturnInfo>
+            {
+                public readonly string type;
+                public readonly string description;
+
+                [JsonIgnore] private readonly int hashCode;
+
+                public static ReturnInfo Create(string type, string description) => new ReturnInfo(type, description);
+
+                public ReturnInfo(string type, string description)
+                {
+                    // Set the return type and description for this function.
+                    this.type = ConvertParameterType(type);
+                    this.description = description;
+
+                    // Calculate the hash code based on the return info's properties
+                    hashCode = HashCode.Combine(this.type, this.description);
+                }
+
+                public override readonly bool Equals(object obj) => obj is ReturnInfo other && Equals(other);
+
+                public readonly bool Equals(ReturnInfo other) => type == other.type && description == other.description;
+
+                public override readonly int GetHashCode() => hashCode;
             }
         }
 
         [Serializable]
-        public struct FunctionInfo
+        public readonly struct YarnParameterInfo : IEquatable<YarnParameterInfo>
         {
-            public string yarnName;
-            public string definitionName;
-            public string documentation;
-            public bool async;
-            public bool containsErrors;
-            public List<ParameterInfo> parameters;
-            public ReturnInfo @return;
+            public readonly string name;
+            public readonly string type;
+            public readonly string defaultValue;
+            public readonly string documentation;
+            public readonly bool isParamsArray;
 
-            public struct ParameterInfo
+            [JsonIgnore] private readonly int hashCode;
+
+            public static YarnParameterInfo Create(string name, string type, string defaultValue, string documentation, bool isParamsArray) => new YarnParameterInfo(name, type, defaultValue, documentation, isParamsArray);
+
+            public static YarnParameterInfo Create(ParameterInfo info) => new YarnParameterInfo(info.Name, info.ParameterType.Name, info.HasDefaultValue ? info.DefaultValue?.ToString() ?? "null" : "None", "", info.GetCustomAttribute<ParamArrayAttribute>() != null);
+
+            public YarnParameterInfo(string name, string type, string defaultValue, string documentation, bool isParamsArray)
             {
-                public string name;
-                public string type;
-                public string defaultValue;
-                public string documentation;
-                public bool isParamsArray;  
+                // Set the properties of this parameter based on the provided information.
+                this.name = name;
+                this.type = ConvertParameterType(type);
+                this.defaultValue = defaultValue;
+                this.documentation = documentation;
+                this.isParamsArray = isParamsArray;
+
+                // Calculate the hash code based on the parameter's properties
+                hashCode = HashCode.Combine(name, this.type, defaultValue, documentation, isParamsArray);
             }
 
-            public struct ReturnInfo
+            public override readonly bool Equals(object obj) => obj is YarnParameterInfo other && Equals(other);
+
+            public readonly bool Equals(YarnParameterInfo other) => name == other.name && type == other.type && defaultValue == other.defaultValue && isParamsArray == other.isParamsArray;
+
+            public override readonly int GetHashCode() => hashCode;
+        }
+    }
+
+    internal static class YarnParameterInfoExtensions
+    {
+        public static List<YarnParameterInfo> ToYarnParameters(this MethodInfo methodInfo)
+        {
+            // Convert the parameters of a MethodInfo into a list of YarnParameterInfo objects, which can then be serialized to JSON for use in our editor tools.
+            var parameters = methodInfo.GetParameters();
+
+            // Initialize a list to hold our YarnParameterInfo objects for this method
+            var yarnParameters = new List<YarnParameterInfo>();
+
+            // Loop through each parameter and create a YarnParameterInfo object for it
+            foreach (var parameter in parameters)
             {
-                public string type;
-                public string description;
+                // Create a YarnParameterInfo object for this parameter
+                var yarnParameter = YarnParameterInfo.Create(parameter);
+
+                // Add the YarnParameterInfo object to our list of parameters for this method
+                yarnParameters.Add(yarnParameter);
             }
+
+            // Return the list of YarnParameterInfo objects for this method
+            return yarnParameters;
+        }
+
+        public static int GetHashCode(this List<YarnParameterInfo> parameters)
+        {
+            // Calculate a combined hash code for a list of YarnParameterInfo objects by XORing the hash codes of each individual parameter. This allows us to include the parameters in the hash code calculation for our FunctionInfo struct.
+            int hashCode = 0;
+
+            // Loop through each parameter and XOR its hash code with the combined hash code
+            foreach (var parameter in parameters) hashCode ^= parameter.GetHashCode();
+
+            // Return the combined hash code for the list of parameters
+            return hashCode;
         }
     }
 }

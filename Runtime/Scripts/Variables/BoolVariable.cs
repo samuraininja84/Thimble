@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Thimble
 {
     [Serializable]
-    public struct BoolVariable : IVariable<bool>
+    public struct BoolVariable : IVariable<bool>, IEquatable<bool>, IEquatable<BoolVariable>
     {
         [SerializeField] private string name;
         [SerializeField] private bool value;
