@@ -1,5 +1,3 @@
-using UnityEngine;
-
 namespace Thimble
 {
     public interface IFunctionHandle
