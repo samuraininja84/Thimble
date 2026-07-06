@@ -48,7 +48,7 @@ namespace Thimble.Editor
         private void OnGUI()
         {
             // Get the height of the window
-            float windowHeight = position.height;
+            float windowHeight = position.height - 45;
 
             // Add a scroll view to the window to display all command data when there are too many to fit on the screen
             scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition, GUILayout.Height(windowHeight));
@@ -58,6 +58,9 @@ namespace Thimble.Editor
 
             // Draw the selected section
             DrawSection(selectedSectionIndex);
+
+            // End the scroll view
+            EditorGUILayout.EndScrollView();
 
             // Move the toolbar to the bottom of the window
             GUILayout.FlexibleSpace();
@@ -70,9 +73,6 @@ namespace Thimble.Editor
 
             // Add space after the toolbar
             EditorGUILayout.Space();
-
-            // End the scroll view
-            EditorGUILayout.EndScrollView();
         }
 
         private void DrawSection(int sectionIndex)
