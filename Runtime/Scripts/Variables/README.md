@@ -32,9 +32,16 @@
 	- By default, there should be a ```VariableData``` ```ScriptableObject``` in the Runtime/Data folder and a Dialogue Runner Prefab with a ```VariableStorageReferencer``` component to use as a reference.
 
 # Typed Variables:
-- There are structs for each of the Primitive Types that Yarn Variables can be serialized to.
+- There are ```struct```s for each of the Primitive Types that Yarn Variables can be serialized to with custom property drawers linked to your project's ```Variable Data```.
 	- ```StringVariable```
 	- ```FloatVariable```
 	- ```BoolVariable```
-- Each of these can be used to validate Yarn Variables at Runtime and to change the value of their underlying Yarn Variable in Yarn Spinner.
-- They all inherit from ```IVariable``` as well in case you want to use that for any personal validation.
+- As well as composite versions of each of the above ```struct```s with multiple Yarn Variable inputs:
+	- ```CompositeStringVariable```
+	- ```CompositeFloatVariable```
+	- ```CompositeBoolVariable```
+- They all inherit from ```IVariable<T>``` and each of these can be used to validate Yarn Variables at runtime and to change the value of their underlying Yarn Variable(s) in Yarn Spinner with field & methods like:
+	- ```IVariable<T>.Name```
+	- ```IVariable<T>Value```
+	- ```IVariable<T>.GetName()```
+	- ```IVariable<T>.GetValue()```

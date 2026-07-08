@@ -46,12 +46,28 @@ namespace Thimble
 
         public static CompositeStringVariable Create(List<string> names, string value) => new(names, value);
 
-        public void SetName(string name) => this.name = name;
+        public void SetName(string name)
+        {
+            // Trim whitespace from the name string
+            var temp = name.Trim();
+
+            // Split the name string into a list of names using comma as the delimiter and trim whitespace from each name
+            var names = new List<string>(temp.Split(",", StringSplitOptions.RemoveEmptyEntries));
+
+            // For each name in the list, append the variable name in the VariableData using the variable's name
+            foreach (var n in names) n.AppendYarnPrefix();
+
+            // Update the name
+            Name = string.Join(", ", names);
+        }
 
         public void SetValue(string value)
         {
+            // Trim whitespace from the name string
+            var temp = name.Trim();
+
             // Split the name string into a list of names using comma as the delimiter and trim whitespace from each name
-            var names = new List<string>(name.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries));
+            var names = new List<string>(temp.Split(',', StringSplitOptions.RemoveEmptyEntries));
 
             // For each name in the list, set the variable value in the VariableData using the variable's name
             foreach (var name in names)
@@ -67,12 +83,15 @@ namespace Thimble
             Value = value;
         }
 
-        public readonly string GetName() => Name.AppendYarnPrefix();
+        public readonly string GetName() => Name;
 
         public string GetValue()
         {
+            // Trim whitespace from the name string
+            var temp = name.Trim();
+
             // Split the name string into a list of names using comma as the delimiter and trim whitespace from each name
-            var names = new List<string>(name.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries));
+            var names = new List<string>(temp.Split(',', StringSplitOptions.RemoveEmptyEntries));
 
             // Return the concatenation of all values in the values array. This effectively computes the combined string of all variable values.
             return Value = VariableData.Instance.GetAppendedString(names);
