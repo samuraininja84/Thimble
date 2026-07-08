@@ -31,7 +31,7 @@
 			- If you are missing a ```VariableData``` ```ScriptableObject```, you can create one by right-clicking in the Project window and selecting Create -> Thimble -> Variables -> New Variable Data.
 	- By default, there should be a ```VariableData``` ```ScriptableObject``` in the Runtime/Data folder and a Dialogue Runner Prefab with a ```VariableStorageReferencer``` component to use as a reference.
 
-# Typed Variables:
+# Variable References:
 - There are ```struct```s for each of the Primitive Types that Yarn Variables can be serialized to with custom property drawers linked to your project's ```Variable Data```.
 	- ```StringVariable```
 	- ```FloatVariable```
