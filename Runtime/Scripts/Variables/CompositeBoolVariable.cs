@@ -4,12 +4,13 @@ using UnityEngine;
 
 namespace Thimble
 {
+    [Serializable]
     public struct CompositeBoolVariable : IVariable<bool>, IEquatable<bool>, IEquatable<CompositeBoolVariable>
     {
-        [SerializeField] private List<string> names;
+        [SerializeField] private string name;
         [SerializeField] private bool value;
 
-        public string Name { readonly get => string.Join(", ", names); set => names = new List<string> { value }; }
+        public string Name { readonly get => name; set => name = value; }
 
         public bool Value { readonly get => value; set => this.value = value; }
 
@@ -28,18 +29,31 @@ namespace Thimble
 
         #endregion
 
-        CompositeBoolVariable(List<string> names, bool value)
+        CompositeBoolVariable(string name, bool value)
         {
-            this.names = names;
+            this.name = name;
             this.value = value;
         }
 
+        CompositeBoolVariable(List<string> names, bool value)
+        {
+            this.name = string.Join(", ", names);
+            this.value = value;
+        }
+
+        public static CompositeBoolVariable Default => new(VariableHandler.MissingVariableName, false);
+
+        public static CompositeBoolVariable Create(string name, bool value) => new(name, value);
+
         public static CompositeBoolVariable Create(List<string> names, bool value) => new(names, value);
 
-        public void SetName(string name) => names = new List<string> { name };
+        public void SetName(string name) => this.name = name;
 
         public void SetValue(bool value)
         {
+            // Split the name string into a list of names using comma as the delimiter and trim whitespace from each name
+            var names = new List<string>(name.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries));
+
             // For each name in the list, set the variable value in the VariableData using the variable's name
             foreach (var name in names)
             {
@@ -58,24 +72,11 @@ namespace Thimble
 
         public bool GetValue()
         {
-            // Return false if the list of names is empty to avoid trying to get a value from VariableData with an empty name
-            if (names.Count == 0) return Value = false;
-
-            // For each name in the list, get the variable value from the VariableData using the variable's name
-            foreach (var name in names)
-            {
-                // If the variable name is empty or matches the missing variable name, skip getting the value to avoid trying to get it from VariableData
-                if (string.IsNullOrEmpty(name) || string.Equals(name, VariableHandler.MissingVariableName, StringComparison.OrdinalIgnoreCase)) continue;
-
-                // Get the variable value from the VariableData using the variable's name
-                VariableData.Instance.GetVariable(name, out bool value);
-
-                // If the value is false, return false immediately to short-circuit the logical AND operation
-                if (!value) return Value = false; 
-            }
+            // Split the name string into a list of names using comma as the delimiter and trim whitespace from each name
+            var names = new List<string>(name.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries));
 
             // Return true if all values in the values array are true, otherwise return false. This effectively computes the logical AND of all variable values.
-            return Value = true;
+            return Value = VariableData.Instance.GetConcatValue(names);
         }
 
         public readonly bool Equals(IVariable<bool> other)

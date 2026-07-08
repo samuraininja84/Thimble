@@ -106,11 +106,84 @@ namespace Thimble
 
         public static bool GetVariable(this VariableData variableData, string variableName, out bool value) => variableData.GetVariable(variableName, out value);
 
-        public static Dictionary<string, string> GetStringVariables(this VariableStorageBehaviour storage) => storage.GetAllVariables().Item2;
+        public static string GetStringList(this VariableData variableData, List<string> variableNames)
+        {
+            // Return false if the list of names is empty to avoid trying to get a value from VariableData with an empty name
+            if (variableNames.Count == 0) return string.Empty;
 
-        public static Dictionary<string, float> GetFloatVariables(this VariableStorageBehaviour storage) => storage.GetAllVariables().Item1;
+            // Initialize a variable to hold the concatenated string values
+            var list = new List<string>();
 
-        public static Dictionary<string, bool> GetBoolVariables(this VariableStorageBehaviour storage) => storage.GetAllVariables().Item3;
+            // For each name in the list, get the variable value from the VariableData using the variable's name
+            foreach (var name in variableNames)
+            {
+                // If the variable name is empty or matches the missing variable name, skip getting the value to avoid trying to get it from VariableData
+                if (string.IsNullOrEmpty(name) || string.Equals(name, VariableHandler.MissingVariableName, System.StringComparison.OrdinalIgnoreCase)) continue;
+
+                // Get the variable value from the VariableData using the variable's name
+                variableData.GetVariable(name, out string value);
+
+                // If the value is null or empty, add "Null" to the list; otherwise, add the value to the list
+                if (!string.IsNullOrEmpty(value)) list.Add(value);
+                else list.Add("Null");
+            }
+
+            // If all values are true, return true
+            return string.Join(", ", list);
+        }
+
+        public static float GetValueSum(this VariableData variableData, List<string> variableNames)
+        {
+            // Return false if the list of names is empty to avoid trying to get a value from VariableData with an empty name
+            if (variableNames.Count == 0) return 0f;
+
+            // Initialize a variable to hold the sum of the float values
+            float sum = 0f;
+
+            // For each name in the list, get the variable value from the VariableData using the variable's name
+            foreach (var name in variableNames)
+            {
+                // If the variable name is empty or matches the missing variable name, skip getting the value to avoid trying to get it from VariableData
+                if (string.IsNullOrEmpty(name) || string.Equals(name, VariableHandler.MissingVariableName, System.StringComparison.OrdinalIgnoreCase)) continue;
+
+                // Get the variable value from the VariableData using the variable's name
+                variableData.GetVariable(name, out float value);
+
+                // Add the value to the sum
+                sum += value;
+            }
+
+            // Return the total sum of all values
+            return sum;
+        }
+
+        public static bool GetConcatValue(this VariableData variableData, List<string> variableNames)
+        {
+            // Return false if the list of names is empty to avoid trying to get a value from VariableData with an empty name
+            if (variableNames.Count == 0) return false;
+
+            // For each name in the list, get the variable value from the VariableData using the variable's name
+            foreach (var name in variableNames)
+            {
+                // If the variable name is empty or matches the missing variable name, skip getting the value to avoid trying to get it from VariableData
+                if (string.IsNullOrEmpty(name) || string.Equals(name, VariableHandler.MissingVariableName, System.StringComparison.OrdinalIgnoreCase)) continue;
+
+                // Get the variable value from the VariableData using the variable's name
+                variableData.GetVariable(name, out bool value);
+
+                // If the value is false, return false immediately to short-circuit the logical AND operation
+                if (!value) return false;
+            }
+
+            // If all values are true, return true
+            return true;
+        }
+
+        public static Dictionary<string, string> GetStringVariables(this VariableStorageBehaviour storage) => storage.GetAllVariables().StringVariables;
+
+        public static Dictionary<string, float> GetFloatVariables(this VariableStorageBehaviour storage) => storage.GetAllVariables().FloatVariables;
+
+        public static Dictionary<string, bool> GetBoolVariables(this VariableStorageBehaviour storage) => storage.GetAllVariables().BoolVariables;
 
         public static Dictionary<string, string> GetStringVariables(this YarnProject project)
         {
