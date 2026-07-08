@@ -85,7 +85,7 @@ namespace Thimble.Editor
                 PopupWindow.Show
                 (
                     position,
-                    new DatabaseTreePopup(new DatabaseTreeView(null, ApplySelection, type))
+                    new VariableDatabaseTreePopup(new VariableDatabaseTreeView(ApplySelection, type))
                     {
                         Width = Mathf.Max(position.width, 300)
                     }

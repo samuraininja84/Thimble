@@ -20,9 +20,35 @@ MonoBehaviour:
     m_keys:
     - $timeOfDay
     - $location
+    - $motherIlya
+    - $dreamPlayer
+    - $companionHooty
+    - $storeBoss
+    - $newDreamPlayer
+    - $recurrent_LowerView
+    - $recurrent_TowerView
+    - $recurrent_EntranceView
+    - $recurrent_DoorView
+    - $recurrent_MemoryView
+    - $recurrent_MemoryCloseUpView
+    - $recurrent_FallView
+    - $recurrent_PitView
     m_values:
     - evening
     - roof
+    - Ilya
+    - Amerie_D_Free
+    - Hooty
+    - Boss
+    - Amerie_D_New
+    - LowerView
+    - TowerView
+    - EntranceView
+    - DoorView
+    - MemoryView
+    - MemoryCloseUpView
+    - FallView
+    - PitView
   floatVariables:
     m_keys:
     - $memorySection
@@ -31,16 +57,10 @@ MonoBehaviour:
   boolVariables:
     m_keys:
     - $Yarn.Internal.Once.Roof.124316f3
-    - $isChild
-    - $spokenAboutTable
-    - $tableSet
-    - $NPC_Comments
-    - $visitedStoreDream
-    - $Yarn.Internal.Once.Roof.4d536055
-    - $Yarn.Internal.Once.Kitchen_Dinner.cbbdf744
-    - $Yarn.Internal.Once.Kitchen_Knife.54302a93
-    - $knifeIncident
-    - $Yarn.Internal.Once.LivingRoom_TV.db222d74
+    - $Yarn.Internal.Once.Roof.c58ab2c2
+    - $Yarn.Internal.Once.Kitchen_Dinner.bef0665a
+    - $Yarn.Internal.Once.Kitchen_Knife.9af55bfa
+    - $Yarn.Internal.Once.LivingRoom_TV.83d75b6a
     - $Yarn.Internal.Once.Fall_Recovery.d980b3b4
     - $Yarn.Internal.Once.UnsettlingDream.16d73451
     - $Yarn.Internal.Once.BottleDrop.527a4d11
@@ -48,6 +68,13 @@ MonoBehaviour:
     - $Yarn.Internal.Once.Tower_Down.60814b3a
     - $Yarn.Internal.Once.Tower_Pit_Room.0e0c740f
     - $Yarn.Internal.Once.Tower_Fall.67c82570
+    - $isDreaming
+    - $isChild
+    - $spokenAboutTable
+    - $tableSet
+    - $NPC_Comments
+    - $visitedStoreDream
+    - $knifeIncident
     - $Yarn.Internal.Once.ExitStore.0914f8ff
     - $Yarn.Internal.Once.LiftOut.921ec1ab
-    m_values: 0001000000000000000000000000000000000000
+    m_values: 000000000000000000000000000100000000000000

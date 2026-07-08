@@ -9,23 +9,34 @@ namespace Thimble
         [SerializeField] private string name;
         [SerializeField] private float value;
 
-        public string Name { get => name; set => name = value; }
+        public string Name { readonly get => name; set => name = value; }
 
-        public float Value { get => value; set => this.value = value; }
+        public float Value { readonly get => value; set => this.value = value; }
 
         #region Operators
 
+        // Implicit conversion from float to FloatVariable
+        public static implicit operator float(FloatVariable variable) => variable.Value;
+
+        // Equality operators for comparing FloatVariable with FloatVariable
+        public static bool operator ==(FloatVariable left, FloatVariable right) => left.Equals(right);
+        public static bool operator !=(FloatVariable left, FloatVariable right) => !left.Equals(right);
+
+        // Equality operators for comparing FloatVariable with float
+        public static bool operator ==(FloatVariable variable, float value) => variable.Equals(value);
+        public static bool operator !=(FloatVariable variable, float value) => !variable.Equals(value);
+
         #endregion
 
-        public FloatVariable(string name, float value)
+        FloatVariable(string name, float value)
         {
             this.name = name;
             this.value = value;
         }
 
-        public static FloatVariable Default => new FloatVariable(VariableHandler.MissingVariableName, 0f);
+        public static FloatVariable Default => new(VariableHandler.MissingVariableName, 0f);
 
-        public static FloatVariable Create(string name, float value) => new FloatVariable(name, value);
+        public static FloatVariable Create(string name, float value) => new(name, value);
 
         public void SetName(string name) => Name = name;
 
@@ -41,9 +52,7 @@ namespace Thimble
             Value = value;
         }
 
-        public void SetValue(IVariable<float> variable) => Value = variable.Value;
-
-        public string GetName() => Name.AppendYarnPrefix();
+        public readonly string GetName() => Name.AppendYarnPrefix();
 
         public float GetValue()
         {
@@ -57,7 +66,7 @@ namespace Thimble
             return Value = value;
         }
 
-        public bool Equals(IVariable<float> other)
+        public readonly bool Equals(IVariable<float> other)
         {
             // Compare names using case-insensitive comparison
             bool nameEquals = string.Equals(Name, other.Name, StringComparison.OrdinalIgnoreCase);
@@ -66,11 +75,11 @@ namespace Thimble
             return nameEquals && other.Value.Approximately(Value);
         }
 
-        public bool Equals(FloatVariable other) => Equals((IVariable<float>)other);
+        public readonly bool Equals(FloatVariable other) => Equals((IVariable<float>)other);
 
-        public bool Equals(float other) => other.Approximately(Value);
+        public readonly bool Equals(float other) => other.Approximately(Value);
 
-        public override bool Equals(object obj)
+        public override readonly bool Equals(object obj)
         {
             if (obj is FloatVariable variable)
                 return Equals(variable);
@@ -79,6 +88,6 @@ namespace Thimble
             return false;
         }
 
-        public override int GetHashCode() => (Name, Value).GetHashCode();
+        public override readonly int GetHashCode() => (Name, Value).GetHashCode();
     }
 }

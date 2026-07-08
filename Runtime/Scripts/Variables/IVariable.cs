@@ -12,8 +12,6 @@ namespace Thimble
 
         void SetValue(T value);
 
-        void SetValue(IVariable<T> variable);
-
         string GetName();
 
         T GetValue();

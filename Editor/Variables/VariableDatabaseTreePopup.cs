@@ -4,10 +4,10 @@ using UnityEditor.IMGUI.Controls;
 
 namespace Thimble.Editor
 {
-    public class DatabaseTreePopup : PopupWindowContent
+    public class VariableDatabaseTreePopup : PopupWindowContent
     {
         private readonly SearchField _searchField;
-        private readonly DatabaseTreeView _treeView;
+        private readonly VariableDatabaseTreeView _treeView;
         private bool _shouldClose;
 
         private static readonly GUIStyle _buttonToggleStyle = new(EditorStyles.miniButton) { padding = RectUtility.One.Multiply(2) };
@@ -18,7 +18,7 @@ namespace Thimble.Editor
 
         public float Width { get; set; }
 
-        public DatabaseTreePopup(DatabaseTreeView contents)
+        public VariableDatabaseTreePopup(VariableDatabaseTreeView contents)
         {
             _searchField = new SearchField();
             _treeView = contents;

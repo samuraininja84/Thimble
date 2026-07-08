@@ -111,6 +111,27 @@ namespace Thimble.Editor
             // Check that the variable data is not null before drawing them
             if (VariableDataExists())
             {
+                // Create a label for the variable data name
+                EditorGUILayout.LabelField("Variable Data: " + FormatDataName(variableData.name), EditorStyles.boldLabel);
+
+                // Begin the disabled group for the variable data field
+                EditorGUI.BeginDisabledGroup(true);
+
+                // Display the variable data field
+                EditorGUILayout.ObjectField("Variable Data", variableData, typeof(VariableData), false);
+
+                // End the disabled group for the variable data field
+                EditorGUI.EndDisabledGroup();
+
+                // Display a warning if the variable storage is null
+                if (variableData.storage == null)
+                {
+                    EditorGUILayout.Separator();
+                    EditorGUILayout.HelpBox("Variable Storage is null. Variables will not be updated or refreshed in the Yarn Project.", MessageType.None);
+                    EditorGUILayout.HelpBox("This can be assigned manually but using a Variable Storage Referencer is recommended to set the data in the reference at Start.", MessageType.None);
+                    EditorGUILayout.Separator();
+                }
+
                 // Display the variable data with its respective variable storage, variables, and variable tools
                 DrawVariableData(variableData);
             }
@@ -124,28 +145,13 @@ namespace Thimble.Editor
             EditorGUILayout.EndFoldoutHeaderGroup();
         }
 
-        private void DrawVariableData(VariableData variableData, VariableStorageBehaviour storage = null)
+        private void DrawVariableData(VariableData variableData)
         {
-            // Create a label for the variable data name
-            EditorGUILayout.LabelField("Variable Data: " + FormatDataName(variableData.name), EditorStyles.boldLabel);
-
-            // Begin the disabled group for the variable data field
-            EditorGUI.BeginDisabledGroup(true);
-
-            // Display the variable data field
-            variableData = (VariableData)EditorGUILayout.ObjectField("Variable Data", variableData, typeof(VariableData), false);
-
-            // End the disabled group for the variable data field
-            EditorGUI.EndDisabledGroup();
-
             // Create a serialized object for the variable data
-            SerializedObject variableDataObject = new SerializedObject(variableData);
+            var variableDataObject = new SerializedObject(variableData);
 
             // Update the serialized object
             variableDataObject.Update();
-
-            // Add space after the variable storage field
-            EditorGUILayout.Space();
 
             // Display the variable data based on if there are any variables in the variable data or not
             if (variableData.Empty())
@@ -189,6 +195,9 @@ namespace Thimble.Editor
                     }
                 }
 
+                // Add a separator between the string variables and the float variables
+                EditorGUILayout.Separator();
+
                 // Display all float variables with a bold label if there are any float variables
                 EditorGUILayout.LabelField("Float Variables", EditorStyles.boldLabel);
 
@@ -222,6 +231,9 @@ namespace Thimble.Editor
                         EditorGUILayout.EndHorizontal();
                     }
                 }
+
+                // Add a separator between the float variables and the bool variables
+                EditorGUILayout.Separator();
 
                 // Display all bool variables with a bold label if there are any bool variables
                 EditorGUILayout.LabelField("Bool Variables", EditorStyles.boldLabel);
@@ -263,14 +275,8 @@ namespace Thimble.Editor
                     }
                 }
 
-                // Display a warning if the variable storage is null
-                if (variableData.storage == null)
-                {
-                    EditorGUILayout.Separator();
-                    EditorGUILayout.HelpBox("Variable Storage is null. Variables will not be updated or refreshed in the Yarn Project.", MessageType.None);
-                    EditorGUILayout.HelpBox("This can be assigned manually but using a Variable Storage Referencer is recommended to set the data in the reference at Start.", MessageType.None);
-                    EditorGUILayout.Separator();
-                }
+                // Add a separator between the bool variables and the variable tools
+                EditorGUILayout.Separator();
             }
 
             // Display variable tools header with a bold label

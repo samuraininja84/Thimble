@@ -9,14 +9,13 @@ namespace Thimble
         [SerializeField] private string name;
         [SerializeField] private string value;
 
-        public string Name { get => name; set => name = value; }
+        public string Name { readonly get => name; set => name = value; }
 
-        public string Value { get => value; set => this.value = value; }
+        public string Value { readonly get => value; set => this.value = value; }
 
         #region Operators
 
-        // Implicit conversion from string to StringVariable and vice versa
-        public static implicit operator StringVariable(string value) => new StringVariable { Name = value, Value = value };
+        // Implicit conversion from string to StringVariable
         public static implicit operator string(StringVariable variable) => variable.Value;
 
         // Equality operators for comparing StringVariable with StringVariable
@@ -35,9 +34,9 @@ namespace Thimble
             this.value = value;
         }
 
-        public static StringVariable Default => new StringVariable(VariableHandler.MissingVariableName, string.Empty);
+        public static StringVariable Default => new(VariableHandler.MissingVariableName, string.Empty);
 
-        public static StringVariable Create(string name, string value) => new StringVariable(name, value);
+        public static StringVariable Create(string name, string value) => new(name, value);
 
         public void SetName(string name) => Name = name;
 
@@ -53,9 +52,7 @@ namespace Thimble
             Value = value;
         }
 
-        public void SetValue(IVariable<string> variable) => Value = variable.Value;
-
-        public string GetName() => Name.AppendYarnPrefix();
+        public readonly string GetName() => Name.AppendYarnPrefix();
 
         public string GetValue()
         {
@@ -69,7 +66,7 @@ namespace Thimble
             return Value = value;
         }
 
-        public bool Equals(IVariable<string> other)
+        public readonly bool Equals(IVariable<string> other)
         {
             // Compare names using case-insensitive comparison
             bool nameEquals = string.Equals(Name, other.Name, StringComparison.OrdinalIgnoreCase);
@@ -81,17 +78,17 @@ namespace Thimble
             return nameEquals && valueEquals;
         }
 
-        public bool Equals(StringVariable other) => Equals((IVariable<string>)other);
+        public readonly bool Equals(StringVariable other) => Equals((IVariable<string>)other);
 
-        public bool Equals(string other) => string.Equals(Value, other, StringComparison.OrdinalIgnoreCase);
+        public readonly bool Equals(string other) => string.Equals(Value, other, StringComparison.OrdinalIgnoreCase);
 
-        public override bool Equals(object obj)
+        public override readonly bool Equals(object obj)
         {
             if (obj is StringVariable variable) return Equals(variable);
             if (obj is string str) return Equals(str);
             return false;
         }
 
-        public override int GetHashCode() => (Name, Value).GetHashCode();
+        public override readonly int GetHashCode() => (Name, Value).GetHashCode();
     }
 }

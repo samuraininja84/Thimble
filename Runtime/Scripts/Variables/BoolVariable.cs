@@ -9,14 +9,13 @@ namespace Thimble
         [SerializeField] private string name;
         [SerializeField] private bool value;
 
-        public string Name { get => name; set => name = value; }
+        public string Name { readonly get => name; set => name = value; }
 
-        public bool Value { get => value; set => this.value = value; }
+        public bool Value { readonly get => value; set => this.value = value; }
 
         #region Operators
 
-        // Implicit conversion from bool to BoolVariable and vice versa
-        public static implicit operator BoolVariable(bool value) => new BoolVariable { Name = value.ToString(), Value = value };
+        // Implicit conversion from bool to BoolVariable
         public static implicit operator bool(BoolVariable variable) => variable.Value;
 
         // Equality operators for comparing BoolVariable with BoolVariable
@@ -29,15 +28,15 @@ namespace Thimble
 
         #endregion
 
-        public BoolVariable(string name, bool value)
+        BoolVariable(string name, bool value)
         {
             this.name = name;
             this.value = value;
         }
 
-        public static BoolVariable Default => new BoolVariable(VariableHandler.MissingVariableName, false);
+        public static BoolVariable Default => new(VariableHandler.MissingVariableName, false);
 
-        public static BoolVariable Create(string name, bool value) => new BoolVariable(name, value);
+        public static BoolVariable Create(string name, bool value) => new(name, value);
 
         public void SetName(string name) => Name = name;
 
@@ -53,9 +52,7 @@ namespace Thimble
             Value = value;
         }
 
-        public void SetValue(IVariable<bool> variable) => Value = variable.Value;
-
-        public string GetName() => Name.AppendYarnPrefix();
+        public readonly string GetName() => Name.AppendYarnPrefix();
 
         public bool GetValue()
         {
@@ -69,7 +66,7 @@ namespace Thimble
             return Value = value;
         }
 
-        public bool Equals(IVariable<bool> other)
+        public readonly bool Equals(IVariable<bool> other)
         {
             // Compare names using case-insensitive comparison
             bool nameEquals = string.Equals(Name, other.Name, StringComparison.OrdinalIgnoreCase);
@@ -78,11 +75,11 @@ namespace Thimble
             return nameEquals && Value == other.Value;
         }
 
-        public bool Equals(BoolVariable other) => Equals((IVariable<bool>)other);
+        public readonly bool Equals(BoolVariable other) => Equals((IVariable<bool>)other);
 
-        public bool Equals(bool other) => Value == other;
+        public readonly bool Equals(bool other) => Value == other;
 
-        public override bool Equals(object obj)
+        public override readonly bool Equals(object obj)
         {
             if (obj is BoolVariable variable)
                 return Equals(variable);
@@ -91,6 +88,6 @@ namespace Thimble
             return false;
         }
 
-        public override int GetHashCode() => (Name, Value).GetHashCode();
+        public override readonly int GetHashCode() => (Name, Value).GetHashCode();
     }
 }

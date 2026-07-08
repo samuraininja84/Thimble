@@ -5,22 +5,20 @@ using UnityEditor.IMGUI.Controls;
 
 namespace Thimble.Editor
 {
-    public class DatabaseTreeView : TreeView
+    public class VariableDatabaseTreeView : TreeView<EntityId>
     {
-        private readonly string _currentEntry;
         private readonly Action<string> _selectionHandler;
         private readonly VariableType variableType;
         private int _selectedId = -1;
 
-        private TreeViewItem Root { get; set; }
+        private TreeViewItem<EntityId> Root { get; set; }
 
-        public static bool filterOn => DatabaseTreePopup.filterOn;
+        public static bool FilterOn => VariableDatabaseTreePopup.filterOn;
 
-        public static string filterName => VariableHandler.InternalVariableDenotator;
+        public static string FilterName => VariableHandler.InternalVariableDenotator;
 
-        public DatabaseTreeView(string currentEntry, Action<string> selectionHandler, VariableType type) : base(new TreeViewState())
+        public VariableDatabaseTreeView(Action<string> selectionHandler, VariableType type) : base(new TreeViewState<EntityId>())
         {
-            _currentEntry = currentEntry;
             _selectionHandler = selectionHandler;
             variableType = type;
             showAlternatingRowBackgrounds = true;
@@ -28,30 +26,30 @@ namespace Thimble.Editor
             Reload();
         }
 
-        protected override TreeViewItem BuildRoot()
+        protected override TreeViewItem<EntityId> BuildRoot()
         {
             // Create the root of the tree with a unique ID of -1.
-            Root = new TreeViewItem(-1, -1);
+            Root = new TreeViewItem<EntityId>(-1, -1);
 
             // This ID will be used to assign unique IDs to each tree item.
             var id = 1;
 
             // This list will hold the groups for each area handle, which will be added to the root at the end.
-            var groups = new List<TreeViewItem>();
+            var groups = new List<TreeViewItem<EntityId>>();
 
             // Add a default "None" option at the top of the list for users to select if they want to clear the variable selection
             Root.AddChild(CollectionTreeViewItem.Create(VariableHandler.MissingVariableName, id++, VariableHandler.MissingVariableName));
 
             // Create a group for each variable type to organize the variables in the tree view. For example, we can create a group for float variables, another for int variables, etc.
-            var floatGroup = new TreeViewItem(id++) { displayName = "Float Variables" };
-            var stringGroup = new TreeViewItem(id++) { displayName = "String Variables" };
-            var boolGroup = new TreeViewItem(id++) { displayName = "Bool Variables" };
+            var floatGroup = new TreeViewItem<EntityId>(id++) { displayName = "Float Variables" };
+            var stringGroup = new TreeViewItem<EntityId>(id++) { displayName = "String Variables" };
+            var boolGroup = new TreeViewItem<EntityId>(id++) { displayName = "Bool Variables" };
 
             // Iterate through all float variable in the VariableData instance
             foreach (var variable in VariableData.Instance.floatVariables)
             {
                 // If filtering is on, skip variables that don't contain the filter name (e.g., "Yarn.Internal") in their key.
-                if (filterOn && variable.Key.Contains(filterName, StringComparison.OrdinalIgnoreCase)) continue;
+                if (FilterOn && variable.Key.Contains(FilterName, StringComparison.OrdinalIgnoreCase)) continue;
 
                 // Add each variable as a child of the float group with its name formatted for display. Use the variable's name as the label, and assign an icon if desired.
                 floatGroup.AddChild(CollectionTreeViewItem.Create(variable.Key, id++, variable.Key));
@@ -64,7 +62,7 @@ namespace Thimble.Editor
             foreach (var variable in VariableData.Instance.stringVariables)
             {
                 // If filtering is on, skip variables that don't contain the filter name (e.g., "Yarn.Internal") in their key.
-                if (filterOn && variable.Key.Contains(filterName, StringComparison.OrdinalIgnoreCase)) continue;
+                if (FilterOn && variable.Key.Contains(FilterName, StringComparison.OrdinalIgnoreCase)) continue;
 
                 // Add each variable as a child of the string group with its name formatted for display. Use the variable's name as the label, and assign an icon if desired.
                 stringGroup.AddChild(CollectionTreeViewItem.Create(variable.Key, id++, variable.Key));
@@ -77,7 +75,7 @@ namespace Thimble.Editor
             foreach (var variable in VariableData.Instance.boolVariables)
             {
                 // If filtering is on, skip variables that don't contain the filter name (e.g., "Yarn.Internal") in their key.
-                if (filterOn && variable.Key.Contains(filterName, StringComparison.OrdinalIgnoreCase)) continue;
+                if (FilterOn && variable.Key.Contains(FilterName, StringComparison.OrdinalIgnoreCase)) continue;
 
                 // Add each variable as a child of the bool group with its name formatted for display. Use the variable's name as the label, and assign an icon if desired.
                 boolGroup.AddChild(CollectionTreeViewItem.Create(variable.Key, id++, variable.Key));
@@ -121,9 +119,9 @@ namespace Thimble.Editor
             base.OnGUI(rect);
         }
 
-        protected override bool CanMultiSelect(TreeViewItem item) => false;
+        protected override bool CanMultiSelect(TreeViewItem<EntityId> item) => false;
 
-        protected override void SelectionChanged(IList<int> selectedIds)
+        protected override void SelectionChanged(IList<EntityId> selectedIds)
         {
             // If no selection, do nothing
             if (FindItem(selectedIds[0], rootItem) is CollectionTreeViewItem item)
@@ -137,18 +135,15 @@ namespace Thimble.Editor
                 SetExpanded(selectedIds[0], !IsExpanded(selectedIds[0]));
 
                 // Clear selection when clicking on a group
-                SetSelection(new int[] { });
+                SetSelection(new EntityId[] { });
             }
         }
 
-        private class CollectionTreeViewItem : TreeViewItem
+        private class CollectionTreeViewItem : TreeViewItem<EntityId>
         {
             public readonly string Entry;
 
-            public CollectionTreeViewItem(string entry, int id) : base(id, 0)
-            {
-                Entry = entry;
-            }
+            public CollectionTreeViewItem(string entry, int id) : base(id, 0) => Entry = entry;
 
             public static CollectionTreeViewItem Create(string entry, int id, string displayName) => new CollectionTreeViewItem(entry, id) { displayName = displayName };
         }
