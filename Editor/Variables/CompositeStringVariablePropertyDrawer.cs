@@ -3,8 +3,7 @@ using UnityEditor;
 
 namespace Thimble.Editor
 {
-    [CustomPropertyDrawer(typeof(FloatVariable))]
-    public class FloatVariablePropertyDrawer : PropertyDrawer
+    public class CompositeStringVariablePropertyDrawer : PropertyDrawer
     {
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label) => EditorGUIUtility.singleLineHeight;
 
@@ -14,10 +13,10 @@ namespace Thimble.Editor
             EditorGUI.BeginChangeCheck();
 
             // Get the name property and set it to lowercase to match the serialized field name
-            var nameProperty = property.FindPropertyRelative(nameof(FloatVariable.Name).ToLower());
+            var nameProperty = property.FindPropertyRelative(nameof(CompositeStringVariable.Name).ToLower());
 
             // Get the value property and set it to lowercase to match the serialized field name
-            var valueProperty = property.FindPropertyRelative(nameof(FloatVariable.Value).ToLower());
+            var valueProperty = property.FindPropertyRelative(nameof(CompositeStringVariable.Value).ToLower());
 
             // Begin property
             EditorGUI.BeginProperty(position, label, property);
@@ -28,20 +27,17 @@ namespace Thimble.Editor
             // Gap between name and value fields
             float gap = 3f;
 
-            // Width for the float field
-            float floatFieldWidth = 100f;
-
             // Calculate the width for the name and value properties
-            Rect nameRect = new Rect(position.x, position.y, position.width - floatFieldWidth - gap, position.height);
+            Rect nameRect = new Rect(position.x, position.y, position.width / 2 - gap, position.height);
 
-            // Adjust the value rect to accommodate the smaller field for float
-            Rect valueRect = new Rect(position.x + gap + position.width - floatFieldWidth, position.y, floatFieldWidth, position.height);
+            // Adjust the value rect to accommodate the smaller field for bool
+            Rect valueRect = new Rect(position.x + position.width / 2 + gap, position.y, position.width / 2 - gap, position.height);
 
             // Draw name and value properties
-            EditorVariableExtensions.DrawVariableSelector(nameRect, nameProperty, valueProperty, VariableType.Float);
+            EditorVariableExtensions.DrawVariableSelector(nameRect, nameProperty, valueProperty, VariableType.String, true);
 
             // Get the current name value to determine if the value field should be enabled
-            string name = nameProperty.stringValue;
+            string name = nameProperty.stringValue.Replace(VariableHandler.InternalVariableDenotator, string.Empty);
 
             // Disable the value field if the name isn't empty to prevent editing the value with a valid name
             GUI.enabled = string.IsNullOrEmpty(name) || string.Equals(name, VariableHandler.MissingVariableName, System.StringComparison.OrdinalIgnoreCase);

@@ -111,7 +111,7 @@ namespace Thimble.Editor
                             valueProperty.floatValue = VariableData.Instance.GetValueSum(names);
                             break;
                         case VariableType.String:
-                            valueProperty.stringValue = VariableData.Instance.GetStringList(names);
+                            valueProperty.stringValue = VariableData.Instance.GetAppendedString(names);
                             break;
                         case VariableType.Bool:
                             valueProperty.boolValue = VariableData.Instance.GetConcatValue(names);

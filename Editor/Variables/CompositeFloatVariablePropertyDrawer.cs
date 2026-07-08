@@ -3,8 +3,8 @@ using UnityEditor;
 
 namespace Thimble.Editor
 {
-    [CustomPropertyDrawer(typeof(FloatVariable))]
-    public class FloatVariablePropertyDrawer : PropertyDrawer
+    [CustomPropertyDrawer(typeof(CompositeFloatVariable))]
+    public class CompositeFloatVariablePropertyDrawer : PropertyDrawer
     {
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label) => EditorGUIUtility.singleLineHeight;
 
@@ -14,10 +14,10 @@ namespace Thimble.Editor
             EditorGUI.BeginChangeCheck();
 
             // Get the name property and set it to lowercase to match the serialized field name
-            var nameProperty = property.FindPropertyRelative(nameof(FloatVariable.Name).ToLower());
+            var nameProperty = property.FindPropertyRelative(nameof(CompositeFloatVariable.Name).ToLower());
 
             // Get the value property and set it to lowercase to match the serialized field name
-            var valueProperty = property.FindPropertyRelative(nameof(FloatVariable.Value).ToLower());
+            var valueProperty = property.FindPropertyRelative(nameof(CompositeFloatVariable.Value).ToLower());
 
             // Begin property
             EditorGUI.BeginProperty(position, label, property);
@@ -38,10 +38,10 @@ namespace Thimble.Editor
             Rect valueRect = new Rect(position.x + gap + position.width - floatFieldWidth, position.y, floatFieldWidth, position.height);
 
             // Draw name and value properties
-            EditorVariableExtensions.DrawVariableSelector(nameRect, nameProperty, valueProperty, VariableType.Float);
+            EditorVariableExtensions.DrawVariableSelector(nameRect, nameProperty, valueProperty, VariableType.Float, true);
 
             // Get the current name value to determine if the value field should be enabled
-            string name = nameProperty.stringValue;
+            string name = nameProperty.stringValue.Replace(VariableHandler.InternalVariableDenotator, string.Empty);
 
             // Disable the value field if the name isn't empty to prevent editing the value with a valid name
             GUI.enabled = string.IsNullOrEmpty(name) || string.Equals(name, VariableHandler.MissingVariableName, System.StringComparison.OrdinalIgnoreCase);

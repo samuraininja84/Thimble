@@ -106,7 +106,7 @@ namespace Thimble
 
         public static bool GetVariable(this VariableData variableData, string variableName, out bool value) => variableData.GetVariable(variableName, out value);
 
-        public static string GetStringList(this VariableData variableData, List<string> variableNames)
+        public static string GetAppendedString(this VariableData variableData, List<string> variableNames)
         {
             // Return false if the list of names is empty to avoid trying to get a value from VariableData with an empty name
             if (variableNames.Count == 0) return string.Empty;
